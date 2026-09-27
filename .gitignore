@@ -30,7 +30,7 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files 
 .env*
 
 # vercel
@@ -39,3 +39,16 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Keep the generated Prisma Client + query engine out of version control
+/src/generated/prisma
+
+# clerk configuration (can include secrets)
+/.clerk/
+skills-lock.json
+.agents/skills
+tsconfig.tsbuild
+tsconfig.tsbuildinfo
+
+AGENTS.md
+CLAUDE.md
