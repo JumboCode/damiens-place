@@ -9,7 +9,7 @@ about: Create a standard issue ticket for Damien's Place
 
 ## Goal Description
 
-**I want** ..
+**We want** ..
 **so that** ...
 
 ## Background/Context
@@ -22,11 +22,11 @@ about: Create a standard issue ticket for Damien's Place
 2.
 3.
 
-## Acceptance Criteria
+## Deliverables
 
-1.
-2.
-3.
+- [ ]
+- [ ]
+- [ ]
 
 ## Screenshots/Figma links
 

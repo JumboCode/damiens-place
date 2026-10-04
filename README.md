@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Damien's Place
+
+JumboCode 2026-27 project for Damien's Place.
+
+**Project Manager**: Begüm Ugurlu
+**Technical Lead**: Natalie Phua
+**Designer**: Olivia Sheng
 
 ## Getting Started
 
-First, run the development server:
+See the Onboarding Doc in Notion or your first ticket to clone the repo.
+
+Next run `npm i` to install all packages. This sets up the infrastructure and everything you need for the site to work and stores it on a folder called `node_modules`.
+
+You'll also want some packages on VSCode:
+
+- Live Share
+- Prisma
+- ESLint
+- Prettier
+
+Run `npx prisma generate` to generate your Prisma Client. You'll need to run this if the schema gets updated, but Natalie will let you know when that happens.
+
+## Development
+
+To actually run the site, start development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `src/app/page.tsx`. The page auto-updates as you edit the file.
+## Linting
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Before pushing, run `npm run lint` to try to build the website locally. It will throw errors if something is wrong and notify you where that error is.
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Read the Notion for more info on Code Style Standards, Tech Stack explanations, or general guidelines.
