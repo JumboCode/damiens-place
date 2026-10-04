@@ -20,9 +20,14 @@ Ex: if this were a signup page creation, to test, login with user X and password
 - Wrong password: user X is not logged in with password Z
 - Wrong user: user Z is not logged in with password Y -->
 
+## Screenshots
+
+<!-- For backend tickets: Prisma studio or Postman responses-->
+<!-- For frontend tickets: UI changes, all cases -->
+
 ## Checklist before requesting a review
 
-- [ ] Implements all parts of the ticket
+- [ ] Satisfies all Deliverables
 - [ ] Tested thoroughly
 - [ ] No unused dependencies
 - [ ] Requested review from Natalie

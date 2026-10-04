@@ -1,3 +1,9 @@
+// Conventions:
+//   - Default Prisma naming: PascalCase models, camelCase fields.
+//   - All DateTimes are stored in UTC; convert to/from local timezone explicitly.
+//   - Rules the schema can't express (max 3 positions per applicant, appointment
+//     capacity) are enforced in the API layer.
+
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -5,4 +11,221 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+}
+
+// ---------------------------------------------------------------------------
+// Enums
+// ---------------------------------------------------------------------------
+
+enum ApplicantStatus {
+  DRAFT // created when Step 1 is saved; form not yet submitted
+  SUBMITTED // finalized by the submission endpoint; shows up in Tab B
+  APPROVED // admin approved -> Volunteer created
+  REJECTED // admin rejected -> rejection email sent
+}
+
+// TBD
+enum AvailabilityFrequency {
+  WEEKLY
+  MONTHLY
+  SEASONAL
+}
+
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+enum VolunteerStatus {
+  ACTIVE
+  INACTIVE
+}
+
+// ---------------------------------------------------------------------------
+// Position — roles from the client's position list; editable in admin Tab D
+// ---------------------------------------------------------------------------
+
+model Position {
+  id          String  @id @default(cuid())
+  name        String  @unique
+  description String
+  days        String // free display text, i.e. "Thursday and Saturday"
+  times       String // free display text, i.e. "7:30AM - 12:00PM" or "4 hrs biweekly"
+  available   Boolean @default(true) // false = grayed out in the application dropdown
+
+  applicants Applicant[] // implicit many-to-many: positions an applicant is interested in
+  volunteers Volunteer[] // implicit many-to-many: positions a volunteer was approved for
+  hourLogs   HourLog[]
+}
+
+// ---------------------------------------------------------------------------
+// Appointment — onboarding slot that applicants pick in Step 4
+// 
+// 4 person cap, and always fixed at an hour.
+// ---------------------------------------------------------------------------
+
+model Appointment {
+  id       String   @id @default(cuid())
+  startsAt DateTime
+  capacity Int      @default(4)
+
+  applicants Applicant[]
+}
+
+// ---------------------------------------------------------------------------
+// Applicant — a submission from the public 6-step form. Not a user: no login.
+//
+// The form saves step by step, so the row is created at Step 1 (those fields are
+// required) and every later-step field is nullable. The submission endpoint is
+// what verifies the record is complete before status becomes SUBMITTED.
+// ---------------------------------------------------------------------------
+
+model Applicant {
+  id     String          @id @default(cuid())
+  status ApplicantStatus @default(DRAFT)
+
+  // Step 1 — personal info
+  firstName           String
+  lastName            String
+  age                 Int
+  email               String
+  cellPhone           String
+  homePhone           String?
+  proofOfResidenceUrl String // uploaded document (vercel blob URL)
+  street              String
+  city                String
+  state               String
+  zip                 String
+
+  // Step 1 — emergency contact
+  emergencyContactName         String
+  emergencyContactPhone        String
+  emergencyContactRelationship String?
+
+  // Step 2 — volunteer interest
+  positions           Position[] // max 3, enforced in validation
+  generalAvailability AvailabilityFrequency? // TODO: update here 
+  daysPerMonth        Int?
+  availableDays       DayOfWeek[]            @default([])
+  hasDisability       Boolean?
+  disabilityDetails   String? // only when hasDisability = true
+
+  // Step 3 — onboarding materials + compliance (null = not answered yet)
+  materialsReviewedAt       DateTime?
+  photoConsent              Boolean?
+  backgroundCheckAuthorized Boolean?
+  waiverAccepted            Boolean?
+  agreementAccepted         Boolean?
+  minorReleaseAccepted      Boolean? // only applies when age < 18; null otherwise
+  complianceAcceptedAt      DateTime?
+
+  // Step 4 — onboarding appointment
+  appointmentId String?
+  appointment   Appointment? @relation(fields: [appointmentId], references: [id], onDelete: SetNull)
+
+  // Submission + admin review (Tab B)
+  submittedAt       DateTime?
+  reviewedAt        DateTime?
+  reviewedByClerkId String? // Clerk user ID of the admin who approved/rejected
+
+  // Set on approval; the applicant row is kept as the record of what was submitted
+  volunteerId String?    @unique
+  volunteer   Volunteer? @relation(fields: [volunteerId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ---------------------------------------------------------------------------
+// Volunteer — created when an admin approves an applicant. Signs in with a
+// custom session (NOT Clerk; admins live in Clerk only).
+//
+// Login matching (current plan): normalized email + cell phone. Look the
+// volunteer up with:
+//   prisma.volunteer.findUnique({ where: { email_cellPhone: { email, cellPhone } } })
+// Neither field is unique on its own, so two family members can share an email
+// or a phone as long as the pair differs.
+// ---------------------------------------------------------------------------
+
+model Volunteer {
+  id     String          @id @default(cuid())
+  status VolunteerStatus @default(ACTIVE)
+
+  // Login identifiers + profile (all editable by the volunteer)
+  firstName    String
+  lastName     String
+  email        String // normalized to lowercase by the app
+  cellPhone    String // normalized to digits only by the app (no spaces)
+  homePhone    String?
+  photoUrl     String?
+  photoConsent Boolean @default(false)
+
+  emergencyContactName         String
+  emergencyContactPhone        String
+  emergencyContactRelationship String?
+
+  // Positions they were approved for (copied from the applicant)
+  positions Position[]
+  hourLogs  HourLog[]
+
+  // Back-relation: the application this volunteer was created from
+  applicant Applicant?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([email, cellPhone])
+}
+
+// ---------------------------------------------------------------------------
+// HourLog — hours actually worked, entered through the manual "Log Hours" form.
+// Source of truth for hours completed: sum `minutes`. 
+//
+// No running totals stored. Reporting graphs (by month / role / volunteer) are
+// aggregate queries over this table.
+//
+// The form sends a local date + start/end time; the server must convert these to
+// UTC using the pantry's timezone explicitly. `minutes` is recomputed server-side
+// on every create and edit. Edits trigger an admin email notification.
+//
+// positionId can be ANY position, not just the volunteer's approved ones.
+// ---------------------------------------------------------------------------
+
+model HourLog {
+  id          String    @id @default(cuid())
+  volunteerId String
+  volunteer   Volunteer @relation(fields: [volunteerId], references: [id])
+  positionId  String
+  position    Position  @relation(fields: [positionId], references: [id])
+
+  startsAt DateTime // built from the form's date + start time
+  endsAt   DateTime // built from the form's date + end time
+  minutes  Int // computed server-side from startsAt/endsAt
+  notes    String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([volunteerId])
+}
+
+// ---------------------------------------------------------------------------
+// Resource — an uploaded document (handbook, forms, checklists). Shown in
+// application Step 3 (embedded viewer) and managed by admins in Tab D. 
+//
+// Documents the app needs to find by name get a FIXED id in the seed script
+// (e.g. id: "handbook"), so code can look them up the same way in every
+// environment: prisma.resource.findUnique({ where: { id: "handbook" } }).
+// Admins replace the file on that same row; don't allow deleting those rows.
+// ---------------------------------------------------------------------------
+
+model Resource {
+  id      String @id @default(cuid())
+  title   String // "Damien's Volunteer Handbook R3"
+  fileUrl String // vercel blob url 
 }
