@@ -14,37 +14,29 @@ import type { ReactNode } from "react";
 import logo from "@/assets/images/logo.png";
 
 type AuthPageLayoutProps = {
-  title: string;
-  subtitle?: string;
+  user: string;
   children: ReactNode;
 };
 
 export default function AuthPageLayout({
-  title,
-  subtitle,
+  user,
   children,
 }: AuthPageLayoutProps) {
   return (
-    <main
-      className="flex min-h-screen items-center justify-center bg-background 
-      px-4 py-12"
-    >
-      <div className="w-full max-w-md">
+    <main className="flex min-h-screen items-center justify-center bg-background px-4 py-12">
+      <div className="w-full max-w-sm flex flex-col items-center">
         <Image
           src={logo}
-          alt="Damien's Place"
-          className="mx-auto mb-8 h-auto w-40"
+          alt="Damien's Place Logo"
+          className="mx-auto mb-8 h-auto w-45"
           priority
         />
-        <h1 className="text-center text-2xl font-semibold text-foreground">
-          {title}
+        <h1 className="text-center text-4xl font-bold tracking-tight text-black">
+          Welcome, <span className="text-secondary">{user}</span>!
         </h1>
-        {subtitle && (
-          <p className="mt-2 text-center text-sm text-muted-foreground">
-            {subtitle}
-          </p>
-        )}
-        <div className="mt-6 flex justify-center">{children}</div>
+        <div className="mt-8 w-full text-2xl justify-center font-medium">
+          {children}
+        </div>
       </div>
     </main>
   );
