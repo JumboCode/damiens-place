@@ -14,6 +14,7 @@
   --input-box: #f8fafc;
   --input-hover-frame: #949ba8;
   --input-regular-frame: #cbd0da;
+  --input-focus-frame: #949ba8;
 
   /* Error states */
   --error-msg: #e31a1d;
@@ -31,8 +32,9 @@
   --color-primary-foreground: var(--primary-foreground);
   --color-muted-foreground: var(--muted-foreground);
   --color-input-box: var(--input-box);
-  --color-input-hover-frame: var(--color-hover-frame);
-  --color-input-regular-frame: var(--color-input-regular-frame);
+  --color-input-hover-frame: var(--input-hover-frame);
+  --color-input-regular-frame: var(--input-regular-frame);
+  --color-input-focus-frame: var(--input-focus-frame);
   --color-error-msg: var(--error-msg);
 }
 
