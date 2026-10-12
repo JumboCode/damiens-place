@@ -11,6 +11,8 @@ export default function VolunteerSignInForm() {
   const [phoneError, setphoneError] = useState("");
   const [emailError, setEmailError] = useState("");
 
+  const hasErrors = Boolean(emailError || phoneError);
+
   const router = useRouter();
 
   // This runs when the person clicks "Sign in"
@@ -38,6 +40,7 @@ export default function VolunteerSignInForm() {
       setEmailError("");
     } else {
       setEmailError("Please enter a valid email.");
+      hasError = true;
     }
     // Only go to the next page if everything looked okay
     if (!hasError) {
@@ -90,7 +93,10 @@ export default function VolunteerSignInForm() {
       <button
         type="submit"
         id="submit-button"
-        onClick={() => router.push("/sign-in/confirmed")}
+        // disabled={hasErrors}
+        // if (!hasError) {
+        // router.push("/sign-in/confirmed");
+        // }}
       >
         Login
       </button>
