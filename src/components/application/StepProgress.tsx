@@ -22,30 +22,54 @@ export default function StepProgress({ currentStep }: StepProgressProps) {
   return (
     <nav aria-label="Application progress">
       {/*phone version */}
-      <div className="md:hidden">
-        <text>{currentStep + 1} of 6</text>
-        {/*gray progress bar */}
-        <div className="h-2 w-full rounded-full bg-gray-300">
-          {/*filled up part of progress bar */}
-          <div
-            className="h-2 rounded-full bg-primary"
-            style={{ width: percent + "%" }}
-          />
-        </div>
+
+      <div className="md:hidden px-4 mt-8">
+        <ol className="flex items-center">
+          {steps.map((step, index) => (
+            <li
+              key={step.id}
+              aria-label={step.label}
+              aria-current={index === currentStep ? "step" : undefined}
+              className="flex flex-1 items-center last:flex-none"
+            >
+              <div
+                className={
+                  "flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white " +
+                  (index <= currentStep
+                    ? "bg-primary"
+                    : index === currentStep + 1
+                      ? "bg-gray-400"
+                      : "bg-gray-300")
+                }
+              >
+                {index + 1}
+              </div>
+
+              {index < steps.length - 1 && (
+                <div
+                  className={
+                    "h-1 flex-1 " +
+                    (index < currentStep ? "bg-primary" : "bg-gray-300")
+                  }
+                />
+              )}
+            </li>
+          ))}
+        </ol>
       </div>
 
       {/*computer version*/}
-      <ol className="hidden md:flex justify-between">
+      <ol className="hidden md:flex justify-between gap-4 px-8 mt-8">
         {steps.map((step, index) => (
           <li
             key={step.id}
-            aria-current={index == currentStep ? "step" : undefined}
+            aria-current={index === currentStep ? "step" : undefined}
             className={
-              index == currentStep
+              index === currentStep
                 ? "font-bold text-primary"
                 : index < currentStep
                   ? "text-foreground"
-                  : "text-gray-300"
+                  : "text-gray-400"
             }
           >
             {index + 1}. {step.label}
