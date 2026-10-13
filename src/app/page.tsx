@@ -1,6 +1,4 @@
 import AuthPageLayout from "@/components/auth/AuthPageLayout";
-import StepProgress from "@/components/application/StepProgress";
-import ApplicationFormShell from "@/components/application/ApplicationFormShell";
 
 export default function Home() {
   return (

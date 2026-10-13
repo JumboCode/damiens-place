@@ -72,7 +72,8 @@ export default function StepProgress({ currentStep }: StepProgressProps) {
                   : "text-gray-400"
             }
           >
-            {index + 1}. {step.label}
+            <div>{index + 1}</div>
+            <div>{step.label}</div>
           </li>
         ))}
       </ol>
