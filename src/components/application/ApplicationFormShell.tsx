@@ -1,4 +1,12 @@
-// TODO: FILE HEADER
+/**
+ * ApplicationFormShell.tsx
+ *
+ * Displays the volunteer application with a progress indicator,
+ * placeholder content, and navigation buttons.
+ *
+ * Author: Luisa and Jeremiah
+ * Date Created: 10/09/2026
+ */
 
 // This line is needed because this component reacts to clicks
 "use client";

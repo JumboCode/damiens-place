@@ -23,7 +23,7 @@ export default function StepProgress({ currentStep }: StepProgressProps) {
     <nav aria-label="Application progress">
       {/*phone version */}
 
-      <div className="md:hidden px-4 mt-8">
+      <div className="md:hidden px-4">
         <ol className="flex items-center">
           {steps.map((step, index) => (
             <li
@@ -59,7 +59,7 @@ export default function StepProgress({ currentStep }: StepProgressProps) {
       </div>
 
       {/*computer version*/}
-      <ol className="hidden md:flex justify-between gap-4 px-8 mt-8">
+      <ol className="hidden md:flex justify-between gap-4 px-8">
         {steps.map((step, index) => (
           <li
             key={step.id}
@@ -72,8 +72,9 @@ export default function StepProgress({ currentStep }: StepProgressProps) {
                   : "text-gray-400"
             }
           >
-            <div>{index + 1}</div>
-            <div>{step.label}</div>
+            <div>
+              {index + 1}. {step.label}
+            </div>
           </li>
         ))}
       </ol>
