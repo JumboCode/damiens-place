@@ -8,7 +8,6 @@ import { useState } from "react";
 import { steps } from "./steps";
 import StepProgress from "./StepProgress";
 
-
 export default function ApplicationFormShell() {
   // useState = a box that remembers a value. 0 means the first step.
   const [currentStep, setCurrentStep] = useState(0);
@@ -26,16 +25,43 @@ export default function ApplicationFormShell() {
 
   return (
     <div className="flex flex-col gap-6">
-        <StepProgress currentStep={currentStep} steps={steps} />
-
-     <div className="flex flex-col gap-6">
-        { currentStep } out of 6
-        </div>
-
-      {/* TODO: back and next buttons */}
+      <StepProgress currentStep={currentStep} />
+      <div className="flex flex-col gap-6">{currentStep + 1} out of 6</div>
+   
       {/* use the isFirstStep and isLastStep booleans to determine if 
       a button appears, or if it needs to show "Submit" rather than
       Next! */}
+
+
+      
+      {/* {isFirstStep && <button onClick={goBack} disabled={isFirstStep}>Back</button>}
+      
+        {isLastStep ? (
+          
+          <button onClick={goNext} disabled={isLastStep}>
+            Next
+          </button>
+        ) : (
+          <button onClick={goNext} disabled={currentStep !== steps.length - 1}>
+            Submit
+          </button>
+        )} */}
+
+
+       <button onClick={goBack} disabled={isFirstStep}>
+        Back
+      </button>
+
+      
+
+      <button onClick={goNext} disabled={isLastStep}>
+        Next
+      </button>
+    
+      <button onClick={goNext} disabled={currentStep !== steps.length - 1}>
+        Submit
+      </button> 
+
     </div>
   );
 }

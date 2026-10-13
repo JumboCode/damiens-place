@@ -1,7 +1,7 @@
 /**
  * StepProgress.tsx
  *
- * <1-3 sentences: what this file does and why it exists.>
+ * Progress bar and current step for phone and computer version.
  *
  * Author: Luisa and Jeremiah
  * Date Created: 10/09/2026
