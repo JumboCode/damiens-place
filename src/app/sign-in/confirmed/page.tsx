@@ -10,7 +10,9 @@
 export default function ConfirmationPage() {
   return (
     <main>
-      <h1 id="confirmation-page-title">You&apos;re signed in!</h1>
+      <h1 className="flex items-center text-[32px] font-medium leading-normal text-[#1c1e1f]">
+        You&apos;re signed in!
+      </h1>
     </main>
   );
 }

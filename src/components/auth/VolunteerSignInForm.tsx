@@ -12,6 +12,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import CommonButton from "@/components/common/CommonButton";
 
 export default function VolunteerSignInForm() {
   const [phone, setPhone] = useState("");
@@ -58,14 +59,17 @@ export default function VolunteerSignInForm() {
         name="email"
         type="email"
         id="email"
-        className="input-field"
+        className="flex h-[51px] flex-col items-start justify-center gap-2.5 self-stretch rounded-lg border border-[#cbd0da] bg-[#f8fafc] px-5 py-2.5 text-2xl font-normal leading-normal text-[#1c1e1f]"
         value={email}
         onChange={(event) => setEmail(event.target.value)}
         aria-describedby="email-error"
         required
       />
       {emailError && (
-        <p className="error-text" id="email-error">
+        <p
+          className="self-stretch text-xl font-normal leading-normal text-error-msg"
+          id="email-error"
+        >
           {emailError}
         </p>
       )}
@@ -74,21 +78,29 @@ export default function VolunteerSignInForm() {
         name="phone"
         type="tel"
         id="phone"
-        className="input-field"
+        className="flex h-[51px] flex-col items-start justify-center gap-2.5 self-stretch rounded-lg border border-[#cbd0da] bg-[#f8fafc] px-5 py-2.5 text-2xl font-normal leading-normal text-[#1c1e1f]"
         value={phone}
         onChange={(event) => setPhone(event.target.value)}
         aria-describedby="email-error"
         required
       />
       {phoneError && (
-        <p className="error-text" id="phone-error">
+        <p
+          className="self-stretch text-xl font-normal leading-normal text-error-msg"
+          id="phone-error"
+        >
           {phoneError}
         </p>
       )}
 
-      <button type="submit" id="submit-button">
-        Login
-      </button>
+      <div className="flex justify-center mt-4">
+        <CommonButton
+          type="submit"
+          id="submit-button"
+          size="lg"
+          title="Login"
+        />
+      </div>
     </form>
   );
 }

@@ -16,6 +16,7 @@ import { useState } from "react";
 import { steps } from "./steps";
 import StepProgress from "./StepProgress";
 import logo from "@/assets/images/logo.png";
+import CommonButton from "@/components/common/CommonButton";
 
 export default function ApplicationFormShell() {
   // useState = a box that remembers a value. 0 means the first step.
@@ -58,28 +59,14 @@ export default function ApplicationFormShell() {
       </main>
 
       <div className="mx-auto flex w-full max-w-lg justify-end gap-2 pb-4 md:max-w-5xl">
-        <button
-          onClick={goBack}
-          disabled={isFirstStep}
-          className="rounded-full border border-primary px-8 py-2 text-primary disabled:opacity-0 flex"
-        >
-          Back
-        </button>
+        {!isFirstStep ? (
+          <CommonButton onClick={goBack} altStyle title="Back" />
+        ) : null}
 
         {isLastStep ? (
-          <button
-            type="button"
-            className="rounded-full bg-primary px-8 py-2 text-white"
-          >
-            Submit
-          </button>
+          <CommonButton type="button" title="Submit" />
         ) : (
-          <button
-            onClick={goNext}
-            className="rounded-full bg-primary px-8 py-2 text-white"
-          >
-            Next
-          </button>
+          <CommonButton onClick={goNext} title="Next" />
         )}
       </div>
     </div>
