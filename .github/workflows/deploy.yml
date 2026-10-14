@@ -11,7 +11,7 @@ on:
 
 jobs:
   deploy:
-    if: github.actor == 'nat.phua'
+    if: github.actor == 'natphua'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
