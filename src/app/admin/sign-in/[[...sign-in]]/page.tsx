@@ -9,13 +9,8 @@
 
 "use client";
 import { useState, type FormEvent } from "react";
-import { 
-  ClerkProvider, 
-  SignIn,
-  useSession,
-  useSignIn,
-} from "@clerk/nextjs";
-import {usePathname, useRouter} from "next/navigation";
+import { ClerkProvider, SignIn, useSession, useSignIn } from "@clerk/nextjs";
+import { usePathname, useRouter } from "next/navigation";
 
 import AuthPageLayout from "@/components/auth/AuthPageLayout";
 import { clerkAppearance } from "@/lib/clerk-appearance";
@@ -24,7 +19,7 @@ const signInPath = "/admin/sign-in";
 
 //shared styling for the email and password input
 
-const inputClassName = 
+const inputClassName =
   "min-h-12 w-full rounded-md border border-[var(--input-regular-frame)] " +
   "bg-[var(--input-box)] px-3 text-lg text-[var(--foreground)] " +
   "hover:border-[var(--input-hover-frame)] " +
@@ -54,7 +49,7 @@ function AdminSignInForm() {
   const [emailValue, setEmailValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
 
-  const isSubmitDisabled = 
+  const isSubmitDisabled =
     !signIn ||
     isSubmitting ||
     emailValue.trim() === "" ||
@@ -63,7 +58,6 @@ function AdminSignInForm() {
   //const [showClerkForm, setShowClerkForm] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-
     event.preventDefault();
 
     if (!signIn || isSubmitting) return;
@@ -77,19 +71,17 @@ function AdminSignInForm() {
 
     try {
       const { error } = await signIn.password({
-        emailAddress, 
+        emailAddress,
         password,
       });
-      
+
       if (signIn.protectCheck) {
         router.push(`${signInPath}/protect-check`);
         return;
       }
 
       if (error) {
-        setErrorMessage(
-            "Please check email and password.",
-        );
+        setErrorMessage("Please check email and password.");
         return;
       }
       switch (signIn.status) {
@@ -123,9 +115,7 @@ function AdminSignInForm() {
           router.push(`${signInPath}/factor-one`);
           break;
         default:
-          setErrorMessage(
-            "Unable to complete sign in. Please try again.",
-          );
+          setErrorMessage("Unable to complete sign in. Please try again.");
       }
     } catch {
       setErrorMessage("Unable to connect. Please try again.");
@@ -156,83 +146,75 @@ function AdminSignInForm() {
     }
   }
   */
-  const isContinuationPage = 
-    pathname.replace(/\/$/, "") !== signInPath;
+  const isContinuationPage = pathname.replace(/\/$/, "") !== signInPath;
 
   if (isContinuationPage || session) {
     return (
       <SignIn
         routing="path"
-        path = {signInPath}
+        path={signInPath}
         forceRedirectUrl="/admin"
         appearance={clerkAppearance}
-        />
+      />
     );
   }
 
   return (
     <form
-    onSubmit={handleSubmit}
-    aria-label="Admin sign in"
-    aria-busy={isSubmitting}
-    className="w-full rounded-md bg-background px-4 pb-8"
+      onSubmit={handleSubmit}
+      aria-label="Admin sign in"
+      aria-busy={isSubmitting}
+      className="w-full rounded-md bg-background px-4 pb-8"
     >
-      <fieldset 
-        disabled={!signIn || isSubmitting}
-        className="space-y-6"
-      >
+      <fieldset disabled={!signIn || isSubmitting} className="space-y-6">
+        <div className="space-y-2">
+          <label
+            htmlFor="email"
+            className="block font-sans text-3xl font-medium"
+          >
+            Email
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="username"
+            required
+            value={emailValue}
+            onChange={(event) => setEmailValue(event.currentTarget.value)}
+            className={inputClassName}
+          />
+        </div>
 
-      <div className="space-y-2">
-        <label
-        htmlFor="email"
-        className="block font-sans text-3xl font-medium"
-        >
-        Email
-        </label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          autoComplete="username"
-          required
-          value={emailValue}
-          onChange={(event) => setEmailValue(event.currentTarget.value)}
-          className={inputClassName}
-        />
-      </div>
+        <div className="space-y-2">
+          <label htmlFor="password" className="block font-sans text-3xl medium">
+            Password
+          </label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            autoComplete="current-password"
+            required
+            value={passwordValue}
+            onChange={(event) => setPasswordValue(event.currentTarget.value)}
+            className={inputClassName}
+          />
+        </div>
 
-      <div className="space-y-2">
-        <label
-        htmlFor="password"
-        className="block font-sans text-3xl medium"
-        >
-          Password
-        </label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          autoComplete="current-password"
-          required
-          value={passwordValue}
-          onChange={(event) => setPasswordValue(event.currentTarget.value)}
-          className={inputClassName}
-        />
-      </div>
-
-      {errorMessage && (
-        <p 
-        role="alert" 
-        className="font-normal text-sm text-[var(--error-msg)]"
-        >
-          {errorMessage}
+        {errorMessage && (
+          <p
+            role="alert"
+            className="font-normal text-sm text-[var(--error-msg)]"
+          >
+            {errorMessage}
           </p>
-      )}
+        )}
 
-      <button
-        type="submit"
-        disabled={isSubmitDisabled}
-        className="mx-auto block min-h-12 w-64 max-w-full rounded-full
+        <button
+          type="submit"
+          disabled={isSubmitDisabled}
+          className="mx-auto block min-h-12 w-64 max-w-full rounded-full
                   bg-primary px-6 text-xl font-medium text-primary-foreground
                   shadow-sm
                   motion-safe:transition motion-safe:duration-150
@@ -246,10 +228,10 @@ function AdminSignInForm() {
                   disabled:cursor-not-allowed
                   disabled:bg-gray-300 disabled:text-gray-600 disabled:show-none
                   "
-      >
-        {isSubmitting ? "Signing in..." : "Sign in"}
-      </button>
-      {/*
+        >
+          {isSubmitting ? "Signing in..." : "Sign in"}
+        </button>
+        {/*
       commenting this out for sprint 0 since google sign in, etc. 
       not part of it. will just put right back for sprint 1.
       <button
