@@ -43,3 +43,89 @@
     @apply bg-background text-foreground font-sans antialiased;
   }
 }
+
+#submit-button {
+  display: flex;
+  width: 261px;
+  padding: 15px 33px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 0 auto;
+
+  border-radius: 9999px;
+  background: #953756;
+
+  color: #f8fafc;
+  font-family: "Inclusive Sans";
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.input-field {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  align-self: stretch;
+
+  display: flex;
+  height: 51px;
+  padding: 10px 20px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+
+  color: #1c1e1f;
+  font-family: "Inclusive Sans";
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 48px;
+  align-self: stretch;
+
+  border-radius: 8px;
+  border: 1px solid #cbd0da;
+  background: #f8fafc;
+  padding: 10px 20px;
+
+  color: #1c1e1f;
+  font-family: "Inclusive Sans";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.text-secondary {
+  color: #c75173;
+}
+
+.error-text {
+  align-self: stretch;
+  color: #e31a1d;
+  font-family: "Inclusive Sans";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+#confirmation-page-title {
+  display: flex;
+  align-items: center;
+  color: #1c1e1f;
+  font-family: "Inclusive Sans";
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
