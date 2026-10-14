@@ -17,7 +17,6 @@ import { steps } from "./steps";
 import StepProgress from "./StepProgress";
 import logo from "@/assets/images/logo.png";
 
-
 export default function ApplicationFormShell() {
   // useState = a box that remembers a value. 0 means the first step.
   const [currentStep, setCurrentStep] = useState(0);
@@ -52,7 +51,11 @@ export default function ApplicationFormShell() {
         <StepProgress currentStep={currentStep} />
       </div>
 
-      <main className="flex-1 py-6"> {/* placeholder */} </main>
+      <main className="mx-auto w-full max-w-lg flex-1 px-4 py-6 md:max-w-3xl">
+        <div className="flex h-full min-h-64 items-center justify-center rounded-lg border border-dashed border-gray-300 text-gray-400">
+          {steps[currentStep].label}
+        </div>
+      </main>
 
       <div className="mx-auto flex w-full max-w-lg justify-end gap-2 pb-4 md:max-w-5xl">
         <button
@@ -80,5 +83,5 @@ export default function ApplicationFormShell() {
         )}
       </div>
     </div>
-  )
+  );
 }
