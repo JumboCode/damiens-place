@@ -16,15 +16,14 @@ type StepProgressProps = {
 };
 
 export default function StepProgress({ currentStep }: StepProgressProps) {
-  // calculate how full the bar should be and save it in a const percent var
-  const percent = ((currentStep + 1) / 6) * 100;
 
   return (
-    <nav aria-label="Application progress">
-      {/*phone version */}
+    <nav aria-label="Application progress" className="px-4">
 
-      <div className="md:hidden px-4">
-        <ol className="flex items-center">
+      {/*Both versions */}
+
+      {/* max-w-{blank} controls spread of bubbles */}
+        <ol className="flex mx-auto max-w-lg items-center md:max-w-5xl">
           {steps.map((step, index) => (
             <li
               key={step.id}
@@ -32,9 +31,10 @@ export default function StepProgress({ currentStep }: StepProgressProps) {
               aria-current={index === currentStep ? "step" : undefined}
               className="flex flex-1 items-center last:flex-none"
             >
+              {/* Step indicator */}
               <div
                 className={
-                  "flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white " +
+                  "flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-white " +
                   (index <= currentStep
                     ? "bg-primary"
                     : index === currentStep + 1
@@ -45,6 +45,7 @@ export default function StepProgress({ currentStep }: StepProgressProps) {
                 {index + 1}
               </div>
 
+              {/* Progress line */}
               {index < steps.length - 1 && (
                 <div
                   className={
@@ -56,28 +57,6 @@ export default function StepProgress({ currentStep }: StepProgressProps) {
             </li>
           ))}
         </ol>
-      </div>
-
-      {/*computer version*/}
-      <ol className="hidden md:flex justify-between gap-4 px-8">
-        {steps.map((step, index) => (
-          <li
-            key={step.id}
-            aria-current={index === currentStep ? "step" : undefined}
-            className={
-              index === currentStep
-                ? "font-bold text-primary"
-                : index < currentStep
-                  ? "text-foreground"
-                  : "text-gray-400"
-            }
-          >
-            <div>
-              {index + 1}. {step.label}
-            </div>
-          </li>
-        ))}
-      </ol>
     </nav>
   );
 }

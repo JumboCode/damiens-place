@@ -17,6 +17,7 @@ import { steps } from "./steps";
 import StepProgress from "./StepProgress";
 import logo from "@/assets/images/logo.png";
 
+
 export default function ApplicationFormShell() {
   // useState = a box that remembers a value. 0 means the first step.
   const [currentStep, setCurrentStep] = useState(0);
@@ -33,27 +34,31 @@ export default function ApplicationFormShell() {
   }
 
   return (
-    <div className="flex min-h-[100dvh] flex-col gap-6">
-      <Image
-        src={logo}
-        alt="Damien's Place Logo"
-        className="mx-auto mb-2 h-auto w-20"
-        priority
-      />
-      <StepProgress currentStep={currentStep} />
-      <div className="flex flex-col gap-6">
-        <h2 className="text-xl font-bold">
-          Part {currentStep + 1}: {steps[currentStep].label}
-        </h2>
-
-        <p>Content goes here</p>
+    <div className="flex min-h-screen flex-col px-6 md:px-12">
+      <div className="flex justify-end pt-2">
+        <Image
+          src={logo}
+          alt="Damien's Place Logo"
+          className="h-10 w-auto object-contain"
+          priority
+        />
       </div>
 
-      <div className="mt-auto flex justify-end gap-2 pb-4 pr-12">
+      <h1 className="mt-5 text-center text-base text-black font-bold text-xl">
+        Volunteer Application Form
+      </h1>
+
+      <div className="mt-6">
+        <StepProgress currentStep={currentStep} />
+      </div>
+
+      <main className="flex-1 py-6"> {/* placeholder */} </main>
+
+      <div className="mx-auto flex w-full max-w-lg justify-end gap-2 pb-4 md:max-w-5xl">
         <button
           onClick={goBack}
           disabled={isFirstStep}
-          className="rounded-full border border-primary px-8 py-2 text-primary disabled:opacity-0"
+          className="rounded-full border border-primary px-8 py-2 text-primary disabled:opacity-0 flex"
         >
           Back
         </button>
@@ -75,5 +80,5 @@ export default function ApplicationFormShell() {
         )}
       </div>
     </div>
-  );
+  )
 }
