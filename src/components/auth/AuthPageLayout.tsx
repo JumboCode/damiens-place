@@ -32,7 +32,7 @@ export default function AuthPageLayout({
           priority
         />
         <h1 className="text-center text-4xl font-bold tracking-tight text-black">
-          Welcome, <span className="text-secondary">Volunteer</span>!
+          Welcome, <span className="text-secondary">{user}</span>!
         </h1>
         <div className="mt-8 w-full text-2xl justify-center font-medium">
           {children}

@@ -1,5 +1,13 @@
-// TODO: FILE HEADER
-// This line is needed because the form reacts to typing and clicking
+/**
+ * VolunteerSignInForm.tsx
+ *
+ * Basic volunteer sign in page with email and phone number input
+ * boxes, as well as input validation. Attaches to AuthPageLayout.
+ *
+ * Author: Rim and Abby
+ * Date Created: 10/10/26
+ */
+
 "use client";
 
 import { useState } from "react";
@@ -11,8 +19,6 @@ export default function VolunteerSignInForm() {
   const [phoneError, setphoneError] = useState("");
   const [emailError, setEmailError] = useState("");
 
-  const hasErrors = Boolean(emailError || phoneError);
-
   const router = useRouter();
 
   // This runs when the person clicks "Sign in"
@@ -22,7 +28,6 @@ export default function VolunteerSignInForm() {
     let hasError = false;
 
     // check the phone number
-    // 1. Make a variable with only the numbers: phone.replace(/\D/g, "")
     const phoneDigits = phone.replace(/\D/g, "");
     if (phoneDigits.length < 10) {
       setphoneError("Please enter a valid phone number.");
@@ -30,8 +35,6 @@ export default function VolunteerSignInForm() {
     } else {
       setphoneError("");
     }
-    // 2. If its .length is less than 10, set phoneError to a message and hasError = true
-    // 3. Otherwise, set phoneError back to ""
 
     // now check the email!
     const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -50,8 +53,7 @@ export default function VolunteerSignInForm() {
 
   return (
     <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
-      {/* TODO: email and cell phone <label> and <input> */}
-      <label htmlFor="email">Email:</label>
+      <label htmlFor="email">Email</label>
       <input
         name="email"
         type="email"
@@ -67,7 +69,7 @@ export default function VolunteerSignInForm() {
           {emailError}
         </p>
       )}
-      <label htmlFor="phone">Phone Number:</label>
+      <label htmlFor="phone">Phone Number</label>
       <input
         name="phone"
         type="tel"
@@ -84,20 +86,7 @@ export default function VolunteerSignInForm() {
         </p>
       )}
 
-      {/* TODO: conditionally rendering error messages with your useState variables */}
-      {/* In the <input> section, add aria-describedby="email-error" for accessibility! 
-       Connect that to an id="email-error" in the email error object
-      */}
-
-      {/* TODO: submit button */}
-      <button
-        type="submit"
-        id="submit-button"
-        // disabled={hasErrors}
-        // if (!hasError) {
-        // router.push("/sign-in/confirmed");
-        // }}
-      >
+      <button type="submit" id="submit-button">
         Login
       </button>
     </form>

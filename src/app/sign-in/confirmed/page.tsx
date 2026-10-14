@@ -1,8 +1,11 @@
-// TODO: file header
-// import AuthPageLayout and the VolunteerSignInForm you made!
-
-import AuthPageLayout from "@/components/auth/AuthPageLayout";
-// import ConfirmationPage from "@/components/auth/ConfirmationPage";
+/**
+ * src/app/sign-in/confirmed/page.tsx
+ *
+ * Stub confirmation page for volunteer sign ins.
+ *
+ * Author: Rim and Abby
+ * Date Created: 10/10/2026
+ */
 
 export default function ConfirmationPage() {
   return (
