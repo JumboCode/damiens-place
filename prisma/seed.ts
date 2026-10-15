@@ -1,10 +1,10 @@
 /**
- * <seed.ts>
+ * seed.ts
  *
- * <Takes data from positions.ts and populates them in the prisma databse>
+ * Takes data from positions.ts and populates them in the prisma database
  *
- * Author: <Carter Watabe & Alex Li>
- * Date Created: <10/04/2026>
+ * Author: Carter Watabe & Alex Li
+ * Date Created: 10/04/2026
  */
 
 import "dotenv/config";

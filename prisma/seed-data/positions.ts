@@ -1,10 +1,10 @@
 /**
- * <positions.ts>
+ * positions.ts
  *
- * <Holds the data for the volunteer positions table>
+ * Holds the data for the volunteer positions table
  *
- * Author: <Carter Watabe & Alex Li>
- * Date Created: <10/04/2026>
+ * Author: Carter Watabe & Alex Li
+ * Date Created: 10/04/2026
  */
 
 // This describes what one position looks like, so TypeScript can catch typos
