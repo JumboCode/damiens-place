@@ -1,3 +1,12 @@
+/**
+ * <positions.ts>
+ *
+ * <Holds the data for the volunteer positions table>
+ *
+ * Author: <Carter Watabe & Alex Li>
+ * Date Created: <10/04/2026>
+ */
+
 // This describes what one position looks like, so TypeScript can catch typos
 export type SeedPosition = {
   name: string;
@@ -7,6 +16,7 @@ export type SeedPosition = {
   available: boolean;
 };
 
+//these are the prisma positions
 export const positions: SeedPosition[] = [
   {
     name: "Community Outreach",
@@ -95,7 +105,7 @@ export const positions: SeedPosition[] = [
     available: true,
   },
   {
-    name: "Super Volunteer",
+    name: "Super Volunteer (Service Day)",
     description:
       "Assigned duties on arrival to Pantry ranging from stocking shelves, guiding guests through aisles on service days, clean-up, carriage retrieval from parking lot, etc on Service Days",
     days: "Thursday and Saturday",
