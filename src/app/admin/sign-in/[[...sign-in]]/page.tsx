@@ -10,7 +10,7 @@
 "use client";
 import { ClerkProvider } from "@clerk/nextjs";
 import AuthPageLayout from "@/components/auth/AuthPageLayout";
-import AdminSignInForm from "@/components/auth/AdminSignInForm"
+import AdminSignInForm from "@/components/auth/AdminSignInForm";
 
 export default function AdminSignInPage() {
   return (

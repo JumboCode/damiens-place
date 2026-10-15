@@ -25,7 +25,6 @@ const inputClassName =
   "focus-visible:outline-[var(--primary)]";
 
 export default function AdminSignInForm() {
-  
   const { signIn } = useSignIn();
   const { session } = useSession();
 
@@ -74,7 +73,7 @@ export default function AdminSignInForm() {
       }
 
       // we need the cases to handle situations like MFA, "client trust", and the others below.
-      
+
       switch (signIn.status) {
         case "complete": {
           const { error: finalizeError } = await signIn.finalize({
