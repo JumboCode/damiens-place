@@ -1,7 +1,8 @@
 /**
  * AdminSignInForm.tsx
  *
- * Logic for AdminSignInForm to be able to have email and password fields on the same card
+ * Logic for AdminSignInForm to be able to have email and password fields on the
+ * same card
  *
  * Author: William Balz and Nirvaan Govind
  * Date Created: 14 October 2026
@@ -11,7 +12,7 @@
 import { useState, type FormEvent } from "react";
 import { SignIn, useSession, useSignIn } from "@clerk/nextjs";
 import { usePathname, useRouter } from "next/navigation";
-
+import CommonButton from "@/components/common/CommonButton";
 import { clerkAppearance } from "@/lib/clerk-appearance";
 
 const signInPath = "/admin/sign-in";
@@ -72,8 +73,8 @@ export default function AdminSignInForm() {
         return;
       }
 
-      // we need the cases to handle situations like MFA, "client trust", and the others below.
-
+      // we need the cases to handle situations like MFA, "client trust", and t
+      // the others below.
       switch (signIn.status) {
         case "complete": {
           const { error: finalizeError } = await signIn.finalize({
@@ -135,12 +136,7 @@ export default function AdminSignInForm() {
     >
       <fieldset disabled={!signIn || isSubmitting} className="space-y-6">
         <div className="space-y-2">
-          <label
-            htmlFor="email"
-            className="block font-sans text-3xl font-medium"
-          >
-            Email
-          </label>
+          <label htmlFor="email">Email</label>
           <input
             id="email"
             name="email"
@@ -154,9 +150,7 @@ export default function AdminSignInForm() {
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="password" className="block font-sans text-3xl medium">
-            Password
-          </label>
+          <label htmlFor="password">Password</label>
           <input
             id="password"
             name="password"
@@ -170,34 +164,18 @@ export default function AdminSignInForm() {
         </div>
 
         {errorMessage && (
-          <p
-            role="alert"
-            className="font-normal text-sm text-[var(--error-msg)]"
-          >
+          <p role="alert" className="font-normal text-sm text-error-msg">
             {errorMessage}
           </p>
         )}
-
-        <button
-          type="submit"
-          disabled={isSubmitDisabled}
-          className="mx-auto block min-h-12 w-64 max-w-full rounded-full
-                  bg-primary px-6 text-xl font-medium text-primary-foreground
-                  shadow-sm
-                  motion-safe:transition motion-safe:duration-150
-                  enabled:cursor-pointer
-                  enabled:hover:bg-primary/90
-                  enabled:active:shadow-none
-                  motion-safe:enabled:active:translate-y-0.5
-                  motion-safe:enabled:active:scale-[0.98]
-                  focus-visible:outline-2 focus-visible:outline-offset-2
-                  focus-visible:outline-primary
-                  disabled:cursor-not-allowed
-                  disabled:bg-gray-300 disabled:text-gray-600 disabled:show-none
-                  "
-        >
-          {isSubmitting ? "Signing in..." : "Sign in"}
-        </button>
+        <div className="flex justify-center">
+          <CommonButton
+            type="submit"
+            disabled={isSubmitDisabled}
+            size="lg"
+            title={isSubmitting ? "Signing in..." : "Sign in"}
+          />
+        </div>
       </fieldset>
     </form>
   );
