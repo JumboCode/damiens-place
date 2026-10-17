@@ -42,8 +42,6 @@ export default function AdminSignInForm() {
     isSubmitting ||
     emailValue.trim() === "" ||
     passwordValue.length === 0;
-  //commenting out because alt sign in options not part of sprint 0
-  //const [showClerkForm, setShowClerkForm] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -73,8 +71,6 @@ export default function AdminSignInForm() {
         return;
       }
 
-      // we need the cases to handle situations like MFA, "client trust", and t
-      // the others below.
       switch (signIn.status) {
         case "complete": {
           const { error: finalizeError } = await signIn.finalize({
