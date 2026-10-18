@@ -1,4 +1,12 @@
-// TODO: FILE HEADER
+/**
+ * personal-info.ts
+ *
+ * Defines the data types and default values for the Personal Info form.
+ * Validates user inputs to ensure required fields are completed and correctly formatted.
+ *
+ * Author: Luisa Garciarramos
+ * Date Created: 10/16/2026
+ */
 
 // Every answer is text while the person is typing, even Age. Validation checks it's a number.
 export type PersonalInfoValues = {
@@ -40,7 +48,15 @@ export const emptyPersonalInfo: PersonalInfoValues = {
   emergencyContactRelationship: "",
 };
 
-// TODO: function contract (see the helper function template in the Code Style Guide in Notion)
+/**
+ * validatePersonalInfo
+ *
+ * Checks the Personal Info form for missing required fields and invalid
+ * email, phone number, or age formats.
+ *
+ * @param values - The applicant's answers to all Personal Info fields, stored as strings.
+ * @returns An object containing error messages for invalid fields, or an empty object if all fields are valid.
+ */
 export function validatePersonalInfo(
   values: PersonalInfoValues,
 ): PersonalInfoErrors {
@@ -66,9 +82,6 @@ export function validatePersonalInfo(
       errors[field] = "This field is required";
     }
   }
-
-  // Hint for the checks below: only add a format error if the field doesn't already
-  // have a "required" error, so people see one message at a time.
 
   // email: if it's filled in, it has to look like something@something.something
   const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
