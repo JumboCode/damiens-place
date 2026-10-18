@@ -8,15 +8,11 @@
  * Date Created: 10/15/2026
  */
 
-import {
-  ApplicantStatus,
-  AvailabilityFrequency,
-  DayOfWeek,
-} from "../../src/generated/prisma/enums";
+import { ApplicantStatus } from "../../src/generated/prisma/enums";
 
 // Only the fields Prisma requires are mandatory; everything else is optional.
 export type SeedApplicant = {
-  // Fixed ids let the seed script upsert
+  // Fixed ids let the seed script upsert (re-running it never creates duplicates)
   id: string;
   status: ApplicantStatus;
   firstName: string;
@@ -33,16 +29,12 @@ export type SeedApplicant = {
   emergencyContactPhone: string;
   submittedAt?: Date;
 
-  // Optional fields, only filled in for Test One so the detail endpoint has
-  // more to show
+  // Optional fields, only filled in for Test One so the detail endpoint has more to show
   homePhone?: string;
   emergencyContactRelationship?: string;
-  generalAvailability?: AvailabilityFrequency;
-  availableDays?: DayOfWeek[];
+  timeAvailability?: string;
   hasDisability?: boolean;
   materialsReviewedAt?: Date;
-  photoConsent?: boolean;
-  backgroundCheckAuthorized?: boolean;
   waiverAccepted?: boolean;
   agreementAccepted?: boolean;
   complianceAcceptedAt?: Date;
@@ -70,12 +62,9 @@ export const applicants: SeedApplicant[] = [
     emergencyContactName: "Test Contact",
     emergencyContactPhone: "6175550103",
     emergencyContactRelationship: "Friend",
-    generalAvailability: AvailabilityFrequency.WEEKLY,
-    availableDays: [DayOfWeek.THURSDAY, DayOfWeek.SATURDAY],
+    timeAvailability: "Thursdays and Saturdays, 7:30 AM to 12:00 PM",
     hasDisability: false,
     materialsReviewedAt: new Date("2026-10-10T14:00:00Z"),
-    photoConsent: true,
-    backgroundCheckAuthorized: true,
     waiverAccepted: true,
     agreementAccepted: true,
     complianceAcceptedAt: new Date("2026-10-10T14:00:00Z"),
