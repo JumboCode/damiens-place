@@ -45,9 +45,8 @@ export default function FormField({
 
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor={name}>
-        {" "}
-        {label} {required && <span className="text-[error-msg]">*</span>}
+      <label htmlFor={name} className="text-base">
+        {label} {required && <span className="text-[#E31A1D]">*</span>}
       </label>
       <input
         id={name}
@@ -58,11 +57,18 @@ export default function FormField({
         onChange={(event) => onChange(event.target.value)}
         aria-invalid={!!error}
         aria-describedby={errorId}
-        className="bg-input-box border-input-regular-frame hover:border-input-hover-frame focus:border-input-focus-frame rounded-lg px-5 py-2.5 text-2xl font-normal leading-normal text-[#1c1e1f]"
+        className={
+          "w-full rounded-md border bg-input-box px-3 py-2 text-sm font-normal text-foreground focus:outline-none " +
+          (error
+            ? "border-[#E31A1D] hover:border-[#E31A1D] focus:border-[#E31A1D]"
+            : "border-input-regular-frame hover:border-input-hover-frame focus:border-input-focus-frame")
+        }
       />
-       <p id={errorId} className="text-[error-msg]"> 
-        {error}
-        </p> 
+      {error && (
+        <p id={errorId} className="text-sm text-[#E31A1D]">
+          {error}
+        </p>
+      )}
     </div>
   );
 }

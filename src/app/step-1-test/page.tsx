@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -7,15 +8,29 @@ import {
   emptyPersonalInfo,
   validatePersonalInfo,
   type PersonalInfoValues,
+  type PersonalInfoErrors,
 } from "@/components/application/personal-info";
-
-// Give it useState for the values (start with emptyPersonalInfo) and for the errors,
-// render your form, and add a button that sets the errors to
-// validatePersonalInfo(values)
 
 export default function Step1TestPage() {
   const [values, setValues] = useState<PersonalInfoValues>(emptyPersonalInfo);
-  const [errors, setErrors] = useState<
+  const [errors, setErrors] = useState<PersonalInfoErrors>({});
 
-  return <PersonalInfoStep></PersonalInfoStep>;
+  return (
+    <div className="flex flex-col gap-6 p-6">
+      <PersonalInfoStep
+        values={values}
+        onChange={(field, value) => {
+          setValues({ ...values, [field]: value });
+        }}
+        errors={errors}
+      />
+
+      <button
+        onClick={() => setErrors(validatePersonalInfo(values))}
+        className="rounded-full bg-primary px-6 py-2 text-white"
+      >
+        Test Validation
+      </button>
+    </div>
+  );
 }

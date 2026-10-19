@@ -24,10 +24,11 @@ export default function PersonalInfoStep({
 }: PersonalInfoStepProps) {
   return (
     <div className="flex flex-col gap-10">
-      <h2>Part 1: Basic Information</h2>
-
+        <h2 className="text-xl font-bold">
+            Part 1: Basic Information
+        </h2>
       <section className="flex flex-col gap-4">
-        <h3>Personal Information</h3>
+      <h3 className="text-lg font-semibold">Personal Information</h3>
         {/* One column on phones, three on bigger screens */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <FormField
@@ -93,7 +94,7 @@ export default function PersonalInfoStep({
       </main>
 
       <section className="flex flex-col gap-4">
-        <h3>Home Address</h3>
+        <h3 className="text-lg font-semibold">Home Address</h3>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <FormField
@@ -123,7 +124,7 @@ export default function PersonalInfoStep({
           <FormField
             label="ZIP Code"
             name="zip"
-            value={values.street}
+            value={values.zip}
             onChange={(value) => onChange("zip", value)}
             error={errors.zip}
             required
@@ -133,10 +134,18 @@ export default function PersonalInfoStep({
 
       {/* Emergency Contact section */}
       <section className="flex flex-col gap-4">
-        <h3>Emergency Contact</h3>
+      <h3 className="text-lg font-semibold">Emergency Contact</h3>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <FormField
+            label="First Name"
+            name="emergencyContactFirstName"
+            value={values.emergencyContactFirstName}
+            onChange={(value) => onChange("emergencyContactFirstName", value)}
+            error={errors.emergencyContactFirstName}
+            required
+          />
+         <FormField
             label="Last Name"
             name="emergencyContactLastName"
             value={values.emergencyContactLastName}
@@ -144,8 +153,6 @@ export default function PersonalInfoStep({
             error={errors.emergencyContactLastName}
             required
           />
-        </div>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <FormField
             label="Phone Number"
             name="emergencyContactPhone"
@@ -154,7 +161,6 @@ export default function PersonalInfoStep({
             error={errors.emergencyContactPhone}
             required
           />
-        </div>
         <FormField
           label="Relationship"
           name="emergencyContactRelationship"
@@ -162,7 +168,10 @@ export default function PersonalInfoStep({
           onChange={(value) => onChange("emergencyContactRelationship", value)}
           error={errors.emergencyContactRelationship}
         />
+        </div>
       </section>
+
+ 
     </div>
   );
 }
