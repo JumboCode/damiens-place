@@ -102,7 +102,6 @@ model Applicant {
   // Step 3 — minor consent (only applies when age < 18; null = not answered yet)
   minorGuardianSignature   String?
   minorSignature           String?
-  minorGuardianPhoneNumber String?
 
   // Step 4 - onboarding appointment availability 
   onboardingAvailability String? // free text; null = not answered yet
