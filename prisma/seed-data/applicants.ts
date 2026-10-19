@@ -8,7 +8,7 @@
  * Date Created: 10/15/2026
  */
 
-import { ApplicantStatus } from "../../src/generated/prisma/enums";
+import { ApplicantStatus, DayOfWeek } from "../../src/generated/prisma/enums";
 
 // Only the fields Prisma requires are mandatory; everything else is optional.
 export type SeedApplicant = {
@@ -32,11 +32,12 @@ export type SeedApplicant = {
   // Optional fields, only filled in for Test One so the detail endpoint has more to show
   homePhone?: string;
   emergencyContactRelationship?: string;
-  timeAvailability?: string;
+  availableDays?: DayOfWeek[];
+  availableHours?: string;
   hasDisability?: boolean;
   materialsReviewedAt?: Date;
-  waiverAccepted?: boolean;
-  agreementAccepted?: boolean;
+  waiverSignature?: string;
+  agreementSignature?: string;
   complianceAcceptedAt?: Date;
 
   // Names of seeded positions to link to this applicant
@@ -62,11 +63,12 @@ export const applicants: SeedApplicant[] = [
     emergencyContactName: "Test Contact",
     emergencyContactPhone: "6175550103",
     emergencyContactRelationship: "Friend",
-    timeAvailability: "Thursdays and Saturdays, 7:30 AM to 12:00 PM",
+    availableDays: [DayOfWeek.THURSDAY, DayOfWeek.SATURDAY],
+    availableHours: "7:30 AM to 12:00 PM. Happy to stay later if needed.",
     hasDisability: false,
     materialsReviewedAt: new Date("2026-10-10T14:00:00Z"),
-    waiverAccepted: true,
-    agreementAccepted: true,
+    waiverSignature: "Test One",
+    agreementSignature: "Test One",
     complianceAcceptedAt: new Date("2026-10-10T14:00:00Z"),
     submittedAt: new Date("2026-10-10T14:00:00Z"),
     positionNames: ["Guest Intake", "Translator"],

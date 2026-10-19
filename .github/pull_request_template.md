@@ -25,6 +25,10 @@ Ex: if this were a signup page creation, to test, login with user X and password
 <!-- For backend tickets: Prisma studio or Postman responses-->
 <!-- For frontend tickets: UI changes, all cases -->
 
+## Estimated Hours Spent
+
+<!-- Total time spent on the ticket -->
+
 ## Checklist before requesting a review
 
 - [ ] Satisfies all Deliverables
