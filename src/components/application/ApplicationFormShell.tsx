@@ -18,6 +18,8 @@ import StepProgress from "./StepProgress";
 import logo from "@/assets/images/logo.png";
 import CommonButton from "@/components/common/CommonButton";
 
+
+
 export default function ApplicationFormShell() {
   // useState = a box that remembers a value. 0 means the first step.
   const [currentStep, setCurrentStep] = useState(0);
@@ -51,6 +53,9 @@ export default function ApplicationFormShell() {
       <div className="mt-6">
         <StepProgress currentStep={currentStep} />
       </div>
+
+
+      
 
       <main className="mx-auto w-full max-w-lg flex-1 px-4 py-6 md:max-w-3xl">
         <div className="flex h-full min-h-64 items-center justify-center rounded-lg border border-dashed border-gray-300 text-gray-400">

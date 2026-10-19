@@ -4,7 +4,7 @@
  * Defines the data types and default values for the Personal Info form.
  * Validates user inputs to ensure required fields are completed and correctly formatted.
  *
- * Author: Luisa Garciarramos
+ * Author: Luisa and Jeremiah
  * Date Created: 10/16/2026
  */
 
