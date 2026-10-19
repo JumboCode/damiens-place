@@ -24,8 +24,6 @@ import { NextResponse } from "next/server";
  * Errors:
  *   400 - upload rejected
  */
-
-// Hint: Auth is public, and the body is the token request the Blob library sends for you
 export async function POST(request: Request) {
   try {
     const body = (await request.json()) as HandleUploadBody;
