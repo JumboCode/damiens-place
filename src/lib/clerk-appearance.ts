@@ -8,6 +8,8 @@
  */
 
 export const clerkAppearance = {
+  cssLayerName: "clerk",
+
   options: {
     unsafe_disableDevelopmentModeWarnings: true,
   },
@@ -24,121 +26,67 @@ export const clerkAppearance = {
   },
 
   elements: {
-    rootBox: {
-      width: "100%",
-    },
+    rootBox: "w-full",
 
-    cardBox: {
-      width: "100%",
-      boxShadow: "none",
-      border: "none",
-      borderRadius: "5px",
-    },
+    cardBox: "w-full rounded-[5px] border-none shadow-none",
 
-    card: {
-      width: "100%",
-      padding: "0px 16px 32px",
-      border: "none",
-      borderRadius: "0",
-      backgroundColor: "transparent",
-      boxShadow: "none",
-    },
+    card: "w-full rounded-none border-none bg-transparent px-[16px] pt-0 pb-[32px] shadow-none",
 
-    headerTitle: {
-      display: "none",
-    },
+    headerTitle: "hidden",
 
-    header: {
-      ".cl-signIn-start &": {
-        display: "none",
-      },
-    },
-    headerSubtitle: {
-      display: "none",
-    },
+    header: "[.cl-signIn-start_&]:hidden",
 
-    formFieldErrorText: {
-      color: "var(--error-msg)",
-      fontSize: "14px",
-      lineHeight: "20px",
-    },
+    headerSubtitle: "hidden",
 
-    formFieldLabel: {
-      fontSize: "18px",
-      fontWeight: 500,
-      lineHeight: "24px",
-      color: "var(--foreground)",
-      backgroundColor: "transparent",
-    },
+    formFieldErrorText: "text-[14px] leading-[20px] text-error-msg",
 
-    formFieldInput: {
-      minHeight: "48px",
-      fontSize: "18px",
-      backgroundColor: "var(--input-box)",
-      border: "1px solid var(--input-regular-frame)",
-      borderRadius: "6px",
-      boxShadow: "none",
+    formFieldLabel:
+      "bg-transparent text-[18px] leading-[24px] font-medium text-foreground",
+
+    formFieldInput: [
+      "min-h-[48px] text-[18px] bg-input-box",
+      "border border-solid border-input-regular-frame",
+      "rounded-[6px] shadow-none",
 
       //hovering over box when not disabled
-      "&:hover:not:(:disabled):not([aria-invalid='true'])": {
-        borderColor: "var(--input-hover-frame)",
-      },
+      "[&:hover:not(:disabled):not([aria-invalid=true])]:border-input-hover-frame",
 
       //clicking on the box with no error
-      "&:focus:not([aria-invalid='true'])": {
-        borderColor: "var(--input-hover-frame)",
-        boxShadow: "none",
-      },
+      "[&:focus:not([aria-invalid=true])]:border-input-hover-frame",
+      "[&:focus:not([aria-invalid=true])]:shadow-none",
 
       //clear for keyboard navigation
-      "&:focus-visible": {
-        outline: "2px solid var(--primary)",
-        outlineOffset: "2px",
-      },
+      "focus-visible:outline-2",
+      "focus-visible:outline-solid",
+      "focus-visible:outline-primary",
+      "focus-visible:outline-offset-2",
 
       //if error keep red even during hover/focus
-      "&[aria-invalid='true'], &[aria-invalid='true']:hover, &[aria-invalid='true']:focus":
-        {
-          borderColor: "var(--error-msg)",
-          boxShadow: "none",
-        },
+      "aria-invalid:border-error-msg",
+      "aria-invalid:shadow-none",
+      "[&[aria-invalid=true]:hover]:border-error-msg",
+      "[&[aria-invalid=true]:hover]:shadow-none",
+      "[&[aria-invalid=true]:focus]:border-error-msg",
+      "[&[aria-invalid=true]:focus]:shadow-none",
 
-      "&:disabled": {
-        backgroundColor: "var(--input-box)",
-        borderColor: "var(--input-regular-frame)",
-        opacity: 0.6,
-        cursor: "not-allowed",
-      },
+      "disabled:bg-input-box",
+      "disabled:border-input-regular-frame",
+      "disabled:opacity-60",
+      "disabled:cursor-not-allowed",
 
       //placeholder text not in figma so let's cut
-      "&::placeholder": {
-        color: "transparent",
-        opacity: 0,
-      },
-    },
+      "placeholder:text-transparent",
+      "placeholder:opacity-0",
+    ].join(" "),
 
-    formButtonPrimary: {
-      width: "16rem",
-      maxWidth: "100%",
-      minHeight: "48px",
-      marginInline: "auto",
-      borderRadius: "9999px",
-      backgroundColor: "var(--primary)",
-      backgroundImage: "none",
-      boxShadow: "none",
-      fontSize: "20px",
-      fontWeight: 500,
-      textTransform: "none",
-    },
+    formButtonPrimary: [
+      "w-[16rem] max-w-full min-h-[48px] mx-auto",
+      "rounded-[9999px] bg-primary bg-none shadow-none",
+      "text-[20px] font-medium normal-case",
+    ].join(" "),
 
-    footer: {
-      backgroundColor: "var(--background)",
-      backgroundImage: "none",
-      boxShadow: "none",
-      border: "none",
-    },
-    footerAction: {
-      display: "none",
-    },
+    footer: "bg-background bg-none shadow-none border-none",
+
+    footerAction: "hidden",
   },
 };

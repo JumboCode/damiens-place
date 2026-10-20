@@ -15,53 +15,15 @@ import logo from "@/assets/images/logo.png";
 export default function AdminUnauthorizedPage() {
   return (
     <ClerkProvider>
-      <div
-        style={{
-          width: "100%",
-          minHeight: "100vh",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: 48,
-          display: "flex",
-        }}
-      >
-        <div
-          style={{
-            alignSelf: "stretch",
-            flexDirection: "column",
-            justifyContent: "flex-start",
-            alignItems: "center",
-            gap: 36,
-            display: "flex",
-          }}
-        >
+      <div className="flex min-h-screen w-full flex-col items-center justify-center gap-[48px]">
+        <div className="flex flex-col items-center justify-start gap-[36px] self-stretch">
           <Image
             src={logo}
             alt="Damien's Food Pantry logo"
-            style={{ width: 202, height: 82 }}
+            className="h-[82px] w-[202px]"
           />
-          <div
-            style={{
-              alignSelf: "stretch",
-              flexDirection: "column",
-              justifyContent: "flex-start",
-              alignItems: "center",
-              gap: 48,
-              display: "flex",
-            }}
-          >
-            <div
-              style={{
-                width: "100%",
-                textAlign: "center",
-                color: "#1C1E1F",
-                fontSize: 40,
-                fontFamily: "Inclusive Sans",
-                fontWeight: "600",
-                wordWrap: "break-word",
-              }}
-            >
+          <div className="flex flex-col items-center justify-start gap-[48px] self-stretch">
+            <div className="w-full text-center text-[40px] font-semibold text-text-primary wrap-break-word [font-family:'Inclusive_Sans']">
               Sorry, you don’t have access to this page
             </div>
           </div>
@@ -69,17 +31,7 @@ export default function AdminUnauthorizedPage() {
         <SignOutButton redirectUrl="/sign-in">
           <button
             type="button"
-            style={{
-              padding: "15px 33px",
-              background: "var(--primary)",
-              borderRadius: 9999,
-              color: "var(--background)",
-              fontSize: 32,
-              fontFamily: "Inclusive Sans",
-              fontWeight: 600,
-              border: "none",
-              cursor: "pointer",
-            }}
+            className="cursor-pointer rounded-[9999px] border-none bg-primary px-[33px] py[15px] text-[32px] font-semibold text-background [font-family:'Inclusive_Sans']"
           >
             Return to log in
           </button>

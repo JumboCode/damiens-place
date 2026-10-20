@@ -23,42 +23,14 @@ export default async function AdminLayout({
 
   return (
     <div>
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          paddingLeft: 30,
-          paddingRight: 30,
-          paddingTop: 20,
-          paddingBottom: 20,
-          background: "var(--primary)",
-          justifyContent: "space-between",
-          alignItems: "center",
-          display: "inline-flex",
-        }}
-      >
-        <div
-          style={{
-            justifyContent: "flex-start",
-            alignItems: "center",
-            gap: 13,
-            display: "flex",
-          }}
-        >
+      <div className="inline-flex h-full w-full items-center justify-between bg-primary px-[30px] py-[20px]">
+        <div className="flex items-center justify-start gap-[13px]">
           <Image
             src={logo1}
             alt="Damien's Food Pantry logo"
-            style={{ width: 28, height: 29, objectFit: "contain" }}
+            className="h-[29px] w-[28px] object-contain"
           />
-          <div
-            style={{
-              color: "white",
-              fontSize: 18,
-              fontFamily: "Inclusive Sans",
-              fontWeight: "700",
-              wordWrap: "break-word",
-            }}
-          >
+          <div className="text-[18px] font-bold text-white wrap-break-word [font-family:'Inclusive_Sans']">
             Damien’s Food Pantry
           </div>
         </div>
@@ -67,23 +39,7 @@ export default async function AdminLayout({
           <SignOutButton redirectUrl="/admin/sign-in">
             <button
               type="button"
-              style={{
-                display: "inline-flex",
-                justifyContent: "center",
-                alignItems: "center",
-                padding: "10px 20px",
-                background: "var(--background)",
-                color: "black",
-                borderRadius: 9999,
-                border: "none",
-                fontSize: 18,
-                lineHeight: "24px",
-                fontFamily: "inherit",
-                fontWeight: 500,
-                whiteSpace: "nowrap",
-                flexShrink: 0,
-                cursor: "pointer",
-              }}
+              className="inline-flex shrink-0 cursor-pointer items-center justify-center rounded-[9999px] border-none bg-background px-[20px] py-[10px] text-[18px] leading-[24px] font-medium font-medium whitespace-nowrap text-black [font-family:inherit]"
             >
               Log out
             </button>
