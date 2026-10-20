@@ -46,7 +46,7 @@ export default function FormField({
   return (
     <div className="flex flex-col gap-1">
       <label htmlFor={name} className="text-base">
-        {label} {required && <span className="text-[#E31A1D]">*</span>}
+        {label} {required && <span className="text-error-msg">*</span>}
       </label>
       <input
         id={name}
@@ -60,12 +60,12 @@ export default function FormField({
         className={
           "w-full rounded-md border bg-input-box px-3 py-2 text-sm font-normal text-foreground focus:outline-none " +
           (error
-            ? "border-[#E31A1D] hover:border-[#E31A1D] focus:border-[#E31A1D]"
+            ? "border-error-msg hover:border-error-msg focus:border-error-msg"
             : "border-input-regular-frame hover:border-input-hover-frame focus:border-input-focus-frame")
         }
       />
       {error && (
-        <p id={errorId} className="text-sm text-[#E31A1D]">
+        <p id={errorId} className="text-sm text-error-msg">
           {error}
         </p>
       )}
