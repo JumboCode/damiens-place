@@ -7,26 +7,36 @@
  * Date Created: 10/18/2026
  */
 import { NextResponse } from "next/server";
-import { prisma } from "../../../../lib/prisma";
+import { prisma } from "@/lib/prisma";
+import { requireAdmin } from "@/lib/admin-auth";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
 /**
  * PATCH()
  *
- * Updates a position in the prisma DB
+ * Updates one position in the prisma DB. Only the fields that are sent
+ * get changed.
  *
- * Auth: public
- * Params: none
- * Returns: 200 all items
- * Errors: none
+ * Auth: admin
+ * Params: id (the position's id, from the URL)
+ * Body: any of name, description, days, times (non-empty strings) and
+ *        available (boolean)
+ * Returns: 200 { position }, the updated position
+ * Errors:
+ *   400 body isn't valid JSON, is empty, has an unknown field, or has a
+ *          field of the wrong type
+ *   401 not signed in
+ *   403 signed in but not an admin
+ *   404 no position with that id
+ *   409 another position already has that name
+ *   500 anything unexpected
  */
 export async function PATCH(request: Request, { params }: RouteContext) {
-  // In Next.js 15+, params is a Promise, so you have to await it
-  const { id } = await params;
+  const denied = await requireAdmin();
+  if (denied) return denied;
 
-  // TODO(natalie): add the admin check here once admin route protection is merged (BE-positions-api)
-  // Leave this comment exactly as it is. Don't write any auth code.
+  const { id } = await params;
 
   let body;
   try {
