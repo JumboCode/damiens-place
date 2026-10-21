@@ -18,7 +18,7 @@ import { prisma } from "../../../lib/prisma";
  * Auth: public
  * Params: none
  * Returns: 200 all items
- * Errors: TBD
+ * Errors: none
  */
 export async function GET() {
   const positions = await prisma.position.findMany({
