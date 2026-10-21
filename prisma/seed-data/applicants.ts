@@ -12,7 +12,8 @@ import { ApplicantStatus, DayOfWeek } from "../../src/generated/prisma/enums";
 
 // Only the fields Prisma requires are mandatory; everything else is optional.
 export type SeedApplicant = {
-  // Fixed ids let the seed script upsert (re-running it never creates duplicates)
+  // Fixed ids let the seed script upsert (re-running it never creates
+  // duplicates)
   id: string;
   status: ApplicantStatus;
   firstName: string;
@@ -29,7 +30,8 @@ export type SeedApplicant = {
   emergencyContactPhone: string;
   submittedAt?: Date;
 
-  // Optional fields, only filled in for Test One so the detail endpoint has more to show
+  // Optional fields, only filled in for Test One and Test Five so they have
+  // more to show
   homePhone?: string;
   emergencyContactRelationship?: string;
   availableDays?: DayOfWeek[];
@@ -39,6 +41,7 @@ export type SeedApplicant = {
   waiverSignature?: string;
   agreementSignature?: string;
   complianceAcceptedAt?: Date;
+  onboardingAvailability?: string;
 
   // Names of seeded positions to link to this applicant
   positionNames: string[];
@@ -70,6 +73,7 @@ export const applicants: SeedApplicant[] = [
     waiverSignature: "Test One",
     agreementSignature: "Test One",
     complianceAcceptedAt: new Date("2026-10-10T14:00:00Z"),
+    onboardingAvailability: "Weekday mornings before 11 AM.",
     submittedAt: new Date("2026-10-10T14:00:00Z"),
     positionNames: ["Guest Intake", "Translator"],
   },
@@ -125,6 +129,79 @@ export const applicants: SeedApplicant[] = [
     zip: "02149",
     emergencyContactName: "Test Contact",
     emergencyContactPhone: "6175550403",
+    positionNames: [],
+  },
+
+  // Test Five to Seven are for the approve/reject ticket. Their submittedAt
+  // dates are older than Test One, so the Applicant GET list order
+  // (Two, Three, One) is unchanged.
+  {
+    // Approve this one: it has positions, so the copy into a Volunteer can
+    // be checked
+    id: "test-applicant-five",
+    status: ApplicantStatus.SUBMITTED,
+    firstName: "Test",
+    lastName: "Five",
+    age: 30,
+    email: "test.five@example.com",
+    cellPhone: "6175550501",
+    homePhone: "6175550502",
+    proofOfResidenceUrl: "proof-of-residence/test-five-utility-bill.pdf",
+    street: "55 Example Blvd",
+    city: "Medford",
+    state: "MA",
+    zip: "02155",
+    emergencyContactName: "Test Contact",
+    emergencyContactPhone: "6175550503",
+    emergencyContactRelationship: "Sibling",
+    availableDays: [DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY],
+    availableHours: "1:00 PM to 5:00 PM.",
+    hasDisability: false,
+    materialsReviewedAt: new Date("2026-10-09T14:00:00Z"),
+    waiverSignature: "Test Five",
+    agreementSignature: "Test Five",
+    complianceAcceptedAt: new Date("2026-10-09T14:00:00Z"),
+    onboardingAvailability: "Any weekday afternoon.",
+    submittedAt: new Date("2026-10-09T14:00:00Z"),
+    positionNames: ["Guest Intake", "Translator"],
+  },
+  {
+    // Reject this one
+    id: "test-applicant-six",
+    status: ApplicantStatus.SUBMITTED,
+    firstName: "Test",
+    lastName: "Six",
+    age: 41,
+    email: "test.six@example.com",
+    cellPhone: "6175550601",
+    proofOfResidenceUrl: "proof-of-residence/test-six-utility-bill.pdf",
+    street: "66 Example Way",
+    city: "Arlington",
+    state: "MA",
+    zip: "02474",
+    emergencyContactName: "Test Contact",
+    emergencyContactPhone: "6175550603",
+    submittedAt: new Date("2026-10-08T14:00:00Z"),
+    positionNames: [],
+  },
+  {
+    // Same email and cell phone as Test Five on purpose: once Five is approved,
+    // approving Seven must fail because that volunteer already exists
+    id: "test-applicant-seven",
+    status: ApplicantStatus.SUBMITTED,
+    firstName: "Test",
+    lastName: "Seven",
+    age: 30,
+    email: "test.five@example.com",
+    cellPhone: "6175550501",
+    proofOfResidenceUrl: "proof-of-residence/test-seven-utility-bill.pdf",
+    street: "55 Example Blvd",
+    city: "Medford",
+    state: "MA",
+    zip: "02155",
+    emergencyContactName: "Test Contact",
+    emergencyContactPhone: "6175550503",
+    submittedAt: new Date("2026-10-07T14:00:00Z"),
     positionNames: [],
   },
 ];

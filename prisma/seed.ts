@@ -31,10 +31,23 @@ async function main() {
   // seeding applicants
   for (const { id, positionNames, ...fields } of applicants) {
     const positionLinks = positionNames.map((name) => ({ name }));
+
+    // Re-running the seed puts each applicant back to the status in the seed
+    // data, so it also undoes any approval made while testing: delete the
+    // Volunteer created from this applicant (the applicant's volunteerId is
+    // cleared automatically), then clear the review fields below.
+    // This keeps the approve/reject tests repeatable!
+    await prisma.volunteer.deleteMany({ where: { applicant: { id } } });
+
     await prisma.applicant.upsert({
       where: { id },
-      // "set" replaces the links so re-running the seed never piles up extras
-      update: { ...fields, positions: { set: positionLinks } },
+      update: {
+        ...fields,
+        reviewedAt: null,
+        reviewedByClerkId: null,
+        // "set" replaces the links so re-running the seed never piles up extras
+        positions: { set: positionLinks },
+      },
       create: { id, ...fields, positions: { connect: positionLinks } },
     });
   }
