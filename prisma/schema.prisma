@@ -1,8 +1,8 @@
 // Conventions:
 //   - Default Prisma naming: PascalCase models, camelCase fields.
-//   - All DateTimes are stored in UTC; convert to/from local timezone explicitly.
-//   - Rules the schema can't express (max 3 positions per applicant, appointment
-//     capacity) are enforced in the API layer.
+//   - All DateTimes are stored in UTC; timezone conversion helpers are in 
+//        src/lib/time-conversion.ts.
+//   - Rules the schema can't express are enforced in the API layer.
 
 generator client {
   provider = "prisma-client"
@@ -22,13 +22,6 @@ enum ApplicantStatus {
   SUBMITTED // finalized by the submission endpoint; shows up in Tab B
   APPROVED // admin approved -> Volunteer created
   REJECTED // admin rejected -> rejection email sent
-}
-
-// TBD
-enum AvailabilityFrequency {
-  WEEKLY
-  MONTHLY
-  SEASONAL
 }
 
 enum DayOfWeek {
@@ -56,25 +49,11 @@ model Position {
   description String
   days        String // free display text, i.e. "Thursday and Saturday"
   times       String // free display text, i.e. "7:30AM - 12:00PM" or "4 hrs biweekly"
-  available   Boolean @default(true) // false = grayed out in the application dropdown
+  available   Boolean @default(true) 
 
   applicants Applicant[] // implicit many-to-many: positions an applicant is interested in
   volunteers Volunteer[] // implicit many-to-many: positions a volunteer was approved for
   hourLogs   HourLog[]
-}
-
-// ---------------------------------------------------------------------------
-// Appointment — onboarding slot that applicants pick in Step 4
-// 
-// 4 person cap, and always fixed at an hour.
-// ---------------------------------------------------------------------------
-
-model Appointment {
-  id       String   @id @default(cuid())
-  startsAt DateTime
-  capacity Int      @default(4)
-
-  applicants Applicant[]
 }
 
 // ---------------------------------------------------------------------------
@@ -108,25 +87,24 @@ model Applicant {
   emergencyContactRelationship String?
 
   // Step 2 — volunteer interest
-  positions           Position[] // max 3, enforced in validation
-  generalAvailability AvailabilityFrequency? // TODO: update here 
-  daysPerMonth        Int?
-  availableDays       DayOfWeek[]            @default([])
-  hasDisability       Boolean?
-  disabilityDetails   String? // only when hasDisability = true
+  positions         Position[] 
+  availableDays     DayOfWeek[] // Mon–Sun, picked from the dropdown. Empty until answered
+  availableHours    String? // free text: hours on those days, plus any comments
+  hasDisability     Boolean?
+  disabilityDetails String? // only when hasDisability = true
 
   // Step 3 — onboarding materials + compliance (null = not answered yet)
-  materialsReviewedAt       DateTime?
-  photoConsent              Boolean?
-  backgroundCheckAuthorized Boolean?
-  waiverAccepted            Boolean?
-  agreementAccepted         Boolean?
-  minorReleaseAccepted      Boolean? // only applies when age < 18; null otherwise
-  complianceAcceptedAt      DateTime?
+  materialsReviewedAt      DateTime?
+  waiverSignature          String?
+  agreementSignature       String?
+  complianceAcceptedAt     DateTime?
 
-  // Step 4 — onboarding appointment
-  appointmentId String?
-  appointment   Appointment? @relation(fields: [appointmentId], references: [id], onDelete: SetNull)
+  // Step 3 — minor consent (only applies when age < 18; null = not answered yet)
+  minorGuardianSignature   String?
+  minorSignature           String?
+
+  // Step 4 - onboarding appointment availability 
+  onboardingAvailability String? // free text; null = not answered yet
 
   // Submission + admin review (Tab B)
   submittedAt       DateTime?
@@ -226,6 +204,6 @@ model HourLog {
 
 model Resource {
   id      String @id @default(cuid())
-  title   String // "Damien's Volunteer Handbook R3"
+  title   String 
   fileUrl String // vercel blob url 
 }
