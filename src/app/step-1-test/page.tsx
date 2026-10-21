@@ -22,6 +22,7 @@ export default function Step1TestPage() {
           setValues({ ...values, [field]: value });
         }}
         errors={errors}
+        onProofUploaded={() => {}}
       />
 
       <button

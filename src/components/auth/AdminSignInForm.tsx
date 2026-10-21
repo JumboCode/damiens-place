@@ -18,12 +18,11 @@ import { clerkAppearance } from "@/lib/clerk-appearance";
 const signInPath = "/admin/sign-in";
 
 const inputClassName =
-  "min-h-12 w-full rounded-md border border-[var(--input-regular-frame)] " +
-  "bg-[var(--input-box)] px-3 text-lg text-[var(--foreground)] " +
-  "hover:border-[var(--input-hover-frame)] " +
-  "focus:border-[var(--input-hover-frame)] " +
-  "focus-visible:outline-2 focus-visible:outline-offset-2 " +
-  "focus-visible:outline-[var(--primary)]";
+  "min-h-12 w-full rounded-md border border-input-regular-frame " +
+  "bg-input-box px-3 text-lg text-foreground " +
+  "hover:border-input-hover-frame " +
+  "focus:border-2 focus:border-input-focus-frame " +
+  "focus:outline-none focus-visible:outline-none";
 
 export default function AdminSignInForm() {
   const { signIn } = useSignIn();

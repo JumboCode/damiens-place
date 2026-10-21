@@ -61,7 +61,7 @@ export default function FormField({
           "w-full rounded-md border bg-input-box px-3 py-2 text-sm font-normal text-foreground focus:outline-none " +
           (error
             ? "border-error-msg hover:border-error-msg focus:border-error-msg"
-            : "border-input-regular-frame hover:border-input-hover-frame focus:border-input-focus-frame")
+            : "border-input-regular-frame hover:border-input-hover-frame focus:border-2 focus:px-2.75 focus:py-1.75 focus:border-input-focus-frame")
         }
       />
       {error && (

@@ -9,18 +9,22 @@
 "use client";
 
 import FormField from "./FormField";
+import ProofOfResidenceUpload from "./ProofOfResidenceUpload";
 import type { PersonalInfoErrors, PersonalInfoValues } from "./personal-info";
 
 type PersonalInfoStepProps = {
   values: PersonalInfoValues;
   errors: PersonalInfoErrors;
   onChange: (field: keyof PersonalInfoValues, value: string) => void;
+  // Called with the uploaded proof of residence file's URL
+  onProofUploaded: (url: string) => void;
 };
 
 export default function PersonalInfoStep({
   values,
   errors,
   onChange,
+  onProofUploaded,
 }: PersonalInfoStepProps) {
   return (
     <div className="flex flex-col gap-10">
@@ -92,23 +96,7 @@ export default function PersonalInfoStep({
         </div>
       </section>
 
-      <section className="flex flex-col gap-2">
-        <p className="text-left text-lg text-base">
-          Proof of Residence <span className="text-error-msg">*</span>
-        </p>
-
-        <p className="text-left text-sm text-base">
-          Volunteers should live within 25-mile radius from Damien’s Food
-          Pantry, upload relevant documents that prove that you meet the
-          requirement.
-        </p>
-
-        <main className="mt-2 w-full">
-          <div className="mt-2 flex min-h-40 w-full items-center justify-center rounded-lg border border-dashed border-gray-300 bg-gray-100 text-gray-400">
-            <p className="text-center text-sm">Upload Document</p>
-          </div>
-        </main>
-      </section>
+      <ProofOfResidenceUpload onUploaded={onProofUploaded} />
 
       <section className="flex flex-col gap-4">
         <h3 className="text-lg font-semibold">Home Address</h3>

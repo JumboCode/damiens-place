@@ -52,7 +52,8 @@ export const clerkAppearance = {
       "[&:hover:not(:disabled):not([aria-invalid=true])]:border-input-hover-frame",
 
       //clicking on the box with no error
-      "[&:focus:not([aria-invalid=true])]:border-input-hover-frame",
+      "[&:focus:not([aria-invalid=true])]:border-2",
+      "[&:focus:not([aria-invalid=true])]:border-input-focus-frame",
       "[&:focus:not([aria-invalid=true])]:shadow-none",
 
       //clear for keyboard navigation
