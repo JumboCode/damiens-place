@@ -1,3 +1,4 @@
+@layer theme, base, clerk, components, utilities;
 @import "tailwindcss";
 
 :root {
@@ -9,6 +10,7 @@
   --secondary: #c75173;
   --primary-foreground: #ffffff;
   --muted-foreground: #6b7280;
+  --text-primary: #1c1e1f;
 
   /* Input box */
   --input-box: #f8fafc;
@@ -36,6 +38,7 @@
   --color-input-regular-frame: var(--input-regular-frame);
   --color-input-focus-frame: var(--input-focus-frame);
   --color-error-msg: var(--error-msg);
+  --color-text-primary: var(--text-primary);
 }
 
 @layer base {
