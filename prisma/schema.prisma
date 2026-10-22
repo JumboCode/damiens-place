@@ -93,15 +93,18 @@ model Applicant {
   hasDisability     Boolean?
   disabilityDetails String? // only when hasDisability = true
 
-  // Step 3 — onboarding materials + compliance (null = not answered yet)
-  materialsReviewedAt      DateTime?
-  waiverSignature          String?
-  agreementSignature       String?
-  complianceAcceptedAt     DateTime?
+   // Step 3 — onboarding materials + compliance (null = not answered yet)
+  materialsReviewedAt  DateTime?
+  waiverAccepted       Boolean?
+  waiverSignature      String?
+  agreementAccepted    Boolean?
+  agreementSignature   String?
+  complianceAcceptedAt DateTime?
 
   // Step 3 — minor consent (only applies when age < 18; null = not answered yet)
-  minorGuardianSignature   String?
-  minorSignature           String?
+  minorReleaseAccepted   Boolean?
+  minorGuardianSignature String?
+  minorSignature         String?
 
   // Step 4 - onboarding appointment availability 
   onboardingAvailability String? // free text; null = not answered yet
