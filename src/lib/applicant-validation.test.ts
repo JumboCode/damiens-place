@@ -288,4 +288,47 @@ describe("validateApplicantFields", () => {
       error: expect.stringContaining("availableDays"),
     });
   });
+  // Add these inside describe("validateApplicantFields", ...) in
+  // src/lib/applicant-validation.test.ts
+
+  it.each(["waiverAccepted", "agreementAccepted", "minorReleaseAccepted"])(
+    "accepts true or false for %s",
+    (field) => {
+      expect(
+        validateApplicantFields({ [field]: true }, { requireStep1: false }),
+      ).toEqual({ data: { [field]: true } });
+      expect(
+        validateApplicantFields({ [field]: false }, { requireStep1: false }),
+      ).toEqual({ data: { [field]: false } });
+    },
+  );
+
+  it.each(["waiverAccepted", "agreementAccepted", "minorReleaseAccepted"])(
+    "rejects a non-boolean %s",
+    (field) => {
+      const result = validateApplicantFields(
+        { [field]: "yes" },
+        { requireStep1: false },
+      );
+      expect(result).toEqual({ error: expect.stringContaining(field) });
+    },
+  );
+
+  it("rejects the removed minorGuardianPhoneNumber field", () => {
+    const result = validateApplicantFields(
+      { minorGuardianPhoneNumber: "6175550123" },
+      { requireStep1: false },
+    );
+    expect(result).toEqual({
+      error: expect.stringContaining("minorGuardianPhoneNumber"),
+    });
+  });
+
+  it("rejects a repeated day in availableDays", () => {
+    const result = validateApplicantFields(
+      { availableDays: ["MONDAY", "MONDAY"] },
+      { requireStep1: false },
+    );
+    expect(result).toEqual({ error: expect.stringContaining("availableDays") });
+  });
 });

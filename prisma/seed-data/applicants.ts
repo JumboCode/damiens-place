@@ -38,7 +38,9 @@ export type SeedApplicant = {
   availableHours?: string;
   hasDisability?: boolean;
   materialsReviewedAt?: Date;
+  waiverAccepted?: boolean;
   waiverSignature?: string;
+  agreementAccepted?: boolean;
   agreementSignature?: string;
   complianceAcceptedAt?: Date;
   onboardingAvailability?: string;
@@ -70,7 +72,9 @@ export const applicants: SeedApplicant[] = [
     availableHours: "7:30 AM to 12:00 PM. Happy to stay later if needed.",
     hasDisability: false,
     materialsReviewedAt: new Date("2026-10-10T14:00:00Z"),
+    waiverAccepted: true,
     waiverSignature: "Test One",
+    agreementAccepted: true,
     agreementSignature: "Test One",
     complianceAcceptedAt: new Date("2026-10-10T14:00:00Z"),
     onboardingAvailability: "Weekday mornings before 11 AM.",
@@ -158,7 +162,9 @@ export const applicants: SeedApplicant[] = [
     availableHours: "1:00 PM to 5:00 PM.",
     hasDisability: false,
     materialsReviewedAt: new Date("2026-10-09T14:00:00Z"),
+    waiverAccepted: true,
     waiverSignature: "Test Five",
+    agreementAccepted: true,
     agreementSignature: "Test Five",
     complianceAcceptedAt: new Date("2026-10-09T14:00:00Z"),
     onboardingAvailability: "Any weekday afternoon.",

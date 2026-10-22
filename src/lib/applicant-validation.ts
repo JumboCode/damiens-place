@@ -50,7 +50,12 @@ const STRING_FIELDS = [
 ];
 
 // Fields that must be a boolean
-const BOOLEAN_FIELDS = ["hasDisability"];
+const BOOLEAN_FIELDS = [
+  "hasDisability",
+  "waiverAccepted",
+  "agreementAccepted",
+  "minorReleaseAccepted",
+];
 
 // Every field a client is allowed to send. Anything else gets rejected.
 const ALLOWED_FIELDS = [
@@ -156,6 +161,9 @@ export function validateApplicantFields(
         )
       ) {
         return { error: "availableDays must be an array of valid days" };
+      }
+      if (new Set(value).size !== value.length) {
+        return { error: "availableDays has a repeat" };
       }
       data[field] = value;
     }
