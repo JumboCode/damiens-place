@@ -11,7 +11,7 @@ import {
 } from "@/components/application/personal-info";
 
 export default function Step1TestPage() {
-  const [values, setValues] = useState<PersonalInfoValues>(emptyPersonalInfo);
+
   const [errors, setErrors] = useState<PersonalInfoErrors>({});
 
   return (
