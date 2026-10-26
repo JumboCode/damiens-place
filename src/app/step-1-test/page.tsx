@@ -4,14 +4,11 @@ import { useState } from "react";
 import PersonalInfoStep from "@/components/application/PersonalInfoStep";
 
 import {
-  emptyPersonalInfo,
   validatePersonalInfo,
-  type PersonalInfoValues,
   type PersonalInfoErrors,
 } from "@/components/application/personal-info";
 
 export default function Step1TestPage() {
-
   const [errors, setErrors] = useState<PersonalInfoErrors>({});
 
   return (

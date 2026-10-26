@@ -23,7 +23,7 @@ You'll also want some packages on VSCode:
 
 Run `npx prisma generate` to generate your Prisma Client. You'll need to run this if the schema gets updated, but Natalie will let you know when that happens.
 
-## Development 
+## Development
 
 To actually run the site, start development server:
 
