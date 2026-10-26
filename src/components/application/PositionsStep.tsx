@@ -1,7 +1,14 @@
-// TODO: FILE HEADER
-// This line is needed because the page reacts to clicks and loads data
+/**
+ * PositionsStep.tsx
+ *
+ * Step 2 in the application form, where the applicant selects positions
+ * and availability.
+ *
+ * Carter & Rim & Natalie
+ * Date Created: 10/26/2026
+ */
 "use client";
- 
+
 import { useEffect, useState } from "react";
 import CommonDropdown from "@/components/common/CommonDropdown";
 import FormTextArea from "./FormTextArea";
@@ -12,14 +19,14 @@ import type {
   PositionsStepErrors,
   PositionsStepValues,
 } from "./positions-step";
- 
+
 type PositionsStepProps = {
   values: PositionsStepValues;
   errors: PositionsStepErrors;
   // Pass only the fields that changed, so one click can update more than one field
   onChange: (changes: Partial<PositionsStepValues>) => void;
 };
- 
+
 export default function PositionsStep({
   values,
   errors,
@@ -29,114 +36,161 @@ export default function PositionsStep({
   const [loadError, setLoadError] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const POSITION_OPTIONS = positions.map((position) => ({
-                                  value: position.id,
-                                  label: position.name,
-                            }));
- 
+  // Every position is an option, including the ones with available: false
+  const positionOptions = positions.map((position) => ({
+    value: position.id,
+    label: position.name,
+  }));
+
   useEffect(() => {
-      async function loadPositions() {
-        try { 
-          const response = await fetch("/api/positions");
-          if (!response.ok) {
-            setLoadError(true);
-            return;
-          }
-          const data = await response.json();
-          setPositions(data.positions);
-        } catch {
+    async function loadPositions() {
+      try {
+        const response = await fetch("/api/positions");
+        if (!response.ok) {
           setLoadError(true);
-        } finally {
-            setLoading(false);
+          return;
         }
+        const data = await response.json();
+        setPositions(data.positions);
+      } catch {
+        setLoadError(true);
+      } finally {
+        setLoading(false);
       }
-      loadPositions();
-  }, []); 
- 
+    }
+    loadPositions();
+  }, []);
+
   return (
     <div className="flex flex-col gap-10">
-      <h2>Part 2: Volunteer Positions</h2>
- 
+      <h2 className="text-xl font-bold">Part 2: Volunteer Positions</h2>
+
       <section className="flex flex-col gap-4">
-        <h3>All Volunteer Positions</h3>
-        {/* TODO: show "Loading positions..." while loading, a clear error message if loadError
-            (something like "We couldn't load the positions. Please refresh the page."), and
-            otherwise the <PositionsTable /> */}
-        
-        {loading && 
-          <span>
-            Loading positions...
-          </span>
-        }
+        <h3 className="text-lg font-semibold">All Volunteer Positions:</h3>
 
-       {loadError && (
-          <p>
-            We couldnt load the positions. Please refresh the page.
-          </p>     
-      )} 
-
-      {!loading && !loadError && <PositionsTable positions={positions}/>}
-        
-        {/* TODO: a label saying "Position of Interest" with a red *, then <CommonDropdown /> under it.
-            Turn each position into an option: { value: position.id, label: position.name }. Every position is an option, including the ones with available: false.
-            selectedValues is values.positionIds, and its onChange should call onChange({ positionIds: newIds }).
-            Show errors.positionIds in red under the dropdown, like FormField does. */}
-
-      <label> Position of Interest <span>*</span></label>
-      
-
-      <CommonDropdown 
-          options={POSITION_OPTIONS}
-          selectedValues={values.positionIds}
-          onChange={(newIDs: string[]) => onChange({positionIds : newIDs})}
-      />
-
-      {loadError && (
-        <p className="text-sm text-error-msg">
-          {errors.positionIds}
-        </p>
-      )}
-      </section>
- 
-      <section className="flex flex-col gap-4">
-        <h3>Time Available</h3>
-        {/* TODO: a label saying "Days of Week Available" with a red *, then <CommonDropdown /> under it.
-            The options are DAY_OPTIONS. selectedValues is values.availableDays, and its onChange
-            should call onChange({ availableDays: newDays }).
-            Show errors.availableDays in red under the dropdown. */}
-        <label>Days of Week Available<span>*</span></label>
-
-        <CommonDropdown 
-          options={DAY_OPTIONS}
-          selectedValues={values.availableDays}
-          onChange={(newDays: string[]) => onChange({ availableDays: newDays})}
-        />
+        {loading && <p>Loading positions...</p>}
 
         {loadError && (
-          <p className="text-sm text-error-msg">
-            {errors.availableDays}
+          <p className="text-error-msg">
+            We couldn&apos;t load the positions. Please refresh the page.
           </p>
         )}
 
-        {/* TODO: a <FormTextArea /> labeled "Hours available on those days", required, with the helper text
-            "Besides hours available, feel free to enter any comments too."
-            Its value is values.availableHours and typing calls onChange({ availableHours: newText }).
-            Pass errors.availableHours as its error. */}
+        {!loading && !loadError && <PositionsTable positions={positions} />}
+
+        <div className="flex flex-col gap-2">
+          <p className="text-base font-medium">
+            Position of Interest <span className="text-error-msg">*</span>
+          </p>
+          <CommonDropdown
+            options={positionOptions}
+            selectedValues={values.positionIds}
+            onChange={(newIds: string[]) => onChange({ positionIds: newIds })}
+          />
+          {errors.positionIds && (
+            <p className="text-sm text-error-msg">{errors.positionIds}</p>
+          )}
+        </div>
       </section>
- 
+
       <section className="flex flex-col gap-4">
-        <h3>Disability</h3>
-        {/* TODO: "Disability Report" with a red *, then the two checkboxes from the Figma:
-              "Yes, I have a disability that I want to report." and "No, I don't have a disability."
-            They work as a pair: checking one unchecks the other, and unchecking the one you checked
-            leaves the question unanswered again (hasDisability: null).
-            Hint: onChange({ hasDisability: true, ... }) can change two fields at once.
-            Show errors.hasDisability in red under the checkboxes. */}
-        {/* TODO: a <FormTextArea /> for the details, with hideLabel and a label like "Disability details"
-            (the Figma shows no label). It's disabled (grayed out) unless "Yes" is checked,
-            and picking "No" or unchecking clears it, so it never keeps old text:
-              onChange({ hasDisability: false, disabilityDetails: "" })
-            Its value is values.disabilityDetails. */}
+        <h3 className="text-lg font-semibold">Time Available</h3>
+
+        <div className="flex flex-col gap-2">
+          <p className="text-base font-medium">
+            Days of Week Available <span className="text-error-msg">*</span>
+          </p>
+          <CommonDropdown
+            options={DAY_OPTIONS}
+            selectedValues={values.availableDays}
+            onChange={(newDays: string[]) =>
+              onChange({ availableDays: newDays })
+            }
+          />
+          {errors.availableDays && (
+            <p className="text-sm text-error-msg">{errors.availableDays}</p>
+          )}
+        </div>
+
+        <FormTextArea
+          label="Hours Available on Those Days"
+          name="availableHours"
+          required
+          helperText="Besides hours available, feel free to enter any comments too."
+          value={values.availableHours}
+          error={errors.availableHours}
+          onChange={(newText) => onChange({ availableHours: newText })}
+        />
+      </section>
+
+      <section className="flex flex-col gap-4">
+        <h3 className="text-lg font-semibold">Disability</h3>
+
+        {/* A fieldset groups the two checkboxes, and the legend is their shared label */}
+        <fieldset className="flex flex-col gap-3">
+          <legend className="mb-2 text-base font-medium">
+            Disability Report <span className="text-error-msg">*</span>
+          </legend>
+
+          {/* Checking "Yes" unchecks "No". Unchecking it leaves the question unanswered and clears the details */}
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              className="size-4 accent-primary"
+              checked={values.hasDisability === true}
+              onChange={(event) =>
+                onChange(
+                  event.target.checked
+                    ? { hasDisability: true }
+                    : { hasDisability: null, disabilityDetails: "" },
+                )
+              }
+              aria-invalid={errors.hasDisability ? true : undefined}
+              aria-describedby={
+                errors.hasDisability ? "hasDisability-error" : undefined
+              }
+            />
+            Yes, I have a disability that I want to report.
+          </label>
+
+          {/* The details box is grayed out unless "Yes" is checked */}
+          <FormTextArea
+            label="Disability details"
+            name="disabilityDetails"
+            hideLabel
+            rows={6}
+            disabled={values.hasDisability !== true}
+            value={values.disabilityDetails}
+            onChange={(newText) => onChange({ disabilityDetails: newText })}
+          />
+
+          {/* Picking "No" clears the details so they never keep old text */}
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              className="size-4 accent-primary"
+              checked={values.hasDisability === false}
+              onChange={(event) =>
+                onChange(
+                  event.target.checked
+                    ? { hasDisability: false, disabilityDetails: "" }
+                    : { hasDisability: null },
+                )
+              }
+              aria-invalid={errors.hasDisability ? true : undefined}
+              aria-describedby={
+                errors.hasDisability ? "hasDisability-error" : undefined
+              }
+            />
+            No, I don&apos;t have a disability.
+          </label>
+
+          {errors.hasDisability && (
+            <p id="hasDisability-error" className="text-sm text-error-msg">
+              {errors.hasDisability}
+            </p>
+          )}
+        </fieldset>
       </section>
     </div>
   );
