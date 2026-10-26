@@ -3,7 +3,9 @@
 JumboCode 2026-27 project for Damien's Place.
 
 **Project Manager**: Begüm Ugurlu
+
 **Technical Lead**: Natalie Phua
+
 **Designer**: Olivia Sheng
 
 ## Getting Started
