@@ -22,15 +22,17 @@ import { prisma } from "@/lib/prisma";
 export async function checkApplicantReferences(
   data: Record<string, unknown>,
 ): Promise<string | null> {
-  // TODO: if data.positions was sent, count how many positions in the database have one of those ids
-  //   (hint: prisma.position.count({ where: { id: { in: ids } } })).
-  //   If the count is less than the number of ids sent, return a message saying a position doesn't exist.
-    if(data.positions === undefined) {
-        return "position was not sent";
-    }
-   
-    const positions = Array.isArray(data.positions) ? data.positions : [data.positions];
+  if (data.positions === undefined) return null;
 
-    
-    return null;
+  const sent = Array.isArray(data.positions) ? data.positions : [data.positions];
+  if (!sent.every((id): id is string => typeof id === "string")) {
+    return "positions must be position ids";
+  }
+
+  const ids = [...new Set(sent)];
+  const count = await prisma.position.count({ where: { id: { in: ids } } });
+  if (count < ids.length) {
+    return "One or more positions do not exist";
+  }
+  return null;
 }
