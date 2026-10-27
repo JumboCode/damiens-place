@@ -1,7 +1,9 @@
 /**
  * onboarding.ts
  *
- * <1-3 sentences: what this file does and why it exists.>
+ * Defines the data types and default values for the onboarding forms.
+ * Validates waiver, agreement, and minor release acceptance and signatures.
+ *
  *
  * Author: Adrien and Luisa
  * Date Created: <10/25/2026>
@@ -35,11 +37,13 @@ export const emptyOnboarding: OnboardingValues = {
 /**
  * validateOnboarding
  *
- * <1-2 sentences: what it does and why it exists.>
+ * Checks whether the applicant has accepted and signed the required
+ * onboarding agreements, including the minor release when applicable.
  *
- * @param <name> - <meaning and constraints>
- * @returns <what comes back, including edge cases like null>
- * @throws <when it throws, or don't include if it never does>
+ * @param values - The applicant's checkbox responses and typed signatures.
+ * @param isMinor - Whether the applicant is under 18.
+ * @returns An object containing error messages for invalid fields,
+ * or an empty object if all required fields are valid.
  */
 export function validateOnboarding(
   values: OnboardingValues,
@@ -69,9 +73,22 @@ export function validateOnboarding(
       "Please type your full legal name to sign the agreement.";
   }
 
-  // TODO: only when isMinor is true: minorReleaseAccepted must be true, and minorGuardianSignature
-  //   and minorSignature can't be empty once the spaces are trimmed off.
-  if isM
+  // Validate the release form only for applicants under 18
+  if (isMinor) {
+    if (!values.minorReleaseAccepted) {
+      errors.minorReleaseAccepted =
+        "You must agree to the minor release to continue.";
+    }
+
+    if (values.minorGuardianSignature.trim() === "") {
+      errors.minorGuardianSignature =
+        "Please enter the parent or legal guardian's full legal name.";
+    }
+
+    if (values.minorSignature.trim() === "") {
+      errors.minorSignature = "Please enter the minor's full legal name.";
+    }
+  }
 
   return errors;
 }
