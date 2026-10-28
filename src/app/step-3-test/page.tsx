@@ -1,4 +1,3 @@
-
 /**
  * step-3-test/page.tsx
  *
@@ -34,7 +33,7 @@ export default function Step3TestPage() {
   const [isMinor, setIsMinor] = useState(false);
 
   return (
-    <main className="mx-auto flex w-full max-w-5xl flex-col gap-6 p-8"> 
+    <main className="mx-auto flex w-full max-w-5xl flex-col gap-6 p-8">
       {/* Display the onboarding form and update only changed fields */}
       <OnboardingStep
         values={values}

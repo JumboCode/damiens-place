@@ -1,4 +1,3 @@
-
 /**
  * OnboardingStep.tsx
  *
@@ -48,10 +47,7 @@ export default function OnboardingStep({
 
         <p>{HANDBOOK_INSTRUCTIONS}</p>
 
-        <PdfViewer
-          src="/documents/handbook.pdf"
-          title={HANDBOOK_TITLE}
-        />
+        <PdfViewer src="/documents/handbook.pdf" title={HANDBOOK_TITLE} />
       </section>
 
       {/* Volunteer waiver and agreement sections */}
@@ -81,8 +77,8 @@ export default function OnboardingStep({
               }
             />
             <span>
-              I have read, understand, and agree with Damien's Food Pantry's
-              volunteer waiver.
+              I have read, understand, and agree with Damien&apos;s Food
+              Pantry&apos;s volunteer waiver.
             </span>
           </label>
 
@@ -120,9 +116,7 @@ export default function OnboardingStep({
               <ul
                 key={index}
                 className={`space-y-2 pl-6 ${
-                  block.items[0]?.startsWith("1.")
-                    ? "list-none"
-                    : "list-disc"
+                  block.items[0]?.startsWith("1.") ? "list-none" : "list-disc"
                 }`}
               >
                 {block.items.map((item, itemIndex) => (
@@ -142,7 +136,7 @@ export default function OnboardingStep({
               }
             />
             <span>
-              I have read, understand, and agree with Damien's Food Pantry
+              I have read, understand, and agree with Damien&apos;s Food Pantry
               policy. As a volunteer, I do not expect to be compensated.
             </span>
           </label>
@@ -157,9 +151,7 @@ export default function OnboardingStep({
             label="E-Signature"
             name="agreementSignature"
             value={values.agreementSignature}
-            onChange={(newText) =>
-              onChange({ agreementSignature: newText })
-            }
+            onChange={(newText) => onChange({ agreementSignature: newText })}
             error={errors.agreementSignature}
             required
           />
@@ -172,73 +164,69 @@ export default function OnboardingStep({
       </section>
 
       {/* Only show the minor release if the applicant is under 18 */}
-{isMinor && (
-  <section className="flex flex-col gap-6">
-    <h3 className="text-2xl font-semibold">
-      Volunteer Release Form for Minors
-    </h3>
+      {isMinor && (
+        <section className="flex flex-col gap-6">
+          <h3 className="text-2xl font-semibold">
+            Volunteer Release Form for Minors
+          </h3>
 
-    {/* Instructions and release text */}
-    <p>Sign ONLY if the volunteer is less than 18 years old.</p>
-    <p>{MINORS_RELEASE_TEXT}</p>
+          {/* Instructions and release text */}
+          <p>Sign ONLY if the volunteer is less than 18 years old.</p>
+          <p>{MINORS_RELEASE_TEXT}</p>
 
-    {/* Checkbox for accepting the minor release */}
-    <label className="flex items-start gap-2">
-      <input
-        type="checkbox"
-        checked={values.minorReleaseAccepted}
-        onChange={(event) =>
-          onChange({ minorReleaseAccepted: event.target.checked })
-        }
-      />
-      <span>
-        I have read, understand, and agree with Damien's Food Pantry's
-        policy on minor volunteers.
-      </span>
-    </label>
+          {/* Checkbox for accepting the minor release */}
+          <label className="flex items-start gap-2">
+            <input
+              type="checkbox"
+              checked={values.minorReleaseAccepted}
+              onChange={(event) =>
+                onChange({ minorReleaseAccepted: event.target.checked })
+              }
+            />
+            <span>
+              I have read, understand, and agree with Damien&apos;s Food
+              Pantry&apos;s policy on minor volunteers.
+            </span>
+          </label>
 
-    {/* Show an error if the release has not been accepted */}
-    {errors.minorReleaseAccepted && (
-      <p className="text-error-msg">
-        {errors.minorReleaseAccepted}
-      </p>
-    )}
+          {/* Show an error if the release has not been accepted */}
+          {errors.minorReleaseAccepted && (
+            <p className="text-error-msg">{errors.minorReleaseAccepted}</p>
+          )}
 
-    {/* Parent or guardian signature */}
-    <div className="flex flex-col gap-2">
-      <FormField
-        label="Parent/Legal Guardian E-Signature"
-        name="minorGuardianSignature"
-        value={values.minorGuardianSignature}
-        onChange={(newText) =>
-          onChange({ minorGuardianSignature: newText })
-        }
-        error={errors.minorGuardianSignature}
-        required
-      />
-      <p className="text-sm text-gray-500">
-        Type your full legal name here to confirm.
-      </p>
-    </div>
+          {/* Parent or guardian signature */}
+          <div className="flex flex-col gap-2">
+            <FormField
+              label="Parent/Legal Guardian E-Signature"
+              name="minorGuardianSignature"
+              value={values.minorGuardianSignature}
+              onChange={(newText) =>
+                onChange({ minorGuardianSignature: newText })
+              }
+              error={errors.minorGuardianSignature}
+              required
+            />
+            <p className="text-sm text-gray-500">
+              Type your full legal name here to confirm.
+            </p>
+          </div>
 
-    {/* Minor's signature */}
-    <div className="flex flex-col gap-2">
-      <FormField
-        label="Minor E-Signature"
-        name="minorSignature"
-        value={values.minorSignature}
-        onChange={(newText) =>
-          onChange({ minorSignature: newText })
-        }
-        error={errors.minorSignature}
-        required
-      />
-      <p className="text-sm text-gray-500">
-        Type the volunteer's full legal name here to confirm.
-      </p>
-    </div>
-  </section>
-  )}
+          {/* Minor's signature */}
+          <div className="flex flex-col gap-2">
+            <FormField
+              label="Minor E-Signature"
+              name="minorSignature"
+              value={values.minorSignature}
+              onChange={(newText) => onChange({ minorSignature: newText })}
+              error={errors.minorSignature}
+              required
+            />
+            <p className="text-sm text-gray-500">
+              Type the volunteer&apos;s full legal name here to confirm.
+            </p>
+          </div>
+        </section>
+      )}
     </div>
   );
 }
