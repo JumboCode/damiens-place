@@ -3,6 +3,9 @@
  *
  * Shows a PDF in the page, plus a link to open it in a new tab
  * (some browsers, especially phones, can't show PDFs inside a page).
+ *
+ * Author: Adrien and Luisa
+ * Date Created: <10/25/2026>
  */
 
 type PdfViewerProps = {
