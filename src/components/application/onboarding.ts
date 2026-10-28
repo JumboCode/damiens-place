@@ -51,8 +51,6 @@ export function validateOnboarding(
 ): OnboardingErrors {
   const errors: OnboardingErrors = {};
 
-  // TODO: waiverAccepted and agreementAccepted must be true. Use a clear message, like
-  //   "You must agree to the waiver to continue".
   if (!values.waiverAccepted) {
     errors.waiverAccepted = "You must agree to the waiver to continue.";
   }
@@ -60,9 +58,7 @@ export function validateOnboarding(
   if (!values.agreementAccepted) {
     errors.agreementAccepted = "You must agree to the agreement to continue.";
   }
-  // TODO: waiverSignature and agreementSignature can't be empty once the spaces are trimmed off.
-  //   Use a clear message, like "Please type your full legal name to sign the waiver".
-  //waiver signature
+
   if (values.waiverSignature.trim() == "") {
     errors.waiverSignature =
       "Please type your full legal name to sign the waiver.";

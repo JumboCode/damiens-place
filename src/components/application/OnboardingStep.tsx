@@ -68,9 +68,10 @@ export default function OnboardingStep({
           </ol>
 
           {/* Controlled checkbox for accepting the waiver */}
-          <label className="flex items-start gap-2">
+          <label className="flex items-center gap-2">
             <input
               type="checkbox"
+              className="size-4 accent-primary"
               checked={values.waiverAccepted}
               onChange={(event) =>
                 onChange({ waiverAccepted: event.target.checked })
@@ -127,9 +128,10 @@ export default function OnboardingStep({
           )}
 
           {/* Controlled checkbox for accepting the agreement */}
-          <label className="flex items-start gap-2">
+          <label className="flex items-center gap-2">
             <input
               type="checkbox"
+              className="size-4 accent-primary"
               checked={values.agreementAccepted}
               onChange={(event) =>
                 onChange({ agreementAccepted: event.target.checked })
@@ -175,9 +177,10 @@ export default function OnboardingStep({
           <p>{MINORS_RELEASE_TEXT}</p>
 
           {/* Checkbox for accepting the minor release */}
-          <label className="flex items-start gap-2">
+          <label className="flex items-center gap-2">
             <input
               type="checkbox"
+              className="size-4 accent-primary"
               checked={values.minorReleaseAccepted}
               onChange={(event) =>
                 onChange({ minorReleaseAccepted: event.target.checked })

@@ -65,7 +65,7 @@ export default function FormField({
         }
       />
       {error && (
-        <p id={errorId} className="text-sm text-error-msg">
+        <p id={errorId} className="text-md text-error-msg">
           {error}
         </p>
       )}

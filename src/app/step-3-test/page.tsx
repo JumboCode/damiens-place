@@ -48,6 +48,7 @@ export default function Step3TestPage() {
       <label className="flex items-center gap-2">
         <input
           type="checkbox"
+          className="size-4 accent-primary"
           checked={isMinor}
           onChange={(event) => setIsMinor(event.target.checked)}
         />
