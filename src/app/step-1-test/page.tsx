@@ -22,7 +22,7 @@ export default function Step1TestPage() {
         onProofUploaded={() => {}}
       />
 
-      <button
+      <button 
         onClick={() => setErrors(validatePersonalInfo(values))}
         className="rounded-full bg-primary px-6 py-2 text-white"
       >
