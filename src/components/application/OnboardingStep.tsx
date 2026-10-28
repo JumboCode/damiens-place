@@ -39,7 +39,7 @@ export default function OnboardingStep({
   isMinor,
 }: OnboardingStepProps) {
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-10 text-base leading-relaxed">
       <h2>Part 3: Onboarding Materials</h2>
 
       {/* Display the handbook instructions and embedded PDF */}
