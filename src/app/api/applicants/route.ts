@@ -25,7 +25,6 @@ export async function GET(request: Request) {
   const denied = await requireAdmin();
   if (denied) return denied;
 
-
   const status = new URL(request.url).searchParams.get("status");
 
   if (

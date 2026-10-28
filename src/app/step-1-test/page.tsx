@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import PersonalInfoStep from "@/components/application/PersonalInfoStep";
+import { PersonalInfoValues } from "@/components/application/personal-info";
 
 import {
   validatePersonalInfo,
@@ -10,6 +11,9 @@ import {
 
 export default function Step1TestPage() {
   const [errors, setErrors] = useState<PersonalInfoErrors>({});
+  const [values, setValues] = useState<PersonalInfoValues>(
+    {} as PersonalInfoValues,
+  );
 
   return (
     <div className="flex flex-col gap-6 p-6">
@@ -22,7 +26,7 @@ export default function Step1TestPage() {
         onProofUploaded={() => {}}
       />
 
-      <button 
+      <button
         onClick={() => setErrors(validatePersonalInfo(values))}
         className="rounded-full bg-primary px-6 py-2 text-white"
       >
