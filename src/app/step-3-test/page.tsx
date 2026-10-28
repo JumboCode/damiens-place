@@ -1,9 +1,19 @@
-// TODO: FILE HEADER
-// This line is needed because the page remembers what you type
+
+/**
+ * step-3-test/page.tsx
+ *
+ * Temporary test page for the OnboardingStep component.
+ * Tests form values, validation, and the minor release section.
+ *
+ * Author: Adrien and Luisa
+ * Date Created: 10/27/2026
+ */
+
 "use client";
- 
+
 import { useState } from "react";
 import CommonButton from "@/components/common/CommonButton";
+import OnboardingStep from "@/components/application/OnboardingStep";
 import {
   emptyOnboarding,
   validateOnboarding,
@@ -12,19 +22,30 @@ import type {
   OnboardingErrors,
   OnboardingValues,
 } from "@/components/application/onboarding";
-// TODO: import OnboardingStep
- 
+
 export default function Step3TestPage() {
+  // Store the current onboarding form values
   const [values, setValues] = useState<OnboardingValues>(emptyOnboarding);
+
+  // Store validation errors
   const [errors, setErrors] = useState<OnboardingErrors>({});
+
+  // Determine whether to show the minor release section
   const [isMinor, setIsMinor] = useState(false);
- 
+
   return (
     <main className="mx-auto flex max-w-3xl flex-col gap-6 p-8">
-      {/* TODO: drop in <OnboardingStep /> here. Pass values, errors, and isMinor.
-          For onChange, merge the changes into the old values:
-          (changes) => setValues((current) => ({ ...current, ...changes })) */}
- 
+      {/* Display the onboarding form and update only changed fields */}
+      <OnboardingStep
+        values={values}
+        errors={errors}
+        isMinor={isMinor}
+        onChange={(changes) =>
+          setValues((current) => ({ ...current, ...changes }))
+        }
+      />
+
+      {/* Toggle the minor release section */}
       <label className="flex items-center gap-2">
         <input
           type="checkbox"
@@ -33,14 +54,15 @@ export default function Step3TestPage() {
         />
         Applicant is under 18
       </label>
- 
+
+      {/* Validate the form and display any errors */}
       <CommonButton
         title="Validate"
         onClick={() => setErrors(validateOnboarding(values, isMinor))}
       />
- 
-      {/* Shows what the page is holding, so you can check it as you type */}
-      <pre className="rounded-md bg-gray-100 p-4 text-sm">
+
+      {/* Show the current values to help test the form */}
+      <pre className="overflow-x-auto rounded-md bg-gray-100 p-4 text-sm text-black">
         {JSON.stringify(values, null, 2)}
       </pre>
     </main>
