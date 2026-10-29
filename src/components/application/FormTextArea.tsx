@@ -96,7 +96,7 @@ export default function FormTextArea({
       />
 
       {error && (
-        <p id={errorId} className="text-sm text-error-msg">
+        <p id={errorId} className="text-md text-error-msg">
           {error}
         </p>
       )}
