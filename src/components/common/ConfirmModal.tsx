@@ -11,7 +11,6 @@
 import { useEffect, useId, useRef } from "react";
 import type { ReactNode } from "react";
 import CommonButton from "./CommonButton";
-import Check from "@/assets/icons/check.svg";
 
 type ConfirmModalProps = {
   title: string;

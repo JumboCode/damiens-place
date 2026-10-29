@@ -52,7 +52,6 @@ export default function OnboardingStep({
 
       {/* Volunteer waiver and agreement sections */}
       <section className="flex flex-col gap-6">
-
         {/* Volunteer Waiver */}
         <div className="flex flex-col gap-4">
           <h4 className="text-lg font-semibold">

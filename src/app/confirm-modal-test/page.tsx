@@ -80,7 +80,13 @@ export default function ConfirmModalTestPage() {
           title="yay the modal works"
           content="test modal"
           confirmTitle="Close"
-          icon={<Image src={Check} alt="Check" className="w-1/3 h-auto object-contain mx-auto" />}
+          icon={
+            <Image
+              src={Check}
+              alt="Check"
+              className="w-1/3 h-auto object-contain mx-auto"
+            />
+          }
           onConfirm={() => {
             setLog("Closed the result popup");
             setOpen(null);
