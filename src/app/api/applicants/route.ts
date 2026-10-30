@@ -20,11 +20,10 @@ import { checkApplicantReferences } from "@/lib/applicant-references";
  *
  * Auth: public
  * Body: STEP_1_REQUIRED_FIELDS,
- *       positionIds (string[], optional)
+ *       positions (string[], optional)
  * Returns: 201 { applicant: { id, status } }
  * Errors:
  *   400 - malformed JSON, invalid Step 1 field, or invalid position reference
- *   409 - an applicant with this email already exists
  *   500 - unexpected database error
  */
 export async function POST(request: Request) {
@@ -43,27 +42,27 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: String(result.error) }, { status: 400 });
   }
   const applicantData = result.data as Record<string, unknown>;
-
-  const referenceError = await checkApplicantReferences(applicantData);
-  if (referenceError) {
-    return NextResponse.json(
-      { error: String(referenceError) },
-      { status: 400 },
-    );
-  }
-
-  const { positions, ...data } = applicantData;
-  const ids = (
-    Array.isArray(positions)
-      ? positions
-      : positions === undefined
-        ? []
-        : [positions]
-  ).filter((id): id is string => typeof id === "string");
-
   try {
+    const referenceError = await checkApplicantReferences(applicantData);
+    if (referenceError) {
+      return NextResponse.json(
+        { error: String(referenceError) },
+        { status: 400 },
+      );
+    }
+
+    const { positions, ...data } = applicantData;
+    const ids = (
+      Array.isArray(positions)
+        ? positions
+        : positions === undefined
+          ? []
+          : [positions]
+    ).filter((id): id is string => typeof id === "string");
+    // Initialize availableDays as empty since it is filled in during Step 2.
     const applicant = await prisma.applicant.create({
       data: {
+        availableDays: [],
         ...data,
         ...(ids.length > 0 && {
           positions: { connect: ids.map((id) => ({ id })) },
@@ -74,12 +73,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ applicant }, { status: 201 });
   } catch (err) {
     if (err instanceof Error && "code" in err) {
-      if (err.code === "P2002") {
-        return NextResponse.json(
-          { error: "An applicant with this email already exists" },
-          { status: 409 },
-        );
-      }
       if (err.code === "P2025") {
         return NextResponse.json(
           { error: "One or more positions do not exist" },
