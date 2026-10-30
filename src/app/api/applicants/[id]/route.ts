@@ -1,9 +1,10 @@
 /**
  * applicants/[id]/route.ts
  *
- * Updates the fields of an existing applicant in DRAFT status.
+ * PATCH: Updates the fields of an existing applicant in DRAFT status.
+ * GET: Retrieving a specific applicant, admin can see full submission excluding drafts.
  *
- * Author: Elijah, Jeremiah
+ * Author: Elijah, Jeremiah, Abby, William
  * Date Created: 10/28/2026
  */
 
@@ -11,6 +12,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { validateApplicantFields } from "@/lib/applicant-validation";
 import { checkApplicantReferences } from "@/lib/applicant-references";
+import { requireAdmin } from "@/lib/admin-auth";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -113,4 +115,38 @@ export async function PATCH(request: Request, { params }: RouteContext) {
       { status: 500 },
     );
   }
+}
+
+/*
+ * GET /api/applicants/[id]
+ *
+ * Retrieving a specific applicant, admin can see full submission excluding drafts.
+ *
+ * @param request - HTTP request
+ * @returns JSON, 200 or 404 if application not found
+ *
+ */
+export async function GET(_request: Request, { params }: RouteContext) {
+  // Admin check goes FIRST, before we even look the applicant up
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
+  const { id } = await params;
+
+  const applicant = await prisma.applicant.findFirst({
+    where: {
+      id: id,
+      status: { not: "DRAFT" },
+    },
+    include: {
+      positions: true,
+    },
+  });
+
+  // if nothing was found, return 404
+  if (!applicant) {
+    return Response.json({ error: "Applicant not found" }, { status: 404 });
+  }
+  // return 200 with { applicant }
+  return Response.json({ applicant }, { status: 200 });
 }

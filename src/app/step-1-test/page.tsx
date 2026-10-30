@@ -2,17 +2,18 @@
 
 import { useState } from "react";
 import PersonalInfoStep from "@/components/application/PersonalInfoStep";
+import { PersonalInfoValues } from "@/components/application/personal-info";
 
 import {
-  emptyPersonalInfo,
   validatePersonalInfo,
-  type PersonalInfoValues,
   type PersonalInfoErrors,
 } from "@/components/application/personal-info";
 
 export default function Step1TestPage() {
-  const [values, setValues] = useState<PersonalInfoValues>(emptyPersonalInfo);
   const [errors, setErrors] = useState<PersonalInfoErrors>({});
+  const [values, setValues] = useState<PersonalInfoValues>(
+    {} as PersonalInfoValues,
+  );
 
   return (
     <div className="flex flex-col gap-6 p-6">

@@ -1,15 +1,17 @@
 /**
  * applicants/route.ts
  *
- * Creates a new applicant in DRAFT status from the Step 1 application fields.
+ * POST: Creates a new applicant in DRAFT status from the Step 1 application fields.
+ * GET: Checks if user is admin and returns a list of applicants with optional filtering.
  *
- * Author: Elijah, Jeremiah
+ * Author: Elijah, Jeremiah, Abby, William
  * Date Created: 10/25/2026
  */
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { validateApplicantFields } from "@/lib/applicant-validation";
 import { checkApplicantReferences } from "@/lib/applicant-references";
+import { requireAdmin } from "@/lib/admin-auth";
 
 /**
  * POST /api/applicants
@@ -85,4 +87,56 @@ export async function POST(request: Request) {
       { status: 500 },
     );
   }
+}
+
+/**
+ * GET /api/applicants
+ *
+ * Checks if user is admin and returns a list of applicants. Does not include
+ * drafts and there is an optional filter.
+ *
+ * @param request - HTTP request with filter option
+ * @returns JSON, 200, or 400 for invalid status
+ *
+ */
+
+export async function GET(request: Request) {
+  // Admin check goes FIRST. null means allowed
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
+  const status = new URL(request.url).searchParams.get("status");
+
+  if (
+    status !== null &&
+    status !== "REJECTED" &&
+    status !== "APPROVED" &&
+    status !== "SUBMITTED"
+  ) {
+    return Response.json(
+      { message: "Status must be APPROVED, REJECTED, or SUBMITTED" },
+      { status: 400 },
+    );
+  }
+
+  // if a status was sent, it must be exactly SUBMITTED, APPROVED, or REJECTED.
+  //   Anything else (including DRAFT, since admins never see drafts) gets a 400 with a message
+  //   saying what the allowed values are.
+  const applicants = await prisma.applicant.findMany({
+    where: status !== null ? { status: status } : { status: { not: "DRAFT" } },
+
+    orderBy: {
+      submittedAt: "desc",
+    },
+
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      email: true,
+      status: true,
+      submittedAt: true,
+    },
+  });
+  return Response.json({ applicants }, { status: 200 });
 }

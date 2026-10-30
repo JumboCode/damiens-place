@@ -11,6 +11,7 @@ import "dotenv/config";
 import { positions } from "./seed-data/positions";
 import { applicants } from "./seed-data/applicants";
 import { prisma } from "../src/lib/prisma";
+import { volunteers } from "./seed-data/volunteers";
 
 //inserting positions and test applicants into prisma database
 async function main() {
@@ -45,13 +46,25 @@ async function main() {
         ...fields,
         reviewedAt: null,
         reviewedByClerkId: null,
-        // "set" replaces the links so re-running the seed never piles up extras
         positions: { set: positionLinks },
       },
       create: { id, ...fields, positions: { connect: positionLinks } },
     });
   }
   console.log(`Seeded ${applicants.length} test applicants.`);
+
+  // seeding test volunteers (these don't come from an applicant)
+  for (const { id, positionNames, ...fields } of volunteers) {
+    const positionLinks = positionNames.map((name) => ({ name }));
+
+    // Re-running the seed resets each one to the seed data
+    await prisma.volunteer.upsert({
+      where: { id },
+      update: { ...fields, positions: { set: positionLinks } },
+      create: { id, ...fields, positions: { connect: positionLinks } },
+    });
+  }
+  console.log(`Seeded ${volunteers.length} test volunteers.`);
 }
 
 main()
