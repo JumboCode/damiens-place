@@ -169,6 +169,7 @@ export function validateApplicantFields(
     }
   }
 
+  // Disability details require hasDisability to be true in the same request.
   if (input.hasDisability !== true && input.disabilityDetails !== undefined) {
     return {
       error:
