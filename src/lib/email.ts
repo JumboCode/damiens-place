@@ -7,6 +7,8 @@
  * Date Created: 10/22/2026
  */
 
+import { resendEmailProvider } from "./resend-email-provider";
+
 export type EmailMessage = {
   to: string;
   subject: string;
@@ -35,6 +37,21 @@ export const consoleEmailProvider: EmailProvider = async (message) => {
 };
 
 /**
+ * getDefaultProvider
+ *
+ * Picks how emails are delivered when sendEmail isn't given a provider. Resend is used when
+ * RESEND_API_KEY is set (production, or Natalie's machine). Everyone else prints to the terminal,
+ * so nobody needs an email account to build and test.
+ *
+ * @returns resendEmailProvider if RESEND_API_KEY is set, otherwise consoleEmailProvider
+ */
+function getDefaultProvider(): EmailProvider {
+  const useResend =
+    process.env.RESEND_API_KEY && process.env.NODE_ENV !== "test";
+  return useResend ? resendEmailProvider : consoleEmailProvider;
+}
+
+/**
  * sendEmail
  *
  * validates and sends an email, and never throws anything.
@@ -46,8 +63,7 @@ export const consoleEmailProvider: EmailProvider = async (message) => {
  */
 export async function sendEmail(
   message: EmailMessage,
-  // TODO(natalie): swap this default for the Resend provider once the account is set up
-  provider: EmailProvider = consoleEmailProvider,
+  provider: EmailProvider = getDefaultProvider(),
 ): Promise<SendEmailResult> {
   // recipient email address should be valid
   const emailFormat = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // picked this up from applicant-validation.ts
