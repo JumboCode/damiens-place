@@ -27,11 +27,42 @@ export async function GET(_request: Request, { params }: RouteContext) {
   const { id } = await params;
 
   const applicant = await prisma.applicant.findFirst({
-    where: {
-      id: id,
-      status: "DRAFT",
+    where: { id, status: "DRAFT" },
+    select: {
+      id: true,
+      status: true,
+      // Step 1
+      firstName: true,
+      lastName: true,
+      age: true,
+      email: true,
+      cellPhone: true,
+      homePhone: true,
+      proofOfResidenceUrl: true,
+      street: true,
+      city: true,
+      state: true,
+      zip: true,
+      emergencyContactName: true,
+      emergencyContactPhone: true,
+      emergencyContactRelationship: true,
+      // Step 2
+      positions: { select: { id: true } },
+      availableDays: true,
+      availableHours: true,
+      hasDisability: true,
+      disabilityDetails: true,
+      // Step 3
+      waiverAccepted: true,
+      waiverSignature: true,
+      agreementAccepted: true,
+      agreementSignature: true,
+      minorReleaseAccepted: true,
+      minorGuardianSignature: true,
+      minorSignature: true,
+      // Step 4
+      onboardingAvailability: true,
     },
-    select: { positions: { select: { id: true } } },
   });
 
   // if nothing was found, return 404
@@ -39,8 +70,9 @@ export async function GET(_request: Request, { params }: RouteContext) {
     return Response.json({ error: "Applicant not found" }, { status: 404 });
   }
   // return 200 with { applicant }
+  const { positions, ...rest } = applicant;
   return NextResponse.json(
-    { applicant },
+    { applicant: { ...rest, positions: positions.map((p) => p.id) } },
     { headers: { "Cache-Control": "no-store" } },
   );
 }

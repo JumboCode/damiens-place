@@ -28,22 +28,22 @@ export default function AppointmentStep({
   onChange,
 }: AppointmentStepProps) {
   return (
-    <div className="flex flex-col gap-10">
-      <h2 className="text-black font-['Inclusive_Sans'] text-[36px] not-italic font-semibold leading-normal">
+    <div>
+      <h2 className="text-2xl not-italic font-semibold leading-normal">
         Part 4: Schedule Onboarding Appointment
       </h2>
-      <h3 className="text-[32px] font-[Inclusive_Sans] font-semibold leading-normal text-black">
-        Time Available
-      </h3>
-      <FormTextArea
-        label="Onboarding Time Availability"
-        name="onboardingAvailability"
-        required
-        helperText="Please put down your availability for a 30 minute on-boarding appointment."
-        value={values.onboardingAvailability}
-        error={errors.onboardingAvailability}
-        onChange={(newText) => onChange({ onboardingAvailability: newText })}
-      />
+      <div className="flex flex-col gap-2 mt-8">
+        <h3 className="text-xl font-semibold leading-normal">Time Available</h3>
+        <FormTextArea
+          label="Onboarding Time Availability"
+          name="onboardingAvailability"
+          required
+          helperText="Please put down your availability for a 30 minute on-boarding appointment."
+          value={values.onboardingAvailability}
+          error={errors.onboardingAvailability}
+          onChange={(newText) => onChange({ onboardingAvailability: newText })}
+        />
+      </div>
     </div>
   );
 }
