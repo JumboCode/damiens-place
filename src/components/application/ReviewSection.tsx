@@ -34,20 +34,21 @@ export default function ReviewSection({
   return (
     <section className="flex flex-col gap-4">
       {/* Section title on the left and Edit button on the right */}
-      <div className="flex items-center justify-between">
-        <h3 className="text-xl font-semibold">{title}</h3>
+      {/* Section title and Edit button next to each other */}
+      <div className="flex items-center gap-2">
+        <h3 className="text-lg font-semibold">{title}</h3>
 
         <button
           type="button"
           onClick={onEdit}
           aria-label={`Edit ${title}`}
-          className="rounded-md p-2 text-primary hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          className="rounded-md p-1 text-primary hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
         >
-          <Pencil size={20} />
+          <Pencil size={16} />
         </button>
       </div>
-      {/* Display the applicant's answers as label/value pairs */}
-      <dl className="grid grid-cols-1 gap-3 sm:grid-cols-2">{children}</dl>
+      {/* One column on phones, three on desktop */}
+      <dl className="grid grid-cols-1 gap-4 md:grid-cols-3">{children}</dl>
     </section>
   );
 }
