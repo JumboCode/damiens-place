@@ -1,4 +1,11 @@
-// TODO: FILE HEADER
+/**
+ * src/app/api/applicants/[id]/approve/route.ts
+ *
+ * rejects submitted applicants, requires admin role, doesn't rejection of existing volunteer
+ *
+ * Author: Abby and Will
+ * Date Created: 2 November 26
+ */
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { Prisma } from "@/generated/prisma/client";
@@ -8,14 +15,12 @@ import { normalizeEmail } from "@/lib/volunteer-identifiers";
 import { normalizeCellPhone } from "@/lib/volunteer-identifiers";
 import { prisma } from "@/lib/prisma";
 
-// TODO: import prisma, requireAdmin, and loadApplicantForReview
-
 type RouteContext = { params: Promise<{ id: string }> };
 
 /**
  * POST /api/applicants/[id]/approve
  *
- * rejects submitted applicants and creates a volunteer record as well as preventing duplicate volunteers
+ * rejects submitted applicants, requires admin role, doesn't rejection of existing volunteer
  *
  * Auth: Admin
  * Params:
