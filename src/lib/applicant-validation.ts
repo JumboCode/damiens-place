@@ -10,6 +10,7 @@
 
 import { DayOfWeek } from "../generated/prisma/enums";
 import { normalizeEmail, normalizeCellPhone } from "./volunteer-identifiers";
+import type { Applicant } from "@/generated/prisma/client";
 
 // Fields that creating an applicant must include (these are what create the row)
 const STEP_1_REQUIRED_FIELDS = [
@@ -178,4 +179,78 @@ export function validateApplicantFields(
   }
 
   return { data };
+}
+
+// An applicant row plus the ids of the positions they picked
+export type ApplicantForCompleteness = Applicant & {
+  positions: { id: string }[];
+};
+
+// Helper function checks whether a value is null, undefined, or a blank string.
+export function isBlank(value: unknown): boolean {
+  return (
+    value == null ||
+    value == undefined ||
+    (typeof value === "string" && value.trim() === "")
+  );
+}
+
+/**
+ * Checks whether an applicant has completed all required application fields.
+ *
+ * @param applicant - The applicant and their selected positions.
+ * @returns An array of missing field names, or an empty array if the application is complete.
+ */
+export function findMissingFields(
+  applicant: ApplicantForCompleteness,
+): string[] {
+  const missing: string[] = [];
+
+  // Check to make sure the required fields aren't blank
+  for (const field of STEP_1_REQUIRED_FIELDS) {
+    if (isBlank(applicant[field as keyof ApplicantForCompleteness])) {
+      missing.push(field);
+    }
+  }
+
+  if (applicant.positions.length === 0) {
+    missing.push("positions");
+  }
+  if (applicant.availableDays.length === 0) {
+    missing.push("availableDays");
+  }
+  if (isBlank(applicant.availableHours)) {
+    missing.push("availableHours");
+  }
+  if (isBlank(applicant.hasDisability)) {
+    missing.push("hasDisability");
+  }
+  if (applicant.waiverAccepted !== true) {
+    missing.push("waiverAccepted");
+  }
+  if (applicant.agreementAccepted !== true) {
+    missing.push("agreementAccepted");
+  }
+  if (isBlank(applicant.waiverSignature)) {
+    missing.push("waiverSignature");
+  }
+  if (isBlank(applicant.agreementSignature)) {
+    missing.push("agreementSignature");
+  }
+  if (applicant.age < 18) {
+    if (applicant.minorReleaseAccepted !== true) {
+      missing.push("minorReleaseAccepted");
+    }
+    if (isBlank(applicant.minorGuardianSignature)) {
+      missing.push("minorGuardianSignature");
+    }
+    if (isBlank(applicant.minorSignature)) {
+      missing.push("minorSignature");
+    }
+  }
+  if (isBlank(applicant.onboardingAvailability)) {
+    missing.push("onboardingAvailability");
+  }
+
+  return missing;
 }
