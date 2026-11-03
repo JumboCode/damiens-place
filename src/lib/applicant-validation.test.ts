@@ -9,7 +9,178 @@
  */
 
 import { describe, expect, it } from "@jest/globals";
-import { validateApplicantFields } from "./applicant-validation";
+import {
+  validateApplicantFields,
+  findMissingFields,
+  ApplicantForCompleteness,
+} from "./applicant-validation";
+
+// A complete adult applicant. Each test copies it and changes one thing.
+// `as` tells TypeScript to trust us, so we only list the fields the helper looks at.
+const completeAdult = {
+  firstName: "Jane",
+  lastName: "Doe",
+  age: 34,
+  email: "jane@x.com",
+  cellPhone: "6175550123",
+  proofOfResidenceUrl: "test/proof.pdf",
+  street: "1 Main St",
+  city: "Medford",
+  state: "MA",
+  zip: "02155",
+  emergencyContactName: "John Doe",
+  emergencyContactPhone: "6175550124",
+  homePhone: null,
+  emergencyContactRelationship: null,
+  positions: [{ id: "position-1" }],
+  availableDays: ["THURSDAY"],
+  availableHours: "Thursday 10am to 2pm",
+  hasDisability: false,
+  disabilityDetails: null,
+  waiverAccepted: true,
+  waiverSignature: "Jane Doe",
+  agreementAccepted: true,
+  agreementSignature: "Jane Doe",
+  minorReleaseAccepted: null,
+  minorGuardianSignature: null,
+  minorSignature: null,
+  onboardingAvailability: "Weekday mornings",
+} as ApplicantForCompleteness;
+
+describe("findMissingFields", () => {
+  it("returns an empty list for a complete adult applicant", () => {
+    expect(findMissingFields(completeAdult)).toEqual([]);
+  });
+
+  it("reports missing signatures by name", () => {
+    const applicant = {
+      ...completeAdult,
+      waiverSignature: null,
+      agreementSignature: " ",
+    };
+    expect(findMissingFields(applicant)).toEqual([
+      "waiverSignature",
+      "agreementSignature",
+    ]);
+  });
+
+  it("reports waiverAccepted when false or null", () => {
+    expect(
+      findMissingFields({ ...completeAdult, waiverAccepted: false }),
+    ).toContain("waiverAccepted");
+
+    expect(
+      findMissingFields({ ...completeAdult, waiverAccepted: null }),
+    ).toContain("waiverAccepted");
+  });
+
+  it("reports agreementAccepted when false or null", () => {
+    expect(
+      findMissingFields({ ...completeAdult, agreementAccepted: false }),
+    ).toContain("agreementAccepted");
+
+    expect(
+      findMissingFields({ ...completeAdult, agreementAccepted: null }),
+    ).toContain("agreementAccepted");
+  });
+
+  it("does not report consent checkboxes when true", () => {
+    const missing = findMissingFields({
+      ...completeAdult,
+      waiverAccepted: true,
+      agreementAccepted: true,
+    });
+
+    expect(missing).not.toContain("waiverAccepted");
+    expect(missing).not.toContain("agreementAccepted");
+  });
+
+  it("reports positions when there are none", () => {
+    expect(findMissingFields({ ...completeAdult, positions: [] })).toContain(
+      "positions",
+    );
+  });
+
+  it("reports availableDays when there are none", () => {
+    expect(
+      findMissingFields({ ...completeAdult, availableDays: [] }),
+    ).toContain("availableDays");
+  });
+
+  it("does not report hasDisability when false", () => {
+    expect(
+      findMissingFields({ ...completeAdult, hasDisability: false }),
+    ).not.toContain("hasDisability");
+  });
+
+  it("reports hasDisability when null", () => {
+    expect(
+      findMissingFields({ ...completeAdult, hasDisability: null }),
+    ).toContain("hasDisability");
+  });
+
+  it("reports all three minor consent fields for a 17-year-old without them", () => {
+    const applicant = {
+      ...completeAdult,
+      age: 17,
+      minorReleaseAccepted: null,
+      minorGuardianSignature: null,
+      minorSignature: null,
+    };
+
+    expect(findMissingFields(applicant)).toEqual(
+      expect.arrayContaining([
+        "minorReleaseAccepted",
+        "minorGuardianSignature",
+        "minorSignature",
+      ]),
+    );
+  });
+
+  it("accepts a 17-year-old with all three minor consent fields", () => {
+    const applicant = {
+      ...completeAdult,
+      age: 17,
+      minorReleaseAccepted: true,
+      minorGuardianSignature: "John Doe",
+      minorSignature: "Jane Doe",
+    };
+
+    expect(findMissingFields(applicant)).toEqual([]);
+  });
+
+  it("does not require minor consent fields for adults", () => {
+    expect(findMissingFields(completeAdult)).toEqual([]);
+  });
+
+  it("reports missing onboardingAvailability", () => {
+    expect(
+      findMissingFields({
+        ...completeAdult,
+        onboardingAvailability: null,
+      }),
+    ).toContain("onboardingAvailability");
+  });
+
+  it("reports several missing fields together", () => {
+    const applicant = {
+      ...completeAdult,
+      positions: [],
+      availableDays: [],
+      waiverSignature: null,
+      onboardingAvailability: "",
+    };
+
+    expect(findMissingFields(applicant)).toEqual(
+      expect.arrayContaining([
+        "positions",
+        "availableDays",
+        "waiverSignature",
+        "onboardingAvailability",
+      ]),
+    );
+  });
+});
 
 // A complete, valid Step 1 body used for tests requiring all Step 1 fields.
 const validStep1 = {
