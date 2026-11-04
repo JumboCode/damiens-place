@@ -4,11 +4,11 @@ export default clerkMiddleware();
 
 export const config = {
   matcher: [
-    // Skip Next.js internals and all static files, unless found in search params
-    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    // Skip the public upload handler, Next.js internals, and static files.
+    "/((?!api/uploads/proof-of-residence(?:/|$)|_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
     // Always run for Clerk's auto-proxy path
     "/__clerk/:path*",
-    // Always run for API routes
-    "/(api|trpc)(.*)",
+    // Always run for API routes except the public upload handler
+    "/((?!api/uploads/proof-of-residence(?:/|$))(?:api|trpc).*)",
   ],
 };
