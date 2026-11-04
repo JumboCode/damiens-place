@@ -1,5 +1,5 @@
 /**
- * Application-Api.ts
+ * Application Api.ts
  *
  * API functions for the volunteer application form.
  *
@@ -38,11 +38,22 @@ async function request<T>(
   try {
     body = await response.json();
   } catch {
-    let message = "Request failed";
+    return {
+      ok: false,
+      status: response.status,
+      error: response.statusText || "Request failed",
+    };
+  }
 
-    if (body && typeof body === "object" && "error" in body) {
-      message = String((body as { error: unknown }).error);
-    }
+  if (!response.ok) {
+    const message =
+      body !== null &&
+      typeof body === "object" &&
+      "error" in body &&
+      typeof body.error === "string"
+        ? body.error
+        : response.statusText || "Request failed";
+
     return { ok: false, status: response.status, error: message };
   }
 
@@ -67,8 +78,7 @@ async function request<T>(
 export function createApplicant(
   payload: Record<string, unknown>,
 ): Promise<ApiResult<ApplicantResponse>> {
-  // call the endpoints you made last sprint!
-  return request<ApplicantResponse>("", {
+  return request<ApplicantResponse>("/api/applicants", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
@@ -85,9 +95,12 @@ export function createApplicant(
  * @returns A promise resolving to the API result.
  */
 export function updateApplicant(id: string, payload: Record<string, unknown>) {
-  return request<ApplicantResponse>(id, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
+  return request<ApplicantResponse>(
+    `/api/applicants/${encodeURIComponent(id)}`,
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    },
+  );
 }
