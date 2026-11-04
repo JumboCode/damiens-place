@@ -41,7 +41,8 @@ function Row({
   return (
     <div className="flex flex-col gap-1">
       <dt className="text-base font-medium">
-        {label} {required && <span className="text-error-msg">*</span>}
+        {label}
+        {required && <span className="text-error-msg"> *</span>}
       </dt>
       <dd className="text-base">{value.trim() || "—"}</dd>
     </div>
@@ -59,45 +60,33 @@ function Row({
  * @returns The review page containing all four sections and their answers.
  */
 export default function ReviewStep({ data, onEdit }: ReviewStepProps) {
+  let disabilityAnswer = "";
+  if (data.hasDisability !== null) {
+    disabilityAnswer = data.hasDisability ? "Yes" : "No";
+  }
+
   return (
     <div className="flex flex-col gap-10">
-      {/* Page heading from Figma */}
       <h2 className="text-2xl font-semibold">Part 5: Review</h2>
 
-      {/* Personal Information section */}
       <ReviewSection
         title="Personal Information"
         onEdit={() => onEdit(REVIEW_EDIT_STEPS.personalInfo)}
       >
-        {/* Personal information */}
         <Row label="First Name" value={data.firstName} />
         <Row label="Last Name" value={data.lastName} />
         <Row label="Age" value={data.age} />
         <Row label="Email" value={data.email} />
         <Row label="Cell Phone" value={data.cellPhone} />
         <Row label="Home Phone" value={data.homePhone} required={false} />
-
-        {/* Proof of residence */}
-        <div className="col-span-full mt-4 flex flex-col gap-2">
-          <h4 className="text-base font-medium">
-            Proof of Residence <span className="text-error-msg">*</span>
-          </h4>
-          <p>{data.proofUploaded ? "Uploaded" : "—"}</p>
-        </div>
-
-        {/* Home address */}
-        <h4 className="col-span-full mt-4 text-lg font-semibold">
-          Home Address
-        </h4>
+        <Row
+          label="Proof of Residence"
+          value={data.proofUploaded ? "Uploaded" : ""}
+        />
         <Row label="Street Address" value={data.street} />
         <Row label="City" value={data.city} />
         <Row label="State / Province / Region" value={data.state} />
         <Row label="ZIP / Postal Code" value={data.zip} />
-
-        {/* Emergency contact */}
-        <h4 className="col-span-full mt-4 text-lg font-semibold">
-          Emergency Contact
-        </h4>
         <Row label="Emergency Contact Name" value={data.emergencyContactName} />
         <Row
           label="Emergency Contact Phone"
@@ -110,31 +99,17 @@ export default function ReviewStep({ data, onEdit }: ReviewStepProps) {
         />
       </ReviewSection>
 
-      {/* Positions section */}
       <ReviewSection
         title="Positions"
         onEdit={() => onEdit(REVIEW_EDIT_STEPS.positions)}
       >
-        {/* Selected positions and availability */}
         <Row
           label="Volunteer Positions"
           value={data.positionNames.join(", ")}
         />
         <Row label="Available Days" value={data.availableDays.join(", ")} />
         <Row label="Available Hours" value={data.availableHours} />
-
-        {/* Disability answer and additional details */}
-        <Row
-          label="Disability"
-          value={
-            data.hasDisability === null
-              ? "—"
-              : data.hasDisability
-                ? "Yes"
-                : "No"
-          }
-        />
-
+        <Row label="Disability" value={disabilityAnswer} />
         {data.hasDisability === true && (
           <Row
             label="Disability Details"
@@ -144,38 +119,28 @@ export default function ReviewStep({ data, onEdit }: ReviewStepProps) {
         )}
       </ReviewSection>
 
-      {/* Materials section */}
       <ReviewSection
         title="Materials"
         onEdit={() => onEdit(REVIEW_EDIT_STEPS.materials)}
       >
-        {/* Volunteer Waiver and Agreement signatures */}
         <Row label="Volunteer Waiver" value={data.waiverSignature} />
         <Row label="Volunteer Agreement" value={data.agreementSignature} />
-
-        {/* Only display minor signatures if the applicant is under 18 */}
+        {/* Minor signatures only apply to applicants under 18 */}
         {data.isMinor && (
           <>
             <Row
               label="Parent/Legal Guardian E-Signature"
               value={data.minorGuardianSignature}
-              required={false}
             />
-            <Row
-              label="Minor E-Signature"
-              value={data.minorSignature}
-              required={false}
-            />
+            <Row label="Minor E-Signature" value={data.minorSignature} />
           </>
         )}
       </ReviewSection>
 
-      {/* Appointment section */}
       <ReviewSection
         title="Appointment"
         onEdit={() => onEdit(REVIEW_EDIT_STEPS.appointment)}
       >
-        {/* Display the applicant's onboarding availability */}
         <Row
           label="Onboarding Availability"
           value={data.onboardingAvailability}

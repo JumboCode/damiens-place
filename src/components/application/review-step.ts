@@ -6,7 +6,7 @@
  * Author: Adrien and Luisa
  * Date Created: 11/03/2026
  */
- 
+
 // Everything the review page shows. It's already in display form: names instead of ids, and "Monday" instead of "MONDAY".
 export type ReviewData = {
   // Personal info
@@ -39,7 +39,7 @@ export type ReviewData = {
   // Appointment
   onboardingAvailability: string;
 };
- 
+
 // The step number to send to onEdit for each section. These match the order of the steps in the application shell.
 export const REVIEW_EDIT_STEPS = {
   personalInfo: 0,
