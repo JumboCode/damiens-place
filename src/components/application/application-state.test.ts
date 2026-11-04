@@ -73,9 +73,7 @@ describe("buildPersonalInfoPayload", () => {
     expect(payload.lastName).toBe("Smith");
     expect(payload.email).toBe("jane@example.com");
     expect(payload.emergencyContactName).toBe("John Smith");
-    expect(payload.proofOfResidenceUrl).toBe(
-      "https://example.com/proof.pdf",
-    );
+    expect(payload.proofOfResidenceUrl).toBe("https://example.com/proof.pdf");
 
     expect(payload).not.toHaveProperty("homePhone");
     expect(payload).not.toHaveProperty("emergencyContactRelationship");

@@ -19,20 +19,14 @@ import StepProgress from "./StepProgress";
 import logo from "@/assets/images/logo.png";
 import CommonButton from "@/components/common/CommonButton";
 import PersonalInfoStep from "@/components/application/PersonalInfoStep";
-import {
-  validatePersonalInfo,
-  type PersonalInfoErrors,
-} from "./personal-info";
+import { validatePersonalInfo, type PersonalInfoErrors } from "./personal-info";
 import PositionsStep from "@/components/application/PositionsStep";
 import {
   validatePositionsStep,
   type PositionsStepErrors,
 } from "./positions-step";
 import OnboardingStep from "@/components/application/OnboardingStep";
-import {
-  validateOnboarding,
-  type OnboardingErrors,
-} from "./onboarding";
+import { validateOnboarding, type OnboardingErrors } from "./onboarding";
 import {
   emptyApplicationFormState,
   isMinor,
@@ -41,10 +35,7 @@ import {
   buildOnboardingPayload,
   type ApplicationFormState,
 } from "@/components/application/application-state";
-import {
-  createApplicant,
-  updateApplicant,
-} from "@/lib/application-api";
+import { createApplicant, updateApplicant } from "@/lib/application-api";
 
 export default function ApplicationFormShell() {
   // useState = a box that remembers a value. 0 means the first step.

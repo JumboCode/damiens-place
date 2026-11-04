@@ -37,7 +37,7 @@ export const emptyApplicationFormState: ApplicationFormState = {
  *
  * @param state - every answer the shell holds
  * @returns true if the age is a whole number from 1 to 17. False for 18 or older, and for a blank or
- *   invalid age 
+ *   invalid age
  */
 export function isMinor(state: ApplicationFormState): boolean {
   const ageText = state.personalInfo.age.trim();
