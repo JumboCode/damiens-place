@@ -13,5 +13,4 @@ export const steps = [
   { id: "materials", label: "Materials" },
   { id: "appointment", label: "Appointment" },
   { id: "review", label: "Review" },
-  { id: "submit", label: "Submit" },
 ];
