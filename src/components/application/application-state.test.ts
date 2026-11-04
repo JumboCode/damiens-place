@@ -1,5 +1,4 @@
-
-/**
+/*
  * application-state.test.ts
  *
  * Tests the application form state and API payload functions.

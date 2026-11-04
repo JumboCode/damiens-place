@@ -1,4 +1,3 @@
-
 /*
  * application-state.ts
  *
