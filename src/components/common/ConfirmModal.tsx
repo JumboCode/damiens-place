@@ -91,7 +91,7 @@ export default function ConfirmModal({
         className="relative flex max-h-full w-full max-w-md flex-col items-center gap-6 overflow-y-auto rounded-3xl bg-white p-8 text-center shadow-lg outline-none"
       >
         {icon}
-        <h2 id={titleId} className="text-2xl font-bold text-text-primary">
+        <h2 id={titleId} className="text-text-primary">
           {title}
         </h2>
         {content && (
@@ -100,7 +100,7 @@ export default function ConfirmModal({
           </div>
         )}
         {error && (
-          <p role="alert" className="text-md font-medium text-error-msg">
+          <p role="alert" className="font-medium text-error-msg">
             {error}
           </p>
         )}

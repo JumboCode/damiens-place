@@ -25,12 +25,15 @@ type PositionsStepProps = {
   errors: PositionsStepErrors;
   // Pass only the fields that changed, so one click can update more than one field
   onChange: (changes: Partial<PositionsStepValues>) => void;
+  // Called with the loaded positions, so the review page can show names instead of ids
+  onPositionsLoaded?: (positions: Position[]) => void;
 };
 
 export default function PositionsStep({
   values,
   errors,
   onChange,
+  onPositionsLoaded,
 }: PositionsStepProps) {
   const [positions, setPositions] = useState<Position[]>([]);
   const [loadError, setLoadError] = useState(false);
@@ -52,6 +55,7 @@ export default function PositionsStep({
         }
         const data = await response.json();
         setPositions(data.positions);
+        onPositionsLoaded?.(data.positions);
       } catch {
         setLoadError(true);
       } finally {
@@ -59,14 +63,14 @@ export default function PositionsStep({
       }
     }
     loadPositions();
-  }, []);
+  }, [onPositionsLoaded]);
 
   return (
     <div className="flex flex-col gap-10">
-      <h2 className="text-xl font-bold">Part 2: Volunteer Positions</h2>
+      <h2>Part 2: Volunteer Positions</h2>
 
       <section className="flex flex-col gap-4">
-        <h3 className="text-lg font-semibold">All Volunteer Positions:</h3>
+        <h3>All Volunteer Positions:</h3>
 
         {loading && <p>Loading positions...</p>}
 
@@ -79,7 +83,7 @@ export default function PositionsStep({
         {!loading && !loadError && <PositionsTable positions={positions} />}
 
         <div className="flex flex-col gap-2">
-          <p className="text-base font-medium">
+          <p className="font-medium">
             Position of Interest <span className="text-error-msg">*</span>
           </p>
           <CommonDropdown
@@ -88,16 +92,16 @@ export default function PositionsStep({
             onChange={(newIds: string[]) => onChange({ positionIds: newIds })}
           />
           {errors.positionIds && (
-            <p className="text-sm text-error-msg">{errors.positionIds}</p>
+            <p className="text-error-msg">{errors.positionIds}</p>
           )}
         </div>
       </section>
 
       <section className="flex flex-col gap-4">
-        <h3 className="text-lg font-semibold">Time Available</h3>
+        <h3>Time Available</h3>
 
         <div className="flex flex-col gap-2">
-          <p className="text-base font-medium">
+          <p className="font-medium">
             Days of Week Available <span className="text-error-msg">*</span>
           </p>
           <CommonDropdown
@@ -108,7 +112,7 @@ export default function PositionsStep({
             }
           />
           {errors.availableDays && (
-            <p className="text-sm text-error-msg">{errors.availableDays}</p>
+            <p className="text-error-msg">{errors.availableDays}</p>
           )}
         </div>
 
@@ -124,7 +128,7 @@ export default function PositionsStep({
       </section>
 
       <section className="flex flex-col gap-4">
-        <h3 className="text-lg font-semibold">Disability</h3>
+        <h3>Disability</h3>
 
         {/* A fieldset groups the two checkboxes, and the legend is their shared label */}
         <fieldset className="flex flex-col gap-3">
@@ -186,7 +190,7 @@ export default function PositionsStep({
           </label>
 
           {errors.hasDisability && (
-            <p id="hasDisability-error" className="text-sm text-error-msg">
+            <p id="hasDisability-error" className="text-error-msg">
               {errors.hasDisability}
             </p>
           )}

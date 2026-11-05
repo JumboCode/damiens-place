@@ -173,7 +173,7 @@ export default function CommonDropdown({
       ) : null}
 
       {error ? (
-        <p id={errorId} className="text-sm text-error-msg">
+        <p id={errorId} className="text-error-msg">
           {error}
         </p>
       ) : null}

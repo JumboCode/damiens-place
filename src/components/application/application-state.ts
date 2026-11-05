@@ -9,10 +9,14 @@
 
 import { emptyPersonalInfo } from "./personal-info";
 import type { PersonalInfoValues } from "./personal-info";
-import { emptyPositionsStep } from "./positions-step";
-import type { PositionsStepValues } from "./positions-step";
+import { DAY_OPTIONS, emptyPositionsStep } from "./positions-step";
+import type { Position, PositionsStepValues } from "./positions-step";
 import { emptyOnboarding } from "./onboarding";
 import type { OnboardingValues } from "./onboarding";
+import { emptyAppointmentStep } from "./appointment-step";
+import type { AppointmentStepValues } from "./appointment-step";
+import { REVIEW_EDIT_STEPS } from "./review-step";
+import type { ReviewData } from "./review-step";
 
 // Every answer the shell holds, one section per step
 export type ApplicationFormState = {
@@ -20,7 +24,7 @@ export type ApplicationFormState = {
   proofOfResidenceUrl: string; // "" until a file is uploaded (set by PersonalInfoStep's onProofUploaded)
   positions: PositionsStepValues;
   onboarding: OnboardingValues;
-  // TODO(natalie): add the Step 4 answers here
+  appointment: AppointmentStepValues;
 };
 
 export const emptyApplicationFormState: ApplicationFormState = {
@@ -28,6 +32,7 @@ export const emptyApplicationFormState: ApplicationFormState = {
   proofOfResidenceUrl: "",
   positions: emptyPositionsStep,
   onboarding: emptyOnboarding,
+  appointment: emptyAppointmentStep,
 };
 
 /**
@@ -162,4 +167,142 @@ export function buildOnboardingPayload(
   }
 
   return payload;
+}
+
+/**
+ * buildAppointmentPayload
+ *
+ * Builds the body to send for Step 4 (PATCH).
+ *
+ * @param state - every answer the shell holds
+ * @returns an object with `onboardingAvailability` (trimmed)
+ */
+export function buildAppointmentPayload(
+  state: ApplicationFormState,
+): Record<string, unknown> {
+  return {
+    onboardingAvailability: state.appointment.onboardingAvailability.trim(),
+  };
+}
+
+/**
+ * buildReviewData
+ *
+ * Turns the form state into the display form the review page shows: position names instead of ids,
+ * "Monday" instead of "MONDAY", and a yes/no for whether the proof of residence was uploaded.
+ *
+ * @param state - every answer the shell holds
+ * @param positions - the positions loaded from the API, used to look up each chosen id's name
+ * @returns the data for ReviewStep. Position ids that aren't in `positions` are left out, and
+ *   `disabilityDetails` is "" unless `hasDisability` is true
+ */
+export function buildReviewData(
+  state: ApplicationFormState,
+  positions: Position[],
+): ReviewData {
+  const { personalInfo, positions: picked, onboarding, appointment } = state;
+
+  const positionNames = picked.positionIds.flatMap((id) => {
+    const match = positions.find((position) => position.id === id);
+    return match ? [match.name] : [];
+  });
+
+  const availableDays = picked.availableDays.map(
+    (day) => DAY_OPTIONS.find((option) => option.value === day)?.label ?? day,
+  );
+
+  const minor = isMinor(state);
+
+  return {
+    firstName: personalInfo.firstName.trim(),
+    lastName: personalInfo.lastName.trim(),
+    age: personalInfo.age.trim(),
+    email: personalInfo.email.trim(),
+    cellPhone: personalInfo.cellPhone.trim(),
+    homePhone: personalInfo.homePhone.trim(),
+    street: personalInfo.street.trim(),
+    city: personalInfo.city.trim(),
+    state: personalInfo.state.trim(),
+    zip: personalInfo.zip.trim(),
+    emergencyContactName:
+      `${personalInfo.emergencyContactFirstName.trim()} ${personalInfo.emergencyContactLastName.trim()}`.trim(),
+    emergencyContactPhone: personalInfo.emergencyContactPhone.trim(),
+    emergencyContactRelationship:
+      personalInfo.emergencyContactRelationship.trim(),
+    proofUploaded: state.proofOfResidenceUrl.trim() !== "",
+    positionNames,
+    availableDays,
+    availableHours: picked.availableHours.trim(),
+    hasDisability: picked.hasDisability,
+    disabilityDetails:
+      picked.hasDisability === true ? picked.disabilityDetails.trim() : "",
+    waiverSignature: onboarding.waiverSignature.trim(),
+    agreementSignature: onboarding.agreementSignature.trim(),
+    isMinor: minor,
+    minorGuardianSignature: minor
+      ? onboarding.minorGuardianSignature.trim()
+      : "",
+    minorSignature: minor ? onboarding.minorSignature.trim() : "",
+    onboardingAvailability: appointment.onboardingAvailability.trim(),
+  };
+}
+
+// Which step each field the submit endpoint can report as missing belongs to
+const PERSONAL_INFO_FIELDS = [
+  "firstName",
+  "lastName",
+  "age",
+  "email",
+  "cellPhone",
+  "proofOfResidenceUrl",
+  "street",
+  "city",
+  "state",
+  "zip",
+  "emergencyContactName",
+  "emergencyContactPhone",
+];
+const POSITIONS_FIELDS = [
+  "positions",
+  "availableDays",
+  "availableHours",
+  "hasDisability",
+];
+const MATERIALS_FIELDS = [
+  "waiverAccepted",
+  "agreementAccepted",
+  "waiverSignature",
+  "agreementSignature",
+  "minorReleaseAccepted",
+  "minorGuardianSignature",
+  "minorSignature",
+];
+
+/**
+ * firstStepWithMissingFields
+ *
+ * Finds the earliest step that has a field the submit endpoint reported as missing (a 422's
+ * `missingFields`), so the applicant can be sent back to fix it.
+ *
+ * @param missingFields - the field names from the 422 response
+ * @returns the step number (0 to 3), or null if none of the names are recognized
+ */
+export function firstStepWithMissingFields(
+  missingFields: string[],
+): number | null {
+  const stepOf = (field: string): number | null => {
+    if (PERSONAL_INFO_FIELDS.includes(field))
+      return REVIEW_EDIT_STEPS.personalInfo;
+    if (POSITIONS_FIELDS.includes(field)) return REVIEW_EDIT_STEPS.positions;
+    if (MATERIALS_FIELDS.includes(field)) return REVIEW_EDIT_STEPS.materials;
+    if (field === "onboardingAvailability")
+      return REVIEW_EDIT_STEPS.appointment;
+    return null;
+  };
+
+  const found = missingFields
+    .map(stepOf)
+    .filter((step): step is number => step !== null);
+
+  return found.length === 0 ? null : Math.min(...found);
 }

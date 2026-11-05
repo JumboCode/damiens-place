@@ -24,22 +24,20 @@ export default async function AdminLayout({
   return (
     <div>
       <div className="inline-flex h-full w-full items-center justify-between bg-primary px-[30px] py-[20px]">
-        <div className="flex items-center justify-start gap-[13px]">
+        <div className="flex items-center justify-start gap-2">
           <Image
             src={logo1}
             alt="Damien's Food Pantry logo"
             className="h-[29px] w-[28px] object-contain"
           />
-          <div className="text-[18px] font-bold text-white wrap-break-word [font-family:'Inclusive_Sans']">
-            Damien’s Food Pantry
-          </div>
+          <h2 className="text-white">Damien’s Food Pantry</h2>
         </div>
 
         <ClerkProvider>
           <SignOutButton redirectUrl="/admin/sign-in">
             <button
               type="button"
-              className="inline-flex shrink-0 cursor-pointer items-center justify-center rounded-[9999px] border-none bg-background px-[20px] py-[10px] text-[18px] leading-[24px] font-medium font-medium whitespace-nowrap text-black [font-family:inherit]"
+              className="inline-flex font-medium shrink-0 cursor-pointer items-center justify-center rounded-[9999px] border-none bg-background px-[20px] py-[10px] leading-[24px] whitespace-nowrap"
             >
               Log out
             </button>

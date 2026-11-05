@@ -8,9 +8,18 @@
  */
 
 export type ApiResult<T> =
-  { ok: true; data: T } | { ok: false; status: number; error: string };
+  | { ok: true; data: T }
+  | {
+      ok: false;
+      status: number;
+      error: string;
+      // Only on a 422 from the submit endpoint: the fields still missing
+      missingFields?: string[];
+    };
 
 type ApplicantResponse = { applicant: { id: string; status: string } };
+
+type SubmitResponse = ApplicantResponse & { emailSent: boolean };
 
 /**
  * request
@@ -54,7 +63,21 @@ async function request<T>(
         ? body.error
         : response.statusText || "Request failed";
 
-    return { ok: false, status: response.status, error: message };
+    const missingFields =
+      body !== null &&
+      typeof body === "object" &&
+      "missingFields" in body &&
+      Array.isArray(body.missingFields) &&
+      body.missingFields.every((field) => typeof field === "string")
+        ? (body.missingFields as string[])
+        : undefined;
+
+    return {
+      ok: false,
+      status: response.status,
+      error: message,
+      missingFields,
+    };
   }
 
   if (body === null) {
@@ -102,5 +125,21 @@ export function updateApplicant(id: string, payload: Record<string, unknown>) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     },
+  );
+}
+
+/**
+ * submitApplicant
+ *
+ * Submits a completed application. A 422 result carries `missingFields`, and a 409 means the
+ * application was already submitted.
+ *
+ * @param id - The ID of the applicant to submit.
+ * @returns A promise resolving to the API result, including whether the confirmation email was sent.
+ */
+export function submitApplicant(id: string) {
+  return request<SubmitResponse>(
+    `/api/applicants/${encodeURIComponent(id)}/submit`,
+    { method: "POST" },
   );
 }

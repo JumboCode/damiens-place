@@ -8,7 +8,7 @@
  * Author: Natalie Phua
  * Date Created: 10/2/2026
  */
-
+"use client";
 import Image from "next/image";
 import type { ReactNode } from "react";
 import logo from "@/assets/images/logo.png";
@@ -31,7 +31,7 @@ export default function AuthPageLayout({
           className="mx-auto mb-8 h-auto w-45"
           priority
         />
-        <h1 className="text-center text-4xl font-bold tracking-tight text-black">
+        <h1 className="text-center text-4xl tracking-tight text-black">
           Welcome, <span className="text-secondary">{user}</span>!
         </h1>
         <div className="mt-8 w-full text-2xl justify-center font-medium">

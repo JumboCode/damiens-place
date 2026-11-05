@@ -26,6 +26,10 @@
   /* Fonts */
   --font-sans: var(--font-inclusive-sans), ui-sans-serif, system-ui, sans-serif;
 
+  /* Font sizes: text-md is the body size used for <p> */
+  --text-md: 1rem;
+  --text-md--line-height: 1.5;
+
   /* Colors */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -44,5 +48,22 @@
 @layer base {
   body {
     @apply bg-background text-foreground font-sans antialiased;
+  }
+
+  /* Standard text styles. Classes like text-center or text-error-msg still work on top of these. */
+  h1 {
+    @apply text-2xl font-bold;
+  }
+  h2 {
+    @apply text-2xl font-semibold;
+  }
+  h3 {
+    @apply text-xl font-semibold;
+  }
+  h4 {
+    @apply text-lg;
+  }
+  p {
+    @apply text-md;
   }
 }

@@ -67,7 +67,7 @@ export default function ReviewStep({ data, onEdit }: ReviewStepProps) {
 
   return (
     <div className="flex flex-col gap-10">
-      <h2 className="text-2xl font-semibold">Part 5: Review</h2>
+      <h2>Part 5: Review</h2>
 
       <ReviewSection
         title="Personal Information"

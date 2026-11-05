@@ -159,7 +159,7 @@ export default function AdminSignInForm() {
         </div>
 
         {errorMessage && (
-          <p role="alert" className="font-normal text-sm text-error-msg">
+          <p role="alert" className="font-normal text-error-msg">
             {errorMessage}
           </p>
         )}

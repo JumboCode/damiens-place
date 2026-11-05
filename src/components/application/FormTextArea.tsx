@@ -64,17 +64,13 @@ export default function FormTextArea({
     <div className="flex flex-col gap-1">
       <label
         htmlFor={name}
-        className={hideLabel ? "sr-only" : "text-base font-medium"}
+        className={hideLabel ? "sr-only" : "text-lg font-medium"}
       >
         {label}
         {required && <span className="text-error-msg"> *</span>}
       </label>
 
-      {helperText && (
-        <p id={helperId} className="text-sm">
-          {helperText}
-        </p>
-      )}
+      {helperText && <p id={helperId}>{helperText}</p>}
 
       <textarea
         id={name}
@@ -88,7 +84,7 @@ export default function FormTextArea({
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy}
         className={
-          "w-full resize-y rounded-md border bg-input-box px-3 py-2 text-sm font-normal text-foreground focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-500 " +
+          "w-full resize-y rounded-md border bg-input-box px-3 py-2 text-md font-normal text-foreground focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-500 " +
           (error
             ? "border-error-msg hover:border-error-msg focus:border-error-msg"
             : "border-input-regular-frame enabled:hover:border-input-hover-frame focus:border-2 focus:px-2.75 focus:py-1.75 focus:border-input-focus-frame")
@@ -96,7 +92,7 @@ export default function FormTextArea({
       />
 
       {error && (
-        <p id={errorId} className="text-md text-error-msg">
+        <p id={errorId} className="text-error-msg">
           {error}
         </p>
       )}

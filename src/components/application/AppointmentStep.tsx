@@ -29,11 +29,9 @@ export default function AppointmentStep({
 }: AppointmentStepProps) {
   return (
     <div>
-      <h2 className="text-2xl not-italic font-semibold leading-normal">
-        Part 4: Schedule Onboarding Appointment
-      </h2>
-      <div className="flex flex-col gap-2 mt-8">
-        <h3 className="text-xl font-semibold leading-normal">Time Available</h3>
+      <h2>Part 4: Schedule Onboarding Appointment</h2>
+      <div className="flex flex-col gap-4 mt-8">
+        <h3>Time Available</h3>
         <FormTextArea
           label="Onboarding Time Availability"
           name="onboardingAvailability"

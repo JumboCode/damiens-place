@@ -13,6 +13,9 @@ import {
   buildPersonalInfoPayload,
   buildPositionsPayload,
   buildOnboardingPayload,
+  buildAppointmentPayload,
+  buildReviewData,
+  firstStepWithMissingFields,
 } from "./application-state";
 import type { ApplicationFormState } from "./application-state";
 
@@ -27,6 +30,7 @@ function makeState(): ApplicationFormState {
       availableDays: [],
     },
     onboarding: { ...emptyApplicationFormState.onboarding },
+    appointment: { ...emptyApplicationFormState.appointment },
   };
 }
 
@@ -178,5 +182,86 @@ describe("buildOnboardingPayload", () => {
     expect(payload.minorReleaseAccepted).toBe(true);
     expect(payload.minorGuardianSignature).toBe("Parent Name");
     expect(payload.minorSignature).toBe("Minor Name");
+  });
+});
+
+describe("buildAppointmentPayload", () => {
+  test("trims the availability", () => {
+    const state = makeState();
+    state.appointment.onboardingAvailability = "  Mondays after 3  ";
+
+    expect(buildAppointmentPayload(state)).toEqual({
+      onboardingAvailability: "Mondays after 3",
+    });
+  });
+});
+
+describe("buildReviewData", () => {
+  const positions = [
+    {
+      id: "p1",
+      name: "Guest Intake",
+      description: "",
+      days: "",
+      times: "",
+      available: true,
+    },
+    {
+      id: "p2",
+      name: "Translator",
+      description: "",
+      days: "",
+      times: "",
+      available: true,
+    },
+  ];
+
+  test("maps ids to names, days to labels, and flags proof and minor", () => {
+    const state = makeState();
+    state.personalInfo.age = "16";
+    state.personalInfo.emergencyContactFirstName = "John";
+    state.personalInfo.emergencyContactLastName = "Doe";
+    state.proofOfResidenceUrl = "https://example.com/proof.pdf";
+    state.positions.positionIds = ["p2", "missing"];
+    state.positions.availableDays = ["MONDAY", "FRIDAY"];
+    state.positions.hasDisability = false;
+    state.positions.disabilityDetails = "leftover";
+    state.onboarding.minorSignature = " Kid ";
+
+    const data = buildReviewData(state, positions);
+
+    expect(data.positionNames).toEqual(["Translator"]);
+    expect(data.availableDays).toEqual(["Monday", "Friday"]);
+    expect(data.emergencyContactName).toBe("John Doe");
+    expect(data.proofUploaded).toBe(true);
+    expect(data.isMinor).toBe(true);
+    expect(data.minorSignature).toBe("Kid");
+    expect(data.disabilityDetails).toBe("");
+  });
+
+  test("blanks minor signatures for adults and proof when not uploaded", () => {
+    const state = makeState();
+    state.personalInfo.age = "30";
+    state.onboarding.minorSignature = "Stale";
+
+    const data = buildReviewData(state, positions);
+
+    expect(data.isMinor).toBe(false);
+    expect(data.minorSignature).toBe("");
+    expect(data.proofUploaded).toBe(false);
+  });
+});
+
+describe("firstStepWithMissingFields", () => {
+  test.each([
+    [["firstName"], 0],
+    [["availableHours"], 1],
+    [["waiverSignature", "minorSignature"], 2],
+    [["onboardingAvailability"], 3],
+    [["onboardingAvailability", "positions", "waiverAccepted"], 1],
+    [["somethingElse"], null],
+    [[], null],
+  ])("%j -> %s", (fields, expected) => {
+    expect(firstStepWithMissingFields(fields)).toBe(expected);
   });
 });

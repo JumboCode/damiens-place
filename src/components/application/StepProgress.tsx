@@ -19,7 +19,7 @@ export default function StepProgress({ currentStep }: StepProgressProps) {
   return (
     <nav aria-label="Application progress" className="px-4">
       {/* max-w-{blank} controls spread of bubbles */}
-      <ol className="flex mx-auto max-w-lg items-center md:max-w-5xl">
+      <ol className="flex mx-auto max-w-lg items-center md:max-w-3xl">
         {steps.map((step, index) => (
           <li
             key={step.id}

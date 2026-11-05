@@ -66,10 +66,10 @@ export default function ProofOfResidenceUpload({
 
   return (
     <div className="flex flex-col gap-2">
-      <p className="text-base font-medium">
+      <p className="font-medium">
         Proof of Residence <span className="text-error-msg">*</span>
       </p>
-      <p id="proof-of-residence-help" className="text-sm">
+      <p id="proof-of-residence-help">
         Volunteers should live within 25-mile radius from Damien&apos;s Food
         Pantry, upload relevant documents that prove that you meet the
         requirement.
@@ -104,7 +104,7 @@ export default function ProofOfResidenceUpload({
         <p
           id="proof-of-residence-error"
           role="alert"
-          className="text-sm text-error-msg"
+          className="text-error-msg"
         >
           {fileUploadError}
         </p>

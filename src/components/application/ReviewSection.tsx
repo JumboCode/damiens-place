@@ -36,15 +36,15 @@ export default function ReviewSection({
       {/* Section title on the left and Edit button on the right */}
       {/* Section title and Edit button next to each other */}
       <div className="flex items-center gap-2">
-        <h3 className="text-lg font-semibold">{title}</h3>
+        <h3>{title}</h3>
 
         <button
           type="button"
           onClick={onEdit}
           aria-label={`Edit ${title}`}
-          className="rounded-md p-1 text-primary hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          className="rounded-md p-2 text-primary hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
         >
-          <Pencil size={16} />
+          <Pencil size={20} />
         </button>
       </div>
       {/* One column on phones, three on desktop */}

@@ -67,7 +67,7 @@ export default function VolunteerSignInForm() {
       />
       {emailError && (
         <p
-          className="self-stretch text-xl font-normal leading-normal text-error-msg"
+          className="self-stretch font-normal leading-normal text-error-msg"
           id="email-error"
         >
           {emailError}
@@ -86,7 +86,7 @@ export default function VolunteerSignInForm() {
       />
       {phoneError && (
         <p
-          className="self-stretch text-xl font-normal leading-normal text-error-msg"
+          className="self-stretch font-normal leading-normal text-error-msg"
           id="phone-error"
         >
           {phoneError}

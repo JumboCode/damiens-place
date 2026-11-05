@@ -39,11 +39,11 @@ export default function OnboardingStep({
 }: OnboardingStepProps) {
   return (
     <div className="flex flex-col gap-10 text-base leading-relaxed">
-      <h2 className="text-xl font-semibold">Part 3: Onboarding Materials</h2>
+      <h2>Part 3: Onboarding Materials</h2>
 
       {/* Display the handbook instructions and embedded PDF */}
       <section className="flex flex-col gap-4">
-        <h3 className="text-xl font-semibold">{HANDBOOK_TITLE}</h3>
+        <h3>{HANDBOOK_TITLE}</h3>
 
         <p>{HANDBOOK_INSTRUCTIONS}</p>
 
@@ -54,9 +54,9 @@ export default function OnboardingStep({
       <section className="flex flex-col gap-6">
         {/* Volunteer Waiver */}
         <div className="flex flex-col gap-4">
-          <h4 className="text-lg font-semibold">
+          <h3>
             Volunteer Waiver <span className="text-error-msg">*</span>
-          </h4>
+          </h3>
 
           {/* Display waiver statements as a numbered list */}
           <ol className="list-decimal space-y-2 pl-6">
@@ -96,16 +96,16 @@ export default function OnboardingStep({
             required
           />
 
-          <p className="text-sm text-gray-500">
+          <p className="text-gray-500">
             Type your full legal name here to confirm.
           </p>
         </div>
 
         {/* Volunteer Agreement */}
         <div className="flex flex-col gap-4">
-          <h4 className="text-lg font-semibold">
+          <h3>
             Volunteer Agreement <span className="text-error-msg">*</span>
-          </h4>
+          </h3>
 
           {/* Display paragraphs and lists in their original order */}
           {AGREEMENT_BLOCKS.map((block, index) =>
@@ -157,7 +157,7 @@ export default function OnboardingStep({
           />
 
           {/* Instructions for signing the agreement */}
-          <p className="text-sm text-gray-500">
+          <p className="text-gray-500">
             Type your full legal name here to confirm.
           </p>
         </div>
@@ -166,9 +166,7 @@ export default function OnboardingStep({
       {/* Only show the minor release if the applicant is under 18 */}
       {isMinor && (
         <section className="flex flex-col gap-6">
-          <h3 className="text-lg font-semibold">
-            Volunteer Release Form for Minors
-          </h3>
+          <h3>Volunteer Release Form for Minors</h3>
 
           {/* Instructions and release text */}
           <p>Sign ONLY if the volunteer is less than 18 years old.</p>
@@ -207,7 +205,7 @@ export default function OnboardingStep({
               error={errors.minorGuardianSignature}
               required
             />
-            <p className="text-sm text-gray-500">
+            <p className="text-gray-500">
               Type your full legal name here to confirm.
             </p>
           </div>
@@ -222,7 +220,7 @@ export default function OnboardingStep({
               error={errors.minorSignature}
               required
             />
-            <p className="text-sm text-gray-500">
+            <p className="text-gray-500">
               Type the volunteer&apos;s full legal name here to confirm.
             </p>
           </div>

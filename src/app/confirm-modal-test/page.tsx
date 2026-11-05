@@ -39,7 +39,7 @@ export default function ConfirmModalTestPage() {
 
   return (
     <main className="mx-auto flex max-w-3xl flex-col gap-4 p-6">
-      <h1 className="text-xl font-bold">ConfirmModal test</h1>
+      <h1>ConfirmModal test</h1>
       <label className="flex items-center gap-2">
         <input
           type="checkbox"
