@@ -12,6 +12,11 @@
   --muted-foreground: #6b7280;
   --text-primary: #1c1e1f;
 
+  /* Profile banner gradient (left to right, middle stop at 55%) */
+  --banner-start: #f0d5db;
+  --banner-mid: #e9c0c9;
+  --banner-end: #f7e8d6;
+
   /* Input box */
   --input-box: #f8fafc;
   --input-hover-frame: #949ba8;
@@ -37,6 +42,9 @@
   --color-secondary: var(--secondary);
   --color-primary-foreground: var(--primary-foreground);
   --color-muted-foreground: var(--muted-foreground);
+  --color-banner-start: var(--banner-start);
+  --color-banner-mid: var(--banner-mid);
+  --color-banner-end: var(--banner-end);
   --color-input-box: var(--input-box);
   --color-input-hover-frame: var(--input-hover-frame);
   --color-input-regular-frame: var(--input-regular-frame);
