@@ -9,8 +9,10 @@
  */
 
 import { describe, expect, it } from "@jest/globals";
+
 import {
   validateApplicantFields,
+  validateVolunteerFields,
   findMissingFields,
   ApplicantForCompleteness,
 } from "./applicant-validation";
@@ -501,5 +503,137 @@ describe("validateApplicantFields", () => {
       { requireStep1: false },
     );
     expect(result).toEqual({ error: expect.stringContaining("availableDays") });
+  });
+});
+describe("validateVolunteerFields", () => {
+  it("accepts a partial update and normalizes email and phone", () => {
+    const result = validateVolunteerFields({
+      firstName: " Pat ",
+      email: " New.Email@Example.com ",
+      cellPhone: "(617) 555-0199",
+    });
+
+    expect(result).toEqual({
+      data: {
+        firstName: "Pat",
+        email: "new.email@example.com",
+        cellPhone: "6175550199",
+      },
+    });
+  });
+
+  it("rejects a bad email", () => {
+    const result = validateVolunteerFields({ email: "invalid-email" });
+
+    expect(result).toEqual({
+      error: expect.stringContaining("email"),
+    });
+  });
+
+  it("rejects a phone number with only 9 digits", () => {
+    const result = validateVolunteerFields({ cellPhone: "617555012" });
+
+    expect(result).toEqual({
+      error: expect.stringContaining("cellPhone"),
+    });
+  });
+
+  it("rejects a required text field that's only spaces", () => {
+    const result = validateVolunteerFields({ firstName: "   " });
+
+    expect(result).toEqual({
+      error: expect.stringContaining("firstName"),
+    });
+  });
+
+  it("rejects a required field that is null", () => {
+    const result = validateVolunteerFields({ lastName: null });
+
+    expect(result).toEqual({
+      error: expect.stringContaining("lastName"),
+    });
+  });
+
+  it("allows homePhone to be cleared with null", () => {
+    const result = validateVolunteerFields({ homePhone: null });
+
+    expect(result).toEqual({
+      data: { homePhone: null },
+    });
+  });
+
+  it.each(["status", "positions", "id", "unknownField"])(
+    "rejects a read-only or unknown field: %s",
+    (field) => {
+      const result = validateVolunteerFields({ [field]: "test" });
+
+      expect(result).toEqual({
+        error: expect.stringContaining(field),
+      });
+    },
+  );
+
+  it("rejects a body that isn't an object (null)", () => {
+    const result = validateVolunteerFields(null);
+
+    expect(result).toEqual({
+      error: expect.stringContaining("Body"),
+    });
+  });
+
+  it("rejects a body that isn't an object (an array)", () => {
+    const result = validateVolunteerFields([]);
+
+    expect(result).toEqual({
+      error: expect.stringContaining("Body"),
+    });
+  });
+
+  it("rejects a body that isn't an object (a string)", () => {
+    const result = validateVolunteerFields("test");
+
+    expect(result).toEqual({
+      error: expect.stringContaining("Body"),
+    });
+  });
+
+  it("rejects an empty object", () => {
+    const result = validateVolunteerFields({});
+
+    expect(result).toEqual({
+      error: expect.stringContaining("at least one field"),
+    });
+  });
+
+  it("rejects a photoConsent that isn't a boolean", () => {
+    const result = validateVolunteerFields({ photoConsent: "yes" });
+
+    expect(result).toEqual({
+      error: expect.stringContaining("photoConsent"),
+    });
+  });
+
+  it("accepts true or false for photoConsent", () => {
+    expect(validateVolunteerFields({ photoConsent: true })).toEqual({
+      data: { photoConsent: true },
+    });
+
+    expect(validateVolunteerFields({ photoConsent: false })).toEqual({
+      data: { photoConsent: false },
+    });
+  });
+
+  it("allows other optional fields to be cleared with null", () => {
+    const result = validateVolunteerFields({
+      photoUrl: null,
+      emergencyContactRelationship: null,
+    });
+
+    expect(result).toEqual({
+      data: {
+        photoUrl: null,
+        emergencyContactRelationship: null,
+      },
+    });
   });
 });
