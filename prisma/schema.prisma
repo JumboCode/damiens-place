@@ -144,7 +144,7 @@ model Volunteer {
   cellPhone    String // normalized to digits only by the app (no spaces)
   homePhone    String?
   photoUrl     String?
-  photoConsent Boolean @default(false)
+  photoConsent Boolean @default(true)
 
   emergencyContactName         String
   emergencyContactPhone        String
