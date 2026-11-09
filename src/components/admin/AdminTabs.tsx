@@ -21,7 +21,11 @@ export default function AdminTabs() {
                         <Link
                             key={tab.href}
                             href={tab.href}
-                            aria-current={isActiveTab(pathname, tab.href) ? "page" : }
+                            aria-current={isActiveTab(pathname, tab.href) ? "page" : undefined}
+                            className={`font-size: 24px, font-style: normal, font-weight: 500, line-height: normal ${
+                            
+                                isActiveTab(pathname, tab.href) ? "text-primary" : "text-muted-foreground"
+                            }`} 
                         >
                             {tab.label}
                         </Link>
