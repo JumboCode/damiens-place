@@ -7,10 +7,10 @@
  * Date created: 7 October 2026
  */
 
+import AdminApplicantsPage from "./(dashboard)/applicants/page";
+
 export default function AdminDashboardPage() {
   return (
-    <main className="p-8">
-      <h1>Admin Sign In Successful</h1>
-    </main>
+    <AdminApplicantsPage></AdminApplicantsPage>
   );
 }

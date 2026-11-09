@@ -8,7 +8,7 @@
  */
 
 import type { ReactNode } from "react";
-//import AdminTabs from "@/components/admin/admin-tabs";
+import AdminTabs from "@/components/admin/AdminTabs";
 
 /**
  * AdminDashboardLayout
@@ -25,7 +25,7 @@ export default function AdminDashboardLayout({
 }) {
   return (
     <div className=" inline-flex h-full w-full items-center justify-between bg-primary px-[30px] py-[20px]">
-      {/* <AdminTabs /> */}
+      <AdminTabs></AdminTabs>
       <main>{children}</main>
     </div>
   );
