@@ -8,9 +8,13 @@
  */
 
 import AdminApplicantsPage from "./(dashboard)/applicants/page";
+import AdminDashboardLayout from "./(dashboard)/layout";
 
 export default function AdminDashboardPage() {
   return (
-    <AdminApplicantsPage></AdminApplicantsPage>
+    <AdminDashboardLayout>
+      <AdminApplicantsPage>
+      </AdminApplicantsPage>
+    </AdminDashboardLayout>
   );
 }

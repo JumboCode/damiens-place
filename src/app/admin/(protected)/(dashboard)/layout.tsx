@@ -24,8 +24,8 @@ export default function AdminDashboardLayout({
   children: ReactNode;
 }) {
   return (
-    <div className=" inline-flex h-full w-full items-center justify-between bg-primary px-[30px] py-[20px]">
-      <AdminTabs></AdminTabs>
+    <div className="flex items-center justify-start gap-2">
+     <AdminTabs></AdminTabs>
       <main>{children}</main>
     </div>
   );
