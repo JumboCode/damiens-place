@@ -13,7 +13,7 @@ export default function AdminTabs() {
     return (
         <nav
             aria-label="Admin sections"
-            className="text-primary bg-primary text-error"
+            className="flex items-center flex-col"
         >
             {ADMIN_TABS.map(
                 (tab) => {
@@ -31,7 +31,7 @@ export default function AdminTabs() {
                         </Link>
                     );
                 },
-                /* TODO: a <Link> for each tab in ADMIN_TABS.
+                                                        /* TODO: a <Link> for each tab in ADMIN_TABS.
                                                         The selected tab (isActiveTab(pathname, tab.href)) gets aria-current="page" and the selected look
                                                         from the Figma (maroon text with an underline). The others get a hover style.
                                                         Every link needs a clear focus style for keyboard users. Use our theme classes, not hex codes. */
