@@ -143,3 +143,56 @@ export function submitApplicant(id: string) {
     { method: "POST" },
   );
 }
+
+//Luisa and Rim addition 11/08/2026
+
+
+// One saved draft, exactly as GET /api/applicants/:id/draft sends it. Anything not answered yet is null.
+export type ApplicationDraft = {
+  id: string;
+  status: string;
+  firstName: string;
+  lastName: string;
+  age: number;
+  email: string;
+  cellPhone: string;
+  homePhone: string | null;
+  proofOfResidenceUrl: string;
+  street: string;
+  city: string;
+  state: string;
+  zip: string;
+  emergencyContactName: string; // first and last name joined with a space
+  emergencyContactPhone: string;
+  emergencyContactRelationship: string | null;
+  positions: string[]; // position ids
+  availableDays: string[];
+  availableHours: string | null;
+  hasDisability: boolean | null;
+  disabilityDetails: string | null;
+  waiverAccepted: boolean | null;
+  waiverSignature: string | null;
+  agreementAccepted: boolean | null;
+  agreementSignature: string | null;
+  minorReleaseAccepted: boolean | null;
+  minorGuardianSignature: string | null;
+  minorSignature: string | null;
+  onboardingAvailability: string | null;
+};
+
+/**
+ *getDraft
+ *
+ * Gets an applicant's saved draft from the backend so they can resume the application.
+ *
+ * @param id - The ID of the applicant to update.
+ * @returns A promise resolving to the API result, including the applicant's draft data.
+ */
+export function getDraft(
+  id: string,
+): Promise<ApiResult<{ applicant: ApplicationDraft }>> {
+  // DONE: GET /api/applicants/:id/draft using `request`. Encode the id, and use no-store so an old draft is never reused.
+  request(`/api/applicants/${encodeURIComponent(id)}/draft`, {
+    cache: "no-store",
+  });
+}
