@@ -190,7 +190,6 @@ export type ApplicationDraft = {
 export function getDraft(
   id: string,
 ): Promise<ApiResult<{ applicant: ApplicationDraft }>> {
-  // DONE: GET /api/applicants/:id/draft using `request`. Encode the id, and use no-store so an old draft is never reused.
   return request(`/api/applicants/${encodeURIComponent(id)}/draft`, {
     cache: "no-store",
   });

@@ -353,8 +353,12 @@ export default function ApplicationFormShell() {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4">
         <p role="alert">{resumeError}</p>
-        <CommonButton onClick={startOver} title="Start a new application" />
-        <CommonButton onClick={tryAgain} altStyle title="Try again" />
+        <CommonButton
+          onClick={startOver}
+          altStyle
+          title="Start a new application"
+        />
+        <CommonButton onClick={tryAgain} title="Try again" />
       </div>
     );
   }

@@ -329,13 +329,6 @@ export const REVIEW_STEP_INDEX = 4;
 export function draftToFormState(
   draft: ApplicationDraft,
 ): ApplicationFormState {
-  // DONE: build the whole state, one section at a time.
-  //   personalInfo: `age` goes from number to text, and emergencyContactName splits at the first space into first and last name
-  //   positions: `positions` becomes `positionIds`
-  //   onboarding: the checkboxes (null -> false) and the signatures (null -> "")
-  //   appointment: onboardingAvailability
-  //   Unanswered (null) becomes "", but hasDisability stays null
-
   const [emergencyContactFirstName, ...lastNameParts] =
     draft.emergencyContactName.split(" ");
 
@@ -388,10 +381,6 @@ export function draftToFormState(
  * @returns the index of the first incomplete step.
  */
 export function firstIncompleteStep(state: ApplicationFormState): number {
-  // DONE: the index of the first step whose checks fail, or REVIEW_STEP_INDEX if none:
-  //   0: validatePersonalInfo, or proofOfResidenceUrl is ""   1: validatePositionsStep
-  //   2: validateOnboarding (with isMinor(state))             3: validateAppointmentStep
-  //Step 1
   if (
     Object.keys(validatePersonalInfo(state.personalInfo)).length > 0 ||
     state.proofOfResidenceUrl.trim() == ""
