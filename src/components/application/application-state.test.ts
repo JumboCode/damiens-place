@@ -6,7 +6,7 @@
  * Date Created: 11/3/2026
  */
 
-import { describe, expect, test } from "@jest/globals";
+import { describe, expect, test, it } from "@jest/globals";
 import {
   emptyApplicationFormState,
   isMinor,
@@ -16,8 +16,11 @@ import {
   buildAppointmentPayload,
   buildReviewData,
   firstStepWithMissingFields,
+  draftToFormState,
+  firstIncompleteStep,
 } from "./application-state";
 import type { ApplicationFormState } from "./application-state";
+import type { ApplicationDraft } from "@/lib/application-api";
 
 // Creates a separate initial state for each test.
 function makeState(): ApplicationFormState {
@@ -263,5 +266,176 @@ describe("firstStepWithMissingFields", () => {
     [[], null],
   ])("%j -> %s", (fields, expected) => {
     expect(firstStepWithMissingFields(fields)).toBe(expected);
+  });
+});
+
+// Lusia and Rim addition
+
+// A draft with only Step 1 saved (like test-applicant-four)
+const step1Draft: ApplicationDraft = {
+  id: "draft-1",
+  status: "DRAFT",
+  firstName: "Jane",
+  lastName: "Doe",
+  age: 34,
+  email: "jane@example.com",
+  cellPhone: "6175550123",
+  homePhone: null,
+  proofOfResidenceUrl: "https://example.com/proof.pdf",
+  street: "1 Main St",
+  city: "Medford",
+  state: "MA",
+  zip: "02155",
+  emergencyContactName: "John Doe",
+  emergencyContactPhone: "6175550124",
+  emergencyContactRelationship: null,
+  positions: [],
+  availableDays: [],
+  availableHours: null,
+  hasDisability: null,
+  disabilityDetails: null,
+  waiverAccepted: null,
+  waiverSignature: null,
+  agreementAccepted: null,
+  agreementSignature: null,
+  minorReleaseAccepted: null,
+  minorGuardianSignature: null,
+  minorSignature: null,
+  onboardingAvailability: null,
+};
+
+// The same adult applicant with every step answered
+const fullDraft: ApplicationDraft = {
+  ...step1Draft,
+  homePhone: "6175550199",
+  emergencyContactRelationship: "Spouse",
+  positions: ["position-1", "position-2"],
+  availableDays: ["MONDAY", "WEDNESDAY"],
+  availableHours: "Mornings, 9am to noon",
+  hasDisability: true,
+  disabilityDetails: "Needs a chair",
+  waiverAccepted: true,
+  waiverSignature: "Jane Doe",
+  agreementAccepted: true,
+  agreementSignature: "Jane Doe",
+  onboardingAvailability: "Weekday afternoons",
+};
+
+describe("draftToFormState", () => {
+  it("turns a Step 1 only draft into form state, with unanswered answers empty", () => {
+    const state = draftToFormState(step1Draft);
+
+    expect(state.personalInfo.age).toBe("34"); // text in the form, a number in the API
+    expect(state.personalInfo.homePhone).toBe("");
+    expect(state.proofOfResidenceUrl).toBe("https://example.com/proof.pdf");
+    expect(state.positions.positionIds).toEqual([]);
+    expect(state.positions.availableHours).toBe("");
+    expect(state.positions.hasDisability).toBeNull();
+    expect(state.onboarding.waiverAccepted).toBe(false);
+    expect(state.onboarding.waiverSignature).toBe("");
+    expect(state.appointment.onboardingAvailability).toBe("");
+  });
+
+  it("restores the answers from every step", () => {
+    const state = draftToFormState(fullDraft);
+
+    expect(state.personalInfo.homePhone).toBe("6175550199");
+    expect(state.positions.positionIds).toEqual(["position-1", "position-2"]);
+    expect(state.positions.availableDays).toEqual(["MONDAY", "WEDNESDAY"]);
+    expect(state.positions.hasDisability).toBe(true);
+    expect(state.positions.disabilityDetails).toBe("Needs a chair");
+    expect(state.onboarding.waiverAccepted).toBe(true);
+    expect(state.onboarding.agreementSignature).toBe("Jane Doe");
+    expect(state.appointment.onboardingAvailability).toBe("Weekday afternoons");
+  });
+
+  it('keeps a saved "No" for disability as false, not as unanswered', () => {
+    const state = draftToFormState({ ...fullDraft, hasDisability: false });
+    expect(state.positions.hasDisability).toBe(false);
+  });
+
+  it("restores the minors consent", () => {
+    const state = draftToFormState({
+      ...fullDraft,
+      age: 17,
+      minorReleaseAccepted: true,
+      minorGuardianSignature: "John Doe",
+      minorSignature: "Janie Doe",
+    });
+    expect(state.onboarding.minorReleaseAccepted).toBe(true);
+    expect(state.onboarding.minorGuardianSignature).toBe("John Doe");
+    expect(state.onboarding.minorSignature).toBe("Janie Doe");
+  });
+
+  it("splits the emergency contact name into first and last name", () => {
+    const state = draftToFormState({
+      ...step1Draft,
+      emergencyContactName: "Mary Shen",
+    });
+    expect(state.personalInfo).toMatchObject({
+      emergencyContactFirstName: "Mary",
+      emergencyContactLastName: "Shen",
+    });
+  });
+
+  it("is the reverse of buildPersonalInfoPayload", () => {
+    const payload = buildPersonalInfoPayload(draftToFormState(step1Draft));
+
+    expect(payload).toMatchObject({
+      firstName: "Jane",
+      age: 34,
+      emergencyContactName: "John Doe",
+    });
+    expect(payload).not.toHaveProperty("homePhone");
+  });
+});
+
+describe("firstIncompleteStep", () => {
+  it("starts at Step 1 for an empty form", () => {
+    expect(firstIncompleteStep(emptyApplicationFormState)).toBe(0);
+  });
+
+  it("stays on Step 1 when the proof of residence is missing", () => {
+    const state = draftToFormState({ ...fullDraft, proofOfResidenceUrl: "" });
+    expect(firstIncompleteStep(state)).toBe(0);
+  });
+
+  it("goes to Step 2 when only Step 1 is done", () => {
+    expect(firstIncompleteStep(draftToFormState(step1Draft))).toBe(1);
+  });
+
+  it("goes to Step 3 when Steps 1 and 2 are done", () => {
+    const state = draftToFormState({
+      ...fullDraft,
+      waiverAccepted: null,
+      waiverSignature: null,
+      agreementAccepted: null,
+      agreementSignature: null,
+    });
+    expect(firstIncompleteStep(state)).toBe(2);
+  });
+
+  it("returns the earliest incomplete step, even when a later step is done", () => {
+    // Step 2 has no positions, but Steps 3 and 4 are filled in
+    const state = draftToFormState({ ...fullDraft, positions: [] });
+    expect(firstIncompleteStep(state)).toBe(1);
+  });
+
+  it("goes to the Review step when everything is done", () => {
+    expect(firstIncompleteStep(draftToFormState(fullDraft))).toBe(4);
+  });
+
+  it("needs the minors consent for an applicant under 18", () => {
+    const withoutMinorConsent = draftToFormState({ ...fullDraft, age: 17 });
+    expect(firstIncompleteStep(withoutMinorConsent)).toBe(2);
+
+    const withMinorConsent = draftToFormState({
+      ...fullDraft,
+      age: 17,
+      minorReleaseAccepted: true,
+      minorGuardianSignature: "John Doe",
+      minorSignature: "Janie Doe",
+    });
+    expect(firstIncompleteStep(withMinorConsent)).toBe(4);
   });
 });

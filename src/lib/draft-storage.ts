@@ -27,7 +27,7 @@ function getBrowserStorage(): DraftStorage | null {
   try {
     storage = window.localStorage;
     return storage;
-  } catch{
+  } catch {
     return null;
   }
 }
@@ -48,10 +48,10 @@ export function saveDraftId(
   //DONE: setItem inside a try/catch (broken storage must never break the form)
   try {
     storage?.setItem(DRAFT_ID_KEY, id);
-    } catch {
+  } catch {
     // ignore storage errors.
-    }
-  }   
+  }
+}
 
 /**
  * loadDraftId
@@ -85,9 +85,8 @@ export function clearDraftId(
 ): void {
   // DONE: removeItem inside a try/catch
   try {
-    storage?.removeItem(DRAFT_ID_KEY) ?? null;
+    storage?.removeItem(DRAFT_ID_KEY);
   } catch {
     // ignore storage errors.
   }
-
 }

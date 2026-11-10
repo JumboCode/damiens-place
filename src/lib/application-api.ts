@@ -146,7 +146,6 @@ export function submitApplicant(id: string) {
 
 //Luisa and Rim addition 11/08/2026
 
-
 // One saved draft, exactly as GET /api/applicants/:id/draft sends it. Anything not answered yet is null.
 export type ApplicationDraft = {
   id: string;
@@ -192,7 +191,7 @@ export function getDraft(
   id: string,
 ): Promise<ApiResult<{ applicant: ApplicationDraft }>> {
   // DONE: GET /api/applicants/:id/draft using `request`. Encode the id, and use no-store so an old draft is never reused.
-  request(`/api/applicants/${encodeURIComponent(id)}/draft`, {
+  return request(`/api/applicants/${encodeURIComponent(id)}/draft`, {
     cache: "no-store",
   });
 }
