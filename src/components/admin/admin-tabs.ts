@@ -10,14 +10,12 @@ export const ADMIN_TABS: AdminTab[] = [
   { label: "Edits", href: "/admin/edits" },
 ];
 
-
 // TODO: function contract
 export function isActiveTab(pathname: string, href: string): boolean {
   // TODO: true for the same path, or a path under it. "/admin/applicants-old" must NOT count as under "/admin/applicants".
-  if (pathname == href || pathname.startsWith(href + '/')) {
+  if (pathname == href || pathname.startsWith(href + "/")) {
     return true;
-  }
-  else {
+  } else {
     return false;
   }
 }

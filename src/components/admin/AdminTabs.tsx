@@ -26,30 +26,32 @@ import { ADMIN_TABS, isActiveTab } from "./admin-tabs";
  * @returns a <nav> that scrolls sideways
  */
 export default function AdminTabs() {
-    const pathname = usePathname();
+  const pathname = usePathname();
 
-    return (
-        <nav
-            aria-label="Admin sections"
-            className="flex w-full gap-2 overflow-x-auto whitespace-nowrap border-b-1 border-[#e5e7eb]"
-        >
-            {ADMIN_TABS.map(
-                (tab) => {
-                    return (
-                        <Link
-                            key={tab.href}
-                            href={tab.href}
-                            aria-current={isActiveTab(pathname, tab.href) ? "page" : undefined}
-                            className={`h-[47.297px] text-2xl font-medium leading-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 border-b-3 px-3 ${
-                            
-                                isActiveTab(pathname, tab.href) ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"
-                            }`} 
-                        >
-                            {tab.label}
-                        </Link>
-                    );
-                },
-            )}
-        </nav>
-    );
+  return (
+    <div className="border-b border-gray-200">
+      <nav
+        aria-label="Admin sections"
+        className="-mb-px flex gap-2 overflow-x-auto whitespace-nowrap"
+      >
+        {ADMIN_TABS.map((tab) => {
+          const activeTab = isActiveTab(pathname, tab.href);
+          return (
+            <Link
+              key={tab.href}
+              href={tab.href}
+              aria-current={activeTab ? "page" : undefined}
+              className={`border-b-2 px-4 pb-2 pt-3 text-base font-medium leading-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
+                activeTab
+                  ? "border-primary text-primary"
+                  : "border-transparent text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {tab.label}
+            </Link>
+          );
+        })}
+      </nav>
+    </div>
+  );
 }

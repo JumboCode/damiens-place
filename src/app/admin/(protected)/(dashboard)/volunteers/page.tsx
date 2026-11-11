@@ -10,7 +10,6 @@
 import { requireAdminPage } from "@/lib/admin-auth";
 
 export default async function AdminVolunteersPage() {
-    
   await requireAdminPage();
 
   return (
