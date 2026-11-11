@@ -67,6 +67,20 @@ const ALLOWED_FIELDS = [
   "availableDays",
 ];
 
+// The only fields a volunteer may change about themselves
+const VOLUNTEER_EDITABLE_FIELDS = [
+  "firstName",
+  "lastName",
+  "email",
+  "cellPhone",
+  "homePhone",
+  "photoUrl",
+  "photoConsent",
+  "emergencyContactName",
+  "emergencyContactPhone",
+  "emergencyContactRelationship",
+];
+
 /**
  * Validates applicant fields and normalizes email and cell phone values.
  *
@@ -253,4 +267,89 @@ export function findMissingFields(
   }
 
   return missing;
+}
+
+/**
+ * validates inputs to applicant fields for editing
+ *
+ * @param body - input of proposed edited field
+ * @returns - 200; cleaned data to update field with
+ * Errors:
+ * errors if rules are broken regarding input morphology
+ */
+export function validateVolunteerFields(body: unknown) {
+  if (
+    typeof body !== "object" ||
+    body === null ||
+    Array.isArray(body) ||
+    Object.getPrototypeOf(body) !== Object.prototype
+  ) {
+    return { error: "Body must be an object" };
+  }
+  const input = body as Record<string, unknown>;
+
+  if (Object.keys(input).length == 0) {
+    return { error: "There must be at least one field provided" };
+  }
+
+  for (const field of Object.keys(input)) {
+    if (!VOLUNTEER_EDITABLE_FIELDS.includes(field)) {
+      return { error: `${field} is not an allowed field` };
+    }
+  }
+
+  // The cleaned-up values to return. Only fields that were sent end up here.
+  const data: Record<string, unknown> = {};
+
+  // Check each field that was sent, one at a time, and return at the first problem.
+  for (const [field, value] of Object.entries(input)) {
+    if (
+      field === "firstName" ||
+      field === "lastName" ||
+      field === "emergencyContactName" ||
+      field === "emergencyContactPhone"
+    ) {
+      // Blank fields look "filled in" but are useless to an admin, so trim first
+      if (typeof value !== "string" || value.trim() === "") {
+        return { error: `${field} must be a non-empty string` };
+      }
+      data[field] = value.trim();
+    } else if (field === "email") {
+      if (
+        typeof value !== "string" ||
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizeEmail(value))
+      ) {
+        return { error: "email must be a valid email address" };
+      }
+      data[field] = normalizeEmail(value);
+    } else if (field === "cellPhone") {
+      if (typeof value !== "string") {
+        return { error: "cellPhone must be a string" };
+      }
+      const normalized = normalizeCellPhone(value);
+      if (normalized.length < 10) {
+        return { error: "cellPhone must have at least 10 digits" };
+      }
+      data[field] = normalized;
+    } else if (field === "photoConsent") {
+      if (typeof value !== "boolean") {
+        return { error: `${field} must be a boolean` };
+      }
+      data[field] = value;
+    } else if (
+      field === "homePhone" ||
+      field === "emergencyContactRelationship" ||
+      field === "photoUrl"
+    ) {
+      if (value == null) {
+        data[field] = null;
+      } else if (typeof value !== "string" || value.trim() === "") {
+        return { error: `${field} must be a non-empty string` };
+      } else {
+        data[field] = value.trim();
+      }
+    }
+  }
+
+  return { data };
 }
