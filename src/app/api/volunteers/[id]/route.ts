@@ -97,10 +97,6 @@ export async function PATCH(request: Request, { params }: RouteContext) {
       data: data as Parameters<typeof prisma.volunteer.update>[0]["data"],
       select: VOLUNTEER_PROFILE_SELECT,
     });
-    // TODO: prisma.volunteer.update where the id matches, with `data` set to the cleaned data and
-    //   `select: VOLUNTEER_PROFILE_SELECT`. The cleaned data is typed loosely, so you'll need to cast it
-    //   for Prisma. That's fine here, because the helper already cleaned it.
-    //   Return 200 with { volunteer }.
     return Response.json(
       { volunteer: updated },
       { status: 200, headers: { "Cache-Control": "no-store" } },
@@ -119,9 +115,5 @@ export async function PATCH(request: Request, { params }: RouteContext) {
       );
     }
     throw error;
-    // TODO: for a Prisma.PrismaClientKnownRequestError:
-    //   code "P2025" (no volunteer with that id) means 404.
-    //   code "P2002" (the email + cell phone pair already belongs to another volunteer) means 409, with a clear message.
-    //   Throw anything else again.
   }
 }
