@@ -336,8 +336,7 @@ export default function ApplicationFormShell() {
       setSaving(false);
     }
   }
-  // TODO: while `resuming`, show only "Loading your saved application...". If `resumeError`, show it with two
-  //   CommonButtons: "Try again" and "Start a new application" (altStyle). Otherwise the form, as it is today.
+
   if (resuming) {
     return <p>Loading your saved application...</p>;
   }

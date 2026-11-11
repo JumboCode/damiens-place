@@ -9,6 +9,7 @@ import { NextResponse } from "next/server";
 import { Prisma } from "@/generated/prisma/client";
 import { validateVolunteerFields } from "@/lib/applicant-validation";
 import { prisma } from "@/lib/prisma";
+import { requireVolunteer } from "@/lib/volunteer-auth";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -34,14 +35,22 @@ const VOLUNTEER_PROFILE_SELECT = {
  * @param _request - the incoming request
  * @param  params - volunteer id
  * @returns 200; response if successful with volunteer
- * Erros:
+ * Errors:
+ * 401 if not signed in as a volunteer
+ * 403 if the volunteer is inactive or the id isn't the signed-in volunteer's
  * 404 if not found
  */
 export async function GET(_request: Request, { params }: RouteContext) {
-  // TODO(natalie): require the volunteer session with requireVolunteer() and check that its volunteerId matches this id (BE-volunteer-profile)
+  const session = await requireVolunteer();
+  if ("response" in session) return session.response;
 
   // In Next.js 15+, params is a Promise, so you have to await it
   const { id } = await params;
+
+  // A volunteer can only use their own profile
+  if (session.volunteerId !== id) {
+    return Response.json({ error: "User unauthorized." }, { status: 403 });
+  }
 
   const volunteer = await prisma.volunteer.findUnique({
     where: {
@@ -65,14 +74,22 @@ export async function GET(_request: Request, { params }: RouteContext) {
  * @param request - incoming request
  * @param param1 - volunteer id
  * Errors:
+ * 401 if not signed in as a volunteer
+ * 403 if the volunteer is inactive or the id isn't the signed-in volunteer's
  * 400 if invalid json
  * 404 if not found
  * 409 if not unique
  */
 export async function PATCH(request: Request, { params }: RouteContext) {
-  // TODO(natalie): require the volunteer session with requireVolunteer() and check that its volunteerId matches this id (BE-volunteer-profile)
+  const session = await requireVolunteer();
+  if ("response" in session) return session.response;
 
   const { id } = await params;
+
+  // A volunteer can only use their own profile
+  if (session.volunteerId !== id) {
+    return Response.json({ error: "User unauthorized." }, { status: 403 });
+  }
 
   let body: unknown;
   try {

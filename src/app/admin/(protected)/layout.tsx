@@ -22,18 +22,18 @@ export default async function AdminLayout({
   await requireAdminPage();
 
   return (
-    <div>
-      <div className="inline-flex h-full w-full items-center justify-between bg-primary px-[30px] py-[20px]">
-        <div className="flex items-center justify-start gap-2">
-          <Image
-            src={logo1}
-            alt="Damien's Food Pantry logo"
-            className="h-[29px] w-[28px] object-contain"
-          />
-          <h2 className="text-white">Damien’s Food Pantry</h2>
-        </div>
+    <ClerkProvider>
+      <div>
+        <div className="inline-flex h-full w-full items-center justify-between bg-primary px-4 py-3">
+          <div className="flex items-center justify-start gap-2">
+            <Image
+              src={logo1}
+              alt="Damien's Food Pantry logo"
+              className="h-10 object-contain"
+            />
+            <h3 className="text-white">Damien’s Food Pantry</h3>
+          </div>
 
-        <ClerkProvider>
           <SignOutButton redirectUrl="/admin/sign-in">
             <button
               type="button"
@@ -42,9 +42,9 @@ export default async function AdminLayout({
               Log out
             </button>
           </SignOutButton>
-        </ClerkProvider>
+        </div>
+        <main>{children}</main>
       </div>
-      <main>{children}</main>
-    </div>
+    </ClerkProvider>
   );
 }

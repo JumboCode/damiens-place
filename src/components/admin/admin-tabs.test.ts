@@ -1,4 +1,12 @@
-// TODO: FILE HEADER
+/**
+ * admin-tabs.test.ts
+ *
+ * Tests for isActiveTab: own page, a page under the tab, a different tab, and
+ * a path that only shares the same starting letters.
+ *
+ * Author: Jeremiah and Carter
+ * Date Created: 11/8/26
+ */
 import { describe, expect, it } from "@jest/globals";
 import { isActiveTab } from "./admin-tabs";
 

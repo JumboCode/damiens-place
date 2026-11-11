@@ -11,11 +11,17 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
+import { Lock, Mail } from "lucide-react";
 import ProfileCard from "@/components/profile/ProfileCard";
 import ProfileInfoCard from "@/components/profile/ProfileInfo";
 
 // Clerk never gives out the password, so the card only ever shows dots
 const PASSWORD_DOTS = "••••••••";
+
+// Small icons shown before the Email and Password labels
+const ICON_CLASS = "size-5 shrink-0 text-gray-400";
+const EMAIL_ICON = <Mail aria-hidden="true" className={ICON_CLASS} />;
+const PASSWORD_ICON = <Lock aria-hidden="true" className={ICON_CLASS} />;
 
 /**
  * AdminProfileCard
@@ -49,9 +55,10 @@ export default function AdminProfileCard() {
         items={[
           {
             label: "Email",
+            icon: EMAIL_ICON,
             value: user.primaryEmailAddress?.emailAddress ?? "",
           },
-          { label: "Password", value: PASSWORD_DOTS },
+          { label: "Password", icon: PASSWORD_ICON, value: PASSWORD_DOTS },
         ]}
       />
     </ProfileCard>

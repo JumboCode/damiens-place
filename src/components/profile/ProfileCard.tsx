@@ -12,6 +12,7 @@
  */
 "use client";
 
+import { SquarePen } from "lucide-react";
 import type { ReactNode } from "react";
 
 type ProfileCardProps = {
@@ -48,7 +49,7 @@ export default function ProfileCard({
   return (
     <section
       aria-label="Profile"
-      className="overflow-hidden rounded-xl border border-gray-200 bg-white"
+      className="overflow-hidden rounded-xl border border-input-hover-frame bg-white"
     >
       <div
         className="h-28 bg-cover bg-center bg-linear-to-r from-banner-start via-banner-mid via-55% to-banner-end"
@@ -61,7 +62,7 @@ export default function ProfileCard({
 
       <div className="px-4 pb-6 sm:px-6">
         <div className="flex items-start justify-between gap-4">
-          <div className="-mt-10 flex size-20 shrink-0 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-gray-200 text-gray-500">
+          <div className="-mt-10 flex size-22 shrink-0 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-gray-200 text-gray-500">
             {photoUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -87,13 +88,14 @@ export default function ProfileCard({
           <button
             type="button"
             onClick={onEditProfile}
-            className="mt-3 rounded-md border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium hover:bg-gray-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            className="mt-3 inline-flex items-center gap-2 rounded-md border border-input-hover-frame bg-white px-3 py-1.5 text-md font-medium hover:bg-gray-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
+            <SquarePen aria-hidden="true" className="size-4 text-gray-400" />
             Edit Profile
           </button>
         </div>
 
-        <h2 className="mt-3 font-bold">{name}</h2>
+        <h1 className="mt-3 md:text-3xl">{name}</h1>
 
         {children && <div className="mt-4">{children}</div>}
       </div>

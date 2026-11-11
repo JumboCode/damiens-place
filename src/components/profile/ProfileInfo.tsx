@@ -34,17 +34,27 @@ export default function ProfileInfoCard({
   items,
 }: ProfileInfoCardProps) {
   return (
-    <div className="rounded-lg border border-gray-200 p-4 sm:p-5">
+    <div className="rounded-lg border border-input-hover-frame p-4 sm:p-5">
       <h3>{title}</h3>
 
       <dl className="mt-3 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((item) => (
-          <div key={item.label}>
-            <dt className="flex items-center gap-2 text-sm font-medium">
-              {item.icon}
+          // Icon in its own column, so the label and value line up with each other
+          <div
+            key={item.label}
+            className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-2"
+          >
+            {item.icon}
+            <dt
+              className={`text-lg font-medium ${item.icon ? "" : "col-span-full"}`}
+            >
               {item.label}
             </dt>
-            <dd className="mt-1 text-sm whitespace-pre-wrap">{item.value}</dd>
+            <dd
+              className={`mt-1 text-lg break-words whitespace-pre-wrap ${item.icon ? "col-start-2" : "col-span-full"}`}
+            >
+              {item.value}
+            </dd>
           </div>
         ))}
       </dl>
