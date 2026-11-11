@@ -1,16 +1,14 @@
 /**
  * page.tsx
  *
- * Admin sign-in successful page
+ * Admin sign-in successful page, currently redirects to applicants tab
  *
  * Author: William Balz and Nirvaan Govind
  * Date created: 7 October 2026
  */
 
+import { redirect } from "next/navigation";
+
 export default function AdminDashboardPage() {
-  return (
-    <main className="p-8">
-      <h1>Admin Sign In Successful</h1>
-    </main>
-  );
+  redirect("/admin/applicants");
 }
