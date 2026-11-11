@@ -41,7 +41,7 @@ export default function AdminTabs() {
               key={tab.href}
               href={tab.href}
               aria-current={activeTab ? "page" : undefined}
-              className={`border-b-2 px-4 pb-2 pt-3 text-base font-medium leading-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
+              className={`border-b-2 px-4 pb-2 pt-3 text-base font-medium leading-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary ${
                 activeTab
                   ? "border-primary text-primary"
                   : "border-transparent text-muted-foreground hover:text-foreground"
