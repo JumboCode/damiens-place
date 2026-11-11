@@ -1,7 +1,8 @@
 /**
  * ApplicantDecisionControls.tsx
  *
- * Admin can approve/reject submitted applicants. Display confirm modal and updates applicant status.
+ * Admin can approve/reject submitted applicants.
+ * Display confirm modal and updates applicant status.
  *
  * Author: Abby, Alex
  * Date Created: 11/06/26
@@ -27,7 +28,8 @@ type ApplicantDecisionControlsProps = {
 /**
  * ApplicantDecisionControls /src/components/admin/
  *
- * Admin can approve/reject submitted applicants. Display confirm modal while updating applicant status.&#x20;*
+ * Admin can approve/reject submitted applicants.
+ * Display confirm modal while updating applicant status.
  *
  * @param applicantId - id of applicant
  * @param status - applicants inital status
