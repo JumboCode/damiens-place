@@ -2,7 +2,7 @@
  * application-state.test.ts
  *
  * Tests the application form state and API payload functions.
- * Author: Elijah, Jeremiah
+ * Author: Elijah, Jeremiah, Luisa, Rim
  * Date Created: 11/3/2026
  */
 
@@ -268,8 +268,6 @@ describe("firstStepWithMissingFields", () => {
     expect(firstStepWithMissingFields(fields)).toBe(expected);
   });
 });
-
-// Lusia and Rim addition
 
 // A draft with only Step 1 saved (like test-applicant-four)
 const step1Draft: ApplicationDraft = {

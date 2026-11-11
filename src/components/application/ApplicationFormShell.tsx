@@ -56,15 +56,7 @@ import {
   getDraft,
 } from "@/lib/application-api";
 import NavBar from "@/components/common/NavBar";
-
-// DONE: add the imports you need
 import { loadDraftId, saveDraftId, clearDraftId } from "@/lib/draft-storage";
-
-// DONE: tryAgain, and startOver (clears the saved id and the error)
-
-// DONE: in goNext, saveDraftId right after createApplicant succeeds
-// TODO: while `resuming`, show only "Loading your saved application...". If `resumeError`, show it with two
-//   CommonButtons: "Try again" and "Start a new application" (altStyle). Otherwise the form, as it is today.
 
 export default function ApplicationFormShell() {
   const router = useRouter();

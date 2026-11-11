@@ -1,7 +1,7 @@
 /**
  * draft-storage.ts
  *
- * <1-3 sentences: what this file does and why it exists.>
+ * Helper functions for storing a user's draft ID in local storage.
  *
  * Author: Luisa and Rim
  * Date Created: 11/08/2026
@@ -45,7 +45,7 @@ export function saveDraftId(
   id: string,
   storage: DraftStorage | null = getBrowserStorage(),
 ): void {
-  //DONE: setItem inside a try/catch (broken storage must never break the form)
+  // setItem inside a try/catch (broken storage must never break the form)
   try {
     storage?.setItem(DRAFT_ID_KEY, id);
   } catch {
@@ -64,7 +64,7 @@ export function saveDraftId(
 export function loadDraftId(
   storage: DraftStorage | null = getBrowserStorage(),
 ): string | null {
-  // DONE: getItem inside a try/catch. null if nothing is saved
+  // getItem inside a try/catch. null if nothing is saved
   try {
     return storage?.getItem(DRAFT_ID_KEY) ?? null;
   } catch {
@@ -83,7 +83,7 @@ export function loadDraftId(
 export function clearDraftId(
   storage: DraftStorage | null = getBrowserStorage(),
 ): void {
-  // DONE: removeItem inside a try/catch
+  // removeItem inside a try/catch
   try {
     storage?.removeItem(DRAFT_ID_KEY);
   } catch {

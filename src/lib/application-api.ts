@@ -3,7 +3,7 @@
  *
  * API functions for the volunteer application form.
  *
- * Author: Elijah and Jeremiah
+ * Author: Elijah, Jeremiah, Luisa, Rim
  * Date Created: 10/30/2026
  */
 
@@ -143,8 +143,6 @@ export function submitApplicant(id: string) {
     { method: "POST" },
   );
 }
-
-//Luisa and Rim addition 11/08/2026
 
 // One saved draft, exactly as GET /api/applicants/:id/draft sends it. Anything not answered yet is null.
 export type ApplicationDraft = {
