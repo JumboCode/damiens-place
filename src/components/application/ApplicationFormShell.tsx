@@ -14,7 +14,7 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { steps } from "./steps";
 import StepProgress from "./StepProgress";
 import CommonButton from "@/components/common/CommonButton";
@@ -45,19 +45,24 @@ import {
   buildAppointmentPayload,
   buildReviewData,
   firstStepWithMissingFields,
+  draftToFormState,
+  firstIncompleteStep,
   type ApplicationFormState,
 } from "@/components/application/application-state";
 import {
   createApplicant,
   updateApplicant,
   submitApplicant,
+  getDraft,
 } from "@/lib/application-api";
 import NavBar from "@/components/common/NavBar";
+import { loadDraftId, saveDraftId, clearDraftId } from "@/lib/draft-storage";
 
 export default function ApplicationFormShell() {
   const router = useRouter();
   // useState = a box that remembers a value. 0 means the first step.
   const [currentStep, setCurrentStep] = useState(0);
+
   const [state, setState] = useState<ApplicationFormState>(
     emptyApplicationFormState,
   );
@@ -93,6 +98,54 @@ export default function ApplicationFormShell() {
   const [saveError, setSaveError] = useState<string | null>(null);
   const [proofError, setProofError] = useState<string | null>(null);
   const savingRef = useRef(false);
+  // True until we've checked for a saved draft
+  const [resuming, setResuming] = useState(true);
+  const [resumeError, setResumeError] = useState<string | null>(null);
+  // Changing this runs the check again (the "Try again" button)
+  const [resumeAttempt, setResumeAttempt] = useState(0);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function resume() {
+      const savedId = loadDraftId();
+      if (!savedId) {
+        setResuming(false);
+        return;
+      }
+
+      try {
+        const result = await getDraft(savedId);
+
+        if (cancelled) {
+          return;
+        }
+
+        if (result.ok) {
+          const restored = draftToFormState(result.data.applicant);
+          setDraftId(savedId);
+          setState(restored);
+          setCurrentStep(firstIncompleteStep(restored));
+        } else if (result.status === 404) {
+          clearDraftId();
+        } else {
+          setResumeError("We couldn't load your saved application.");
+        }
+      } catch {
+        if (!cancelled) {
+          setResumeError("We couldn't load your saved application.");
+        }
+      } finally {
+        if (!cancelled) {
+          setResuming(false);
+        }
+      }
+    }
+    resume();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [resumeAttempt]);
 
   /**
    * validateStep
@@ -184,6 +237,7 @@ export default function ApplicationFormShell() {
 
         if (draftId === null) {
           setDraftId(result.data.applicant.id);
+          saveDraftId(result.data.applicant.id);
         }
       } else if (currentStep >= 1 && currentStep <= 3) {
         if (draftId === null) {
@@ -281,6 +335,47 @@ export default function ApplicationFormShell() {
       savingRef.current = false;
       setSaving(false);
     }
+  }
+  // TODO: while `resuming`, show only "Loading your saved application...". If `resumeError`, show it with two
+  //   CommonButtons: "Try again" and "Start a new application" (altStyle). Otherwise the form, as it is today.
+  if (resuming) {
+    return <p>Loading your saved application...</p>;
+  }
+  if (resumeError) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center gap-4">
+        <p role="alert">{resumeError}</p>
+        <CommonButton
+          onClick={startOver}
+          altStyle
+          title="Start a new application"
+        />
+        <CommonButton onClick={tryAgain} title="Try again" />
+      </div>
+    );
+  }
+
+  /**
+   * tryAgain
+   *
+   * Triggers another attempt to load the applicant's saved draft.
+   */
+  function tryAgain() {
+    setResumeAttempt((previous) => previous + 1);
+  }
+
+  /**
+   * startOver
+   *
+   * Clears the saved draft ID and resets the application so the applicant can start a new application.
+   */
+  function startOver() {
+    clearDraftId();
+    setDraftId(null);
+    setState(emptyApplicationFormState);
+    setCurrentStep(0);
+    setResumeError(null);
+    setResuming(false);
   }
 
   return (

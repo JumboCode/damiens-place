@@ -7,16 +7,24 @@
  * Date Created: 11/3/2026
  */
 
-import { emptyPersonalInfo } from "./personal-info";
+import { emptyPersonalInfo, validatePersonalInfo } from "./personal-info";
 import type { PersonalInfoValues } from "./personal-info";
-import { DAY_OPTIONS, emptyPositionsStep } from "./positions-step";
+import {
+  DAY_OPTIONS,
+  emptyPositionsStep,
+  validatePositionsStep,
+} from "./positions-step";
 import type { Position, PositionsStepValues } from "./positions-step";
-import { emptyOnboarding } from "./onboarding";
+import { emptyOnboarding, validateOnboarding } from "./onboarding";
 import type { OnboardingValues } from "./onboarding";
-import { emptyAppointmentStep } from "./appointment-step";
+import {
+  emptyAppointmentStep,
+  validateAppointmentStep,
+} from "./appointment-step";
 import type { AppointmentStepValues } from "./appointment-step";
 import { REVIEW_EDIT_STEPS } from "./review-step";
 import type { ReviewData } from "./review-step";
+import type { ApplicationDraft } from "@/lib/application-api";
 
 // Every answer the shell holds, one section per step
 export type ApplicationFormState = {
@@ -305,4 +313,90 @@ export function firstStepWithMissingFields(
     .filter((step): step is number => step !== null);
 
   return found.length === 0 ? null : Math.min(...found);
+}
+
+// The step number of the Review page (the 5th step)
+export const REVIEW_STEP_INDEX = 4;
+
+/**
+ * draftToFormState
+ *
+ * Converts a saved draft from the backend into the shape the shell uses for its state, so the applicant can continue,
+ *
+ * @param draft - the saved draft from the backend, with every field filled in (or null if unanswered)
+ * @returns the application form state, with every field filled in (or "" for unanswered text fields, and false for unanswered checkboxes)
+ */
+export function draftToFormState(
+  draft: ApplicationDraft,
+): ApplicationFormState {
+  const [emergencyContactFirstName, ...lastNameParts] =
+    draft.emergencyContactName.split(" ");
+
+  return {
+    personalInfo: {
+      firstName: draft.firstName,
+      lastName: draft.lastName,
+      age: draft.age.toString(),
+      email: draft.email,
+      cellPhone: draft.cellPhone,
+      homePhone: draft.homePhone ?? "",
+      street: draft.street,
+      city: draft.city,
+      state: draft.state,
+      zip: draft.zip,
+      emergencyContactFirstName: emergencyContactFirstName,
+      emergencyContactLastName: lastNameParts.join(" "),
+      emergencyContactPhone: draft.emergencyContactPhone,
+      emergencyContactRelationship: draft.emergencyContactRelationship ?? "",
+    },
+    proofOfResidenceUrl: draft.proofOfResidenceUrl,
+    positions: {
+      positionIds: draft.positions,
+      availableDays: draft.availableDays,
+      availableHours: draft.availableHours ?? "",
+      hasDisability: draft.hasDisability,
+      disabilityDetails: draft.disabilityDetails ?? "",
+    },
+    onboarding: {
+      waiverAccepted: draft.waiverAccepted ?? false, // the checkbox
+      waiverSignature: draft.waiverSignature ?? "",
+      agreementAccepted: draft.agreementAccepted ?? false, // the checkbox
+      agreementSignature: draft.agreementSignature ?? "",
+      minorReleaseAccepted: draft.minorReleaseAccepted ?? false, // the checkbox
+      minorGuardianSignature: draft.minorGuardianSignature ?? "",
+      minorSignature: draft.minorSignature ?? "",
+    },
+    appointment: {
+      onboardingAvailability: draft.onboardingAvailability ?? "",
+    },
+  };
+}
+
+/**
+ * firstIncompleteStep
+ *
+ * Checks each step of the application in order to find the first incomplete one.
+ *
+ * @param state - the current application form state.
+ * @returns the index of the first incomplete step.
+ */
+export function firstIncompleteStep(state: ApplicationFormState): number {
+  if (
+    Object.keys(validatePersonalInfo(state.personalInfo)).length > 0 ||
+    state.proofOfResidenceUrl.trim() == ""
+  ) {
+    return 0;
+  }
+  if (Object.keys(validatePositionsStep(state.positions)).length > 0) {
+    return 1;
+  }
+  if (
+    Object.keys(validateOnboarding(state.onboarding, isMinor(state))).length > 0
+  ) {
+    return 2;
+  }
+  if (Object.keys(validateAppointmentStep(state.appointment)).length > 0) {
+    return 3;
+  }
+  return REVIEW_STEP_INDEX;
 }

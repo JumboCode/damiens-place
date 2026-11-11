@@ -3,7 +3,7 @@
  *
  * API functions for the volunteer application form.
  *
- * Author: Elijah and Jeremiah
+ * Author: Elijah, Jeremiah, Luisa, Rim
  * Date Created: 10/30/2026
  */
 
@@ -142,4 +142,53 @@ export function submitApplicant(id: string) {
     `/api/applicants/${encodeURIComponent(id)}/submit`,
     { method: "POST" },
   );
+}
+
+// One saved draft, exactly as GET /api/applicants/:id/draft sends it. Anything not answered yet is null.
+export type ApplicationDraft = {
+  id: string;
+  status: string;
+  firstName: string;
+  lastName: string;
+  age: number;
+  email: string;
+  cellPhone: string;
+  homePhone: string | null;
+  proofOfResidenceUrl: string;
+  street: string;
+  city: string;
+  state: string;
+  zip: string;
+  emergencyContactName: string; // first and last name joined with a space
+  emergencyContactPhone: string;
+  emergencyContactRelationship: string | null;
+  positions: string[]; // position ids
+  availableDays: string[];
+  availableHours: string | null;
+  hasDisability: boolean | null;
+  disabilityDetails: string | null;
+  waiverAccepted: boolean | null;
+  waiverSignature: string | null;
+  agreementAccepted: boolean | null;
+  agreementSignature: string | null;
+  minorReleaseAccepted: boolean | null;
+  minorGuardianSignature: string | null;
+  minorSignature: string | null;
+  onboardingAvailability: string | null;
+};
+
+/**
+ *getDraft
+ *
+ * Gets an applicant's saved draft from the backend so they can resume the application.
+ *
+ * @param id - The ID of the applicant to update.
+ * @returns A promise resolving to the API result, including the applicant's draft data.
+ */
+export function getDraft(
+  id: string,
+): Promise<ApiResult<{ applicant: ApplicationDraft }>> {
+  return request(`/api/applicants/${encodeURIComponent(id)}/draft`, {
+    cache: "no-store",
+  });
 }
