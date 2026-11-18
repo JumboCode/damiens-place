@@ -2,7 +2,7 @@
  * volunteer-api.ts
  *
  * Fetches volunteer profiles and logs volunteers out without throwing
- * 
+ *
  * Author: William
  * Date created: 15 November 2026
  */

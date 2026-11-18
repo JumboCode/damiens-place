@@ -2,7 +2,7 @@
  * volunteer-api.test.ts
  *
  * Tests volunteer profile requests and logout with mocked fetch responses
- * 
+ *
  * Author: William
  * Date created: 15 November 2026
  */

@@ -1,8 +1,8 @@
 /**
  * layout.tsx
- * 
+ *
  * volunteer layout with the top bar and logout button
- * 
+ *
  * Author: William
  * Date created: 15 November 2026
  */
