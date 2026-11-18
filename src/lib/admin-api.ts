@@ -2,8 +2,9 @@
  * admin-api.ts
  *
  * calls POST and sends approval or rejection and returns if succeeded or not
+ * calls GET and sends approval or rejects if succeeded or not
  *
- * Author: Abby, Alex
+ * Author: Abby, Alex, Carter, Jeremiah
  * Date Created: 11/06/26
  */
 
@@ -50,5 +51,39 @@ export async function decideApplicant(
     }
   } catch {
     return { ok: false, message: "something went wrong" };
+  }
+}
+
+export type ApplicantSummary = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  status: "SUBMITTED" | "APPROVED" | "REJECTED";
+  submittedAt: string | null;
+};
+
+export type ApplicantsResult =
+  { ok: true; applicants: ApplicantSummary[] } | { ok: false; message: string };
+
+/**
+ * fetchApplicants
+ *
+ * calls GET /api/applicants and returns every non-draft applicant,
+ * newest first. does not throw, failure comes back as an error message
+ *
+ * @returns ApplicantsResult - applicant list or failure with an error message
+ */
+export async function fetchApplicants(): Promise<ApplicantsResult> {
+  try {
+    const response = await fetch("/api/applicants");
+    const body = await response.json();
+
+    if (response.ok) {
+      return { ok: true, applicants: body };
+    }
+    return { ok: false, message: body?.error ?? "Something went wrong" };
+  } catch {
+    return { ok: false, message: "Could not load applicants." };
   }
 }
