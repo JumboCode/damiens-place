@@ -21,6 +21,7 @@ export type Volunteer = {
   emergencyContactPhone: string;
   emergencyContactRelationship: string | null;
   positions: { id: string; name: string }[];
+  totalMinutes: number;
 };
 
 export type VolunteerResult =

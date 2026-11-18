@@ -7,7 +7,7 @@
  */
 
 import { Prisma } from "@/generated/prisma/client";
-import { pantryDateTimeToUtc } from "./time-conversion";
+import { formatPantry, pantryDateTimeToUtc } from "./time-conversion";
 
 type HourLogResult =
   | {
@@ -30,6 +30,76 @@ export const HOUR_LOG_SELECT = {
   minutes: true,
   notes: true,
 } satisfies Prisma.HourLogSelect;
+
+export type HourLogEditSnapshot = {
+  positionId: string;
+  position: { name: string };
+  startsAt: Date;
+  endsAt: Date;
+  notes: string | null;
+};
+
+export type HourLogChange = {
+  field: string;
+  previous: string;
+  updated: string;
+};
+
+/**
+ * Lists the user-editable fields that changed between two saved hour entries.
+ */
+export function describeHourLogChanges(
+  before: HourLogEditSnapshot,
+  after: HourLogEditSnapshot,
+): HourLogChange[] {
+  const [previousDate, previousStartTime] = formatPantry(before.startsAt).split(
+    " ",
+  );
+  const [updatedDate, updatedStartTime] = formatPantry(after.startsAt).split(
+    " ",
+  );
+  const previousEndTime = formatPantry(before.endsAt).split(" ")[1];
+  const updatedEndTime = formatPantry(after.endsAt).split(" ")[1];
+  const changes: HourLogChange[] = [];
+
+  if (previousDate !== updatedDate) {
+    changes.push({
+      field: "Date",
+      previous: previousDate,
+      updated: updatedDate,
+    });
+  }
+  if (previousStartTime !== updatedStartTime) {
+    changes.push({
+      field: "Start time",
+      previous: previousStartTime,
+      updated: updatedStartTime,
+    });
+  }
+  if (previousEndTime !== updatedEndTime) {
+    changes.push({
+      field: "End time",
+      previous: previousEndTime,
+      updated: updatedEndTime,
+    });
+  }
+  if (before.positionId !== after.positionId) {
+    changes.push({
+      field: "Position",
+      previous: before.position.name,
+      updated: after.position.name,
+    });
+  }
+  if (before.notes !== after.notes) {
+    changes.push({
+      field: "Notes",
+      previous: before.notes || "None",
+      updated: after.notes || "None",
+    });
+  }
+
+  return changes;
+}
 
 /**
  * Validates the request body shared by the POST and PATCH hour-log endpoints.

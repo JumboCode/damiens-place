@@ -43,6 +43,7 @@ describe("fetchVolunteer", () => {
       emergencyContactPhone: "5559876543",
       emergencyContactRelationship: "Sibling",
       positions: [{ id: "p1", name: "Food distribution" }],
+      totalMinutes: 90,
     };
     mockFetch(200, async () => ({ volunteer }));
 

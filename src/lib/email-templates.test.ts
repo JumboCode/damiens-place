@@ -13,6 +13,7 @@ import {
   applicationReceivedEmail,
   applicationApprovedEmail,
   applicationRejectedEmail,
+  hourLogEditedEmail,
 } from "./email-templates";
 
 describe("escapeHtml", () => {
@@ -120,5 +121,32 @@ describe("email templates", () => {
     const result = create("Jane");
 
     expect(result.subject).toBe(subject);
+  });
+
+  describe("hourLogEditedEmail", () => {
+    it("includes changed fields and the updated entry in text and escaped HTML", () => {
+      const result = hourLogEditedEmail({
+        volunteerName: "<Sam Taylor>",
+        changes: [
+          { field: "Start time", previous: "09:00AM", updated: "09:30AM" },
+        ],
+        updatedEntry: {
+          date: "11/18/2026",
+          startTime: "09:30AM",
+          endTime: "12:00PM",
+          position: "Food distribution",
+          notes: "<updated>",
+        },
+      });
+
+      expect(result.text).toContain(
+        "<Sam Taylor> has edited their hour log entry. Changed fields: Start time (09:00AM -> 09:30AM).",
+      );
+      expect(result.text).toContain("Updated entry:\n\nDate: 11/18/2026");
+      expect(result.text).toContain("Notes: <updated>");
+      expect(result.html).toContain("&lt;Sam Taylor&gt;");
+      expect(result.html).toContain("&lt;updated&gt;");
+      expect(result.html).not.toContain("<updated>");
+    });
   });
 });

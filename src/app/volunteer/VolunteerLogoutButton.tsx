@@ -1,5 +1,10 @@
 /**
- * file header
+ * VolunteerLogoutButton.tsx
+ *
+ * Logs out the signed-in volunteer and returns them to the sign-in page.
+ *
+ * Author: Will & Elijah
+ * Date Created: 11/17/26
  */
 
 "use client";
@@ -29,7 +34,7 @@ export default function VolunteerLogoutButton() {
       <button
         type="button"
         onClick={handleLogout}
-        className="inline-flex font-medium shrink-0 cursor-pointer items-center justify-center rounded-[9999px] border-none bg-background px-[20px] py-[10px] leading-[24px] whitespace-nowrap"
+        className="inline-flex shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-background px-5 py-2.5 font-medium leading-6 whitespace-nowrap"
       >
         Log out
       </button>

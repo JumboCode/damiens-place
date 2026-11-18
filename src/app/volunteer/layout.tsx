@@ -16,7 +16,7 @@ export default function VolunteerLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div>
+    <div className="flex min-h-screen flex-col">
       <div className="inline-flex h-full w-full items-center justify-between bg-primary px-4 py-3">
         <div className="flex items-center justify-start gap-2">
           <Image
@@ -30,7 +30,7 @@ export default function VolunteerLayout({
         <VolunteerLogoutButton />
       </div>
 
-      <main>{children}</main>
+      <main className="flex flex-1 flex-col">{children}</main>
     </div>
   );
 }

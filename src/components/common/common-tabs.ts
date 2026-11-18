@@ -1,16 +1,16 @@
 /**
- * admin-tabs.ts
+ * common-tabs.ts
  *
- * The list of admin dashboard tabs and the check for which tab is active.
+ * Shared tab types, admin and volunteer tab lists, and the active-tab check.
  *
  * Author: Jeremiah and Carter
  * Date Created: 11/8/26
  */
 
-export type AdminTab = { label: string; href: string; disabled?: boolean };
+export type CommonTab = { label: string; href: string };
 
 // The four tabs, in the order the Figma shows them
-export const ADMIN_TABS: AdminTab[] = [
+export const ADMIN_TABS: CommonTab[] = [
   { label: "Scheduling", href: "/admin/scheduling" },
   { label: "Applicants", href: "/admin/applicants" },
   { label: "Volunteers", href: "/admin/volunteers" },
@@ -23,13 +23,13 @@ export const ADMIN_TABS: AdminTab[] = [
  * @param volunteerId - The volunteer's ID
  * @returns The volunteer dashboard tabs
  */
-export function getVolunteerTabs(volunteerId: string): AdminTab[] {
+export function getVolunteerTabs(volunteerId: string): CommonTab[] {
   const base = `/volunteer/${encodeURIComponent(volunteerId)}`;
 
   return [
-    { label: "Scheduling", href: `${base}/scheduling`, disabled: true },
-    { label: "Volunteer Hours", href: base },
-    { label: "Resources", href: `${base}/resources`, disabled: true },
+    { label: "Scheduling", href: `${base}/scheduling` },
+    { label: "Volunteer Hours", href: `${base}/hours` },
+    { label: "Resources", href: `${base}/resources` },
   ];
 }
 
@@ -51,4 +51,23 @@ export function isActiveTab(pathname: string, href: string): boolean {
   } else {
     return false;
   }
+}
+
+/**
+ * Returns the deepest tab route matching the current path.
+ *
+ * @param pathname - the current page's path
+ * @param tabs - the available dashboard tabs
+ * @returns the matching tab's href, or null when no tab matches
+ */
+export function getActiveTabHref(
+  pathname: string,
+  tabs: CommonTab[],
+): string | null {
+  return tabs.reduce<string | null>((activeHref, tab) => {
+    if (!isActiveTab(pathname, tab.href)) return activeHref;
+    return activeHref === null || tab.href.length > activeHref.length
+      ? tab.href
+      : activeHref;
+  }, null);
 }

@@ -1,8 +1,8 @@
 /**
- * AdminTabs.tsx
+ * CommonTabs.tsx
  *
- * Implemented the admin tab bar. Each tab is a link to its own page, and the tab
- * for the current page is highlighted.
+ * Renders shared admin and volunteer tabs. Each tab links to its own page, and
+ * the tab for the current page is highlighted.
  *
  * Carter & Jeremiah
  * Date Created: 11/07/2026
@@ -13,29 +13,29 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ADMIN_TABS, isActiveTab, type AdminTab } from "./admin-tabs";
+import { ADMIN_TABS, getActiveTabHref, type CommonTab } from "./common-tabs";
 
-type AdminTabsProps = {
-  tabs?: AdminTab[];
+type CommonTabsProps = {
+  tabs?: CommonTab[];
   ariaLabel?: string;
 };
 
 /**
- * AdminTabs
+ * CommonTabs
  *
- * Reads the current pathname and renders links for enabled tabs
- * and noninteractive text for disabled tabs.
- * The tab where isActiveTab() is true gets
- * aria-current="page" and the selected style.
- * Other enabled tabs get a hover style.
+ * Reads the current pathname and renders links for the supplied tabs.
+ * The most specific tab matching the current pathname gets aria-current="page"
+ * and the selected style.
+ * Other tabs get a hover style.
  *
  * @returns a <nav> that scrolls sideways
  */
-export default function AdminTabs({
+export default function CommonTabs({
   tabs = ADMIN_TABS,
-  ariaLabel = "Admin sections",
-}: AdminTabsProps) {
+  ariaLabel = "Dashboard sections",
+}: CommonTabsProps) {
   const pathname = usePathname();
+  const activeTabHref = getActiveTabHref(pathname, tabs);
 
   return (
     <div className="border-b border-input-hover-frame">
@@ -44,18 +44,7 @@ export default function AdminTabs({
         className="-mb-px flex gap-2 overflow-x-auto whitespace-nowrap"
       >
         {tabs.map((tab) => {
-          if (tab.disabled) {
-            return (
-              <span
-                key={tab.href}
-                aria-disabled="true"
-                className="border-b-2 border-transparent px-4 pb-2 pt-3 text-lg font-medium leading-normal text-muted-foreground opacity-50"
-              >
-                {tab.label}
-              </span>
-            );
-          }
-          const activeTab = isActiveTab(pathname, tab.href);
+          const activeTab = tab.href === activeTabHref;
           return (
             <Link
               key={tab.href}

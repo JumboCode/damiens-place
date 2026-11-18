@@ -9,12 +9,12 @@
 
 import type { ReactNode } from "react";
 import AdminProfileCard from "@/components/admin/AdminProfileCard";
-import AdminTabs from "@/components/admin/AdminTabs";
+import CommonTabs from "@/components/common/CommonTabs";
 
 /**
  * AdminDashboardLayout
  *
- * Renders the admin dashboard layout with the admin's profile card, an AdminTabs
+ * Renders the admin dashboard layout with the admin's profile card, a CommonTabs
  * bar, and a content area
  *
  * @param children - The rows of tab information displayed each section
@@ -29,7 +29,7 @@ export default function AdminDashboardLayout({
     <div className="mx-auto w-full max-w-8xl px-4 pt-6 sm:px-6">
       <AdminProfileCard />
       <div className="mt-10">
-        <AdminTabs />
+        <CommonTabs ariaLabel="Admin sections" />
       </div>
       <div>{children}</div>
     </div>

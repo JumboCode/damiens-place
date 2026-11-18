@@ -10,9 +10,16 @@
  */
 
 import { NextResponse } from "next/server";
-import { HOUR_LOG_SELECT, validateHourLogFields } from "@/lib/hour-log";
+import {
+  describeHourLogChanges,
+  HOUR_LOG_SELECT,
+  validateHourLogFields,
+} from "@/lib/hour-log";
 import { prisma } from "@/lib/prisma";
 import { requireVolunteer } from "@/lib/volunteer-auth";
+import { sendEmail } from "@/lib/email";
+import { hourLogEditedEmail } from "@/lib/email-templates";
+import { formatPantry } from "@/lib/time-conversion";
 
 type RouteContext = { params: Promise<{ id: string; logId: string }> };
 
@@ -21,7 +28,8 @@ type RouteContext = { params: Promise<{ id: string; logId: string }> };
  * @param request - incoming request; body has date, startTime, endTime,
  *   positionId, and optional notes (null clears them)
  * @param params - volunteer id and hour log id
- * @returns 200 with { hourLog } holding the updated entry
+ * @returns 200 with { hourLog } holding the updated entry and, when changed,
+ *   emailSent indicating whether the admin notification was delivered
  * Errors:
  * 400 if the body isn't valid JSON, a field is missing, extra, or invalid,
  *     or the position doesn't exist
@@ -61,7 +69,15 @@ export async function PATCH(request: Request, { params }: RouteContext) {
   // reveal which log ids exist
   const existingLog = await prisma.hourLog.findUnique({
     where: { id: logId },
-    select: { volunteerId: true },
+    select: {
+      volunteerId: true,
+      positionId: true,
+      position: { select: { name: true } },
+      startsAt: true,
+      endsAt: true,
+      notes: true,
+      volunteer: { select: { firstName: true, lastName: true } },
+    },
   });
   if (!existingLog || existingLog.volunteerId !== id) {
     return NextResponse.json({ error: "Hour log not found" }, { status: 404 });
@@ -84,10 +100,47 @@ export async function PATCH(request: Request, { params }: RouteContext) {
     select: HOUR_LOG_SELECT,
   });
 
-  // TODO(natalie): email the admins that this entry was edited, with the old and new values
+  const changes = describeHourLogChanges(existingLog, hourLog);
+  let emailSent: boolean | undefined;
+
+  if (changes.length > 0) {
+    const [updatedDate, updatedStartTime] = formatPantry(
+      hourLog.startsAt,
+    ).split(" ");
+    const updatedEndTime = formatPantry(hourLog.endsAt).split(" ")[1];
+    const volunteerName =
+      [existingLog.volunteer.firstName, existingLog.volunteer.lastName]
+        .filter(Boolean)
+        .join(" ") || "A volunteer";
+    const adminEmail = process.env.ADMIN_EMAIL?.trim();
+    const emailResult = adminEmail
+      ? await sendEmail({
+          to: adminEmail,
+          ...hourLogEditedEmail({
+            volunteerName,
+            changes,
+            updatedEntry: {
+              date: updatedDate,
+              startTime: updatedStartTime,
+              endTime: updatedEndTime,
+              position: hourLog.position.name,
+              notes: hourLog.notes || "None",
+            },
+          }),
+        })
+      : { ok: false as const, error: "ADMIN_EMAIL is not configured" };
+    emailSent = emailResult.ok;
+
+    if (!emailResult.ok) {
+      console.error(
+        "Failed to notify admins about an hour log edit:",
+        emailResult.error,
+      );
+    }
+  }
 
   return NextResponse.json(
-    { hourLog },
+    { hourLog, ...(emailSent === undefined ? {} : { emailSent }) },
     { status: 200, headers: { "Cache-Control": "no-store" } },
   );
 }
