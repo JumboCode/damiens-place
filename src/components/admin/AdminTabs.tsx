@@ -13,28 +13,37 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ADMIN_TABS, isActiveTab } from "./admin-tabs";
+import { ADMIN_TABS, isActiveTab, type AdminTab } from "./admin-tabs";
+
+type AdminTabsProps = {
+  tabs?: AdminTab[];
+  ariaLabel?: string;
+};
 
 /**
  * AdminTabs
  *
- * Reads the current pathname and renders one <Link> per entry in ADMIN_TABS.
+ * Reads the current pathname and renders one <Link> per supplied tab,
+ * defaulting to ADMIN_TABS for the admin dashboard.
  * The tab where isActiveTab() is true gets
  * aria-current="page" and the selected style.
  * Every other tab gets a hover style.
  *
  * @returns a <nav> that scrolls sideways
  */
-export default function AdminTabs() {
+export default function AdminTabs({
+  tabs = ADMIN_TABS,
+  ariaLabel = "Admin sections",
+}: AdminTabsProps) {
   const pathname = usePathname();
 
   return (
     <div className="border-b border-input-hover-frame">
       <nav
-        aria-label="Admin sections"
+        aria-label={ariaLabel}
         className="-mb-px flex gap-2 overflow-x-auto whitespace-nowrap"
       >
-        {ADMIN_TABS.map((tab) => {
+        {tabs.map((tab) => {
           const activeTab = isActiveTab(pathname, tab.href);
           return (
             <Link
