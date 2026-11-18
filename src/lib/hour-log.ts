@@ -39,7 +39,6 @@ export const HOUR_LOG_SELECT = {
  * minutes, or an error naming the invalid field.
  */
 export function validateHourLogFields(body: unknown): HourLogResult {
-
   // Check that the body is a JSON object.
   if (typeof body !== "object" || body === null || Array.isArray(body)) {
     return { error: "body must be a plain object" };
