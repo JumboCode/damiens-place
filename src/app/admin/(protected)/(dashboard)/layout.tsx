@@ -26,7 +26,7 @@ export default function AdminDashboardLayout({
   children: ReactNode;
 }) {
   return (
-    <div className="mx-auto w-full max-w-8xl px-4 pt-6 sm:px-6">
+    <div className="mx-auto w-full max-w-8xl px-6 pt-6 sm:px-8">
       <AdminProfileCard />
       <div className="mt-10">
         <CommonTabs ariaLabel="Admin sections" />

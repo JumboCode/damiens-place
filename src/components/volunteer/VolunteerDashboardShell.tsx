@@ -91,7 +91,7 @@ export default function VolunteerDashboardShell({
     value?.trim() || "—";
 
   return (
-    <div className="space-y-6 px-4 py-8 sm:px-6 lg:px-10">
+    <div className="mx-auto w-full max-w-8xl px-6 pt-6 sm:px-8">
       <ProfileCard name={name} photoUrl={volunteer.photoUrl}>
         <ProfileInfoCard
           items={[
@@ -137,12 +137,12 @@ export default function VolunteerDashboardShell({
         />
       </ProfileCard>
 
-      <section className="p-4 sm:p-6">
+      <section className="mt-10">
         <CommonTabs
           tabs={getVolunteerTabs(volunteerId)}
           ariaLabel="Volunteer sections"
         />
-        <div className="mt-6">{children}</div>
+        <div className="px-6 pt-6">{children}</div>
       </section>
     </div>
   );
