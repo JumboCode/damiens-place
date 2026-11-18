@@ -26,8 +26,9 @@ type RouteContext = { params: Promise<{ id: string; logId: string }> };
  * 400 if the body isn't valid JSON, a field is missing, extra, or invalid,
  *     or the position doesn't exist
  * 401 if not signed in as a volunteer
- * 403 if the volunteer is inactive or the id isn't the signed-in volunteer's
+ * 403 if the volunteer is inactive
  * 404 if the log doesn't exist or belongs to a different volunteer
+ * 404 if the id isn't the signed-in volunteer's
  */
 export async function PATCH(request: Request, { params }: RouteContext) {
   const session = await requireVolunteer();
@@ -37,7 +38,7 @@ export async function PATCH(request: Request, { params }: RouteContext) {
 
   // A volunteer can only edit their own hours
   if (session.volunteerId !== id) {
-    return NextResponse.json({ error: "User unauthorized." }, { status: 403 });
+    return NextResponse.json({ error: "Hour log not found" }, { status: 404 });
   }
 
   let body: unknown;
