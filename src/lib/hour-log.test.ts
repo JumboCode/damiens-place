@@ -41,7 +41,7 @@ function expectError(body: unknown, field: string) {
 }
 
 // TODO: BE-hour-log changes this to `describe` once validateHourLogFields is written
-describe.skip("validateHourLogFields", () => {
+describe("validateHourLogFields", () => {
   beforeAll(() => {
     jest.useFakeTimers();
     jest.setSystemTime(new Date("2026-11-05T12:00:00Z"));
