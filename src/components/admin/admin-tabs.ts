@@ -7,7 +7,7 @@
  * Date Created: 11/8/26
  */
 
-export type AdminTab = { label: string; href: string };
+export type AdminTab = { label: string; href: string; disabled?: boolean };
 
 // The four tabs, in the order the Figma shows them
 export const ADMIN_TABS: AdminTab[] = [
@@ -16,6 +16,22 @@ export const ADMIN_TABS: AdminTab[] = [
   { label: "Volunteers", href: "/admin/volunteers" },
   { label: "Edits", href: "/admin/edits" },
 ];
+
+/**
+ * Creates the tabs for a volunteer's dashboard.
+ *
+ * @param volunteerId - The volunteer's ID
+ * @returns The volunteer dashboard tabs
+ */
+export function getVolunteerTabs(volunteerId: string): AdminTab[] {
+  const base = `/volunteer/${encodeURIComponent(volunteerId)}`;
+
+  return [
+    { label: "Scheduling", href: `${base}/scheduling`, disabled: true },
+    { label: "Volunteer Hours", href: base },
+    { label: "Resources", href: `${base}/resources`, disabled: true },
+  ];
+}
 
 /**
  * isActiveTab

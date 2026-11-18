@@ -13,28 +13,48 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ADMIN_TABS, isActiveTab } from "./admin-tabs";
+import { ADMIN_TABS, isActiveTab, type AdminTab } from "./admin-tabs";
+
+type AdminTabsProps = {
+  tabs?: AdminTab[];
+  ariaLabel?: string;
+};
 
 /**
  * AdminTabs
  *
- * Reads the current pathname and renders one <Link> per entry in ADMIN_TABS.
+ * Reads the current pathname and renders links for enabled tabs
+ * and noninteractive text for disabled tabs.
  * The tab where isActiveTab() is true gets
  * aria-current="page" and the selected style.
- * Every other tab gets a hover style.
+ * Other enabled tabs get a hover style.
  *
  * @returns a <nav> that scrolls sideways
  */
-export default function AdminTabs() {
+export default function AdminTabs({
+  tabs = ADMIN_TABS,
+  ariaLabel = "Admin sections",
+}: AdminTabsProps) {
   const pathname = usePathname();
 
   return (
     <div className="border-b border-input-hover-frame">
       <nav
-        aria-label="Admin sections"
+        aria-label={ariaLabel}
         className="-mb-px flex gap-2 overflow-x-auto whitespace-nowrap"
       >
-        {ADMIN_TABS.map((tab) => {
+        {tabs.map((tab) => {
+          if (tab.disabled) {
+            return (
+              <span
+                key={tab.href}
+                aria-disabled="true"
+                className="border-b-2 border-transparent px-4 pb-2 pt-3 text-lg font-medium leading-normal text-muted-foreground opacity-50"
+              >
+                {tab.label}
+              </span>
+            );
+          }
           const activeTab = isActiveTab(pathname, tab.href);
           return (
             <Link
