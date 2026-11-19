@@ -13,7 +13,5 @@ import ApplicantsTable from "@/components/admin/ApplicantsTable";
 export default async function AdminApplicantsPage() {
   await requireAdminPage();
 
-  return (
-    <ApplicantsTable />
-  );
+  return <ApplicantsTable />;
 }
