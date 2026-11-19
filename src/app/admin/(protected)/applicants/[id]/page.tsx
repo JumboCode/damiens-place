@@ -8,13 +8,15 @@
  */
 
 import ApplicantDetailView from "@/components/admin/ApplicantDetailView";
-import {requireAdminPage} from "@/lib/admin-auth";
+import { requireAdminPage } from "@/lib/admin-auth";
 
 export default async function ApplicantDetailPage({
   params,
-}: { params: Promise <{id: string}>}) {
-        await requireAdminPage(); 
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  await requireAdminPage();
 
-        const {id} = await params; 
-        return <ApplicantDetailView applicantId={id} />;
+  const { id } = await params;
+  return <ApplicantDetailView applicantId={id} />;
 }

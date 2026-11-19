@@ -87,13 +87,18 @@ export default function ApplicantDecisionControls({
       {currentStatus === "SUBMITTED" ? (
         <div className="flex w-full flex-col gap-3">
           <div className="w-full [&_button]:!w-full">
-            <CommonButton title="Mark as Onboarded" onClick={() => setPending("approve")} />
+            <CommonButton
+              title="Mark as Onboarded"
+              onClick={() => setPending("approve")}
+            />
           </div>
 
           <div className="w-full [&_button]:!w-full [&_button]:!bg-white [&_button]:!border-2 [&_button]:!border-[#923657] [&_button]:!text-[#923657]">
-            <CommonButton title="Mark as Rejected" onClick={() => setPending("reject")} />
+            <CommonButton
+              title="Mark as Rejected"
+              onClick={() => setPending("reject")}
+            />
           </div>
-          
         </div>
       ) : (
         <span>{currentStatus}</span>

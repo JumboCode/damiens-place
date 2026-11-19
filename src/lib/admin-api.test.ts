@@ -90,29 +90,33 @@ describe("decideApplicant", () => {
   describe("fetchApplicantDetail", () => {
     it("returns the applicant on a 200 response", async () => {
       const applicant = { id: "a1", firstName: "Alex" };
-      mockFetch(200, async () => ({applicant})); 
+      mockFetch(200, async () => ({ applicant }));
 
       expect(await fetchApplicantDetail("a1")).toEqual({
-        ok: true, 
+        ok: true,
         applicant,
       });
-    })
+    });
     it("returns notFound true for 404", async () => {
-      mockFetch(404, async () => ({error: "Applicant not found"}));
+      mockFetch(404, async () => ({ error: "Applicant not found" }));
 
       expect(await fetchApplicantDetail("a1")).toEqual({
-        ok:false,
+        ok: false,
         message: "Applicant not found",
         notFound: true,
       });
+    });
   });
-    });
 
-    it("returns an error for a 403 response", async () => {
-      mockFetch(403, async () => ({error: "Forbidden"})); 
-      expect(await fetchApplicantDetail("a1")).toEqual({ok: false, message: "Forbidden", notFound: false,}); 
+  it("returns an error for a 403 response", async () => {
+    mockFetch(403, async () => ({ error: "Forbidden" }));
+    expect(await fetchApplicantDetail("a1")).toEqual({
+      ok: false,
+      message: "Forbidden",
+      notFound: false,
     });
-    it("doesn't throw when fetch fails", async () => {
+  });
+  it("doesn't throw when fetch fails", async () => {
     global.fetch = jest
       .fn()
       .mockRejectedValue(new Error("offline")) as unknown as typeof fetch;
@@ -123,4 +127,4 @@ describe("decideApplicant", () => {
       notFound: false,
     });
   });
-  });
+});
