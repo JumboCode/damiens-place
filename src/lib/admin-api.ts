@@ -7,8 +7,6 @@
  * Author: Abby, Alex, Carter, Jeremiah
  * Date Created: 11/06/26
  */
-import { ApplicantStatus, DayOfWeek } from "../generated/prisma/enums";
-import type { Volunteer } from "../generated/prisma/client";
 
 export type Decision = "approve" | "reject";
 
