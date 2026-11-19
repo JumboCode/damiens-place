@@ -19,10 +19,20 @@ import {
   formatPantry,
 } from "@/lib/time-conversion";
 
+import Vector from "@/assets/icons/Vector.svg";
+
+// Styles for the status pill
 const STATUS_STYLES: Record<ApplicantSummary["status"], string> = {
-  REJECTED: "bg-red-100 text-red-700",
-  APPROVED: "bg-green-100 text-green-700",
-  SUBMITTED: "bg-amber-100 text-amber-800",
+  REJECTED: "bg-red-100 text-error-msg text-bold",
+  APPROVED: "bg-green-100 text-emerald-500 text-bold",
+  SUBMITTED: "bg-amber-100 text-amber-500 text-bold",
+};
+
+// Labels for the status pill
+const STATUS_LABELS: Record<string, string> = {
+  SUBMITTED: "applied",
+  REJECTED: "rejected",
+  APPROVED: "onboarded",
 };
 
 /**
@@ -56,6 +66,9 @@ export default function ApplicantsTable() {
   const [error, setError] = useState<string | null>(null);
   // "YYYY-MM", starting on the current month
   const [month, setMonth] = useState(() => pantryMonthKey(new Date()));
+
+  // The current month, and whether the selected month is the current month
+  const atCurrentMonth = month >= pantryMonthKey(new Date());
 
   useEffect(() => {
     let cancelled = false;
@@ -92,7 +105,7 @@ export default function ApplicantsTable() {
             aria-label="Previous month"
             className="rounded border border-gray-200 px-2 py-1 text-xs 
             focus-visible:outline-none focus-visible:ring-2 
-            focus-visible:ring-primary"
+            focus-visible:ring-primary hover:enabled:bg-gray-50"
             onClick={() => setMonth((m) => shiftMonth(m, -1))}
           >
             &larr;
@@ -101,9 +114,11 @@ export default function ApplicantsTable() {
           <button
             type="button"
             aria-label="Next month"
+            disabled={atCurrentMonth}
             className="rounded border border-gray-200 px-2 py-1 text-xs 
             focus-visible:outline-none focus-visible:ring-2 
-            focus-visible:ring-primary"
+            focus-visible:ring-primary hover:enabled:bg-gray-50 disabled:cursor-not-allowed
+            disabled:opacity-50"
             onClick={() => setMonth((m) => shiftMonth(m, 1))}
           >
             &rarr;
@@ -120,20 +135,32 @@ export default function ApplicantsTable() {
           No applicants found
         </p>
       ) : (
-        <div className="overflow-x-auto rounded-lg border border-gray-200">
-          <table className="w-full min-w-[640px] text-left text-m">
-            <thead className="bg-gray-100 text-muted-foreground">
+        <div className="max-h-[650px] overflow-auto rounded-lg border border-gray-200">
+          <table className="w-full min-w-[640px] text-left text-sm table-fixed">
+            <thead className="sticky top-0 bg-gray-100 text-muted-foreground">
               <tr>
-                <th scope="col" className="px-4 py-3 font-medium">
+                <th
+                  scope="col"
+                  className="w-[30%] px-4 py-3 font-medium text-lg"
+                >
                   Name
                 </th>
-                <th scope="col" className="px-4 py-3 font-medium">
+                <th
+                  scope="col"
+                  className="w-[30%] px-4 py-3 font-medium text-lg"
+                >
                   Email
                 </th>
-                <th scope="col" className="px-4 py-3 font-medium">
+                <th
+                  scope="col"
+                  className="w-[20%] px-4 py-3 font-medium text-lg"
+                >
                   Date of Submission
                 </th>
-                <th scope="col" className="px-4 py-3 font-medium">
+                <th
+                  scope="col"
+                  className="w-[20%] px-4 py-3 font-medium text-lg"
+                >
                   Status
                 </th>
               </tr>
@@ -144,9 +171,9 @@ export default function ApplicantsTable() {
                 return (
                   <tr
                     key={a.id}
-                    className="relative border-t border-gray-200 hover:bg-gray-50"
+                    className="group relative border-t border-gray-200 hover:bg-gray-50"
                   >
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 text-right">
                       <Link
                         href={`/admin/applicants/${a.id}`}
                         className="flex items-center gap-2 
@@ -175,9 +202,12 @@ export default function ApplicantsTable() {
                           STATUS_STYLES[a.status]
                         }`}
                       >
-                        {a.status}
+                        {STATUS_LABELS[a.status] || a.status}
                       </span>
                     </td>
+                    {/* <td className="w-12 px-4 py-3 text-right text-muted-foreground">
+                      <Vector className="inline-block h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100" />
+                    </td> */}
                   </tr>
                 );
               })}
