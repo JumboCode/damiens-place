@@ -63,7 +63,7 @@ export type ApplicantDetail = {
   age: number;
   email: string;
   cellPhone: string;
-  homePHone: string | null;
+  homePhone: string | null;
   proofOfResidenceUrl: string;
   street: string;
   city: string;
