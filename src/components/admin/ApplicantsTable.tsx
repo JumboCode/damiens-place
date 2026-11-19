@@ -9,6 +9,7 @@
 
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ApplicantSummary, fetchApplicants } from "@/lib/admin-api";
@@ -97,7 +98,9 @@ export default function ApplicantsTable() {
 
   return (
     <section className="p-6">
-      <div className="mb-4 flex items-center justify-between gap-4">
+      {/* Note for dearest Natalie, can take out flex wrap if you want the 
+      title and month selector to be on same line FOR PHONES, flex wrap stacks them */}
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
         <h1>Onboarding Event Tracker</h1>
         <div className="flex items-center gap-3">
           <button
@@ -110,7 +113,7 @@ export default function ApplicantsTable() {
           >
             &larr;
           </button>
-          <span>{formatMonth(month)}</span>
+          <span className="mx-4 whitespace-nowrap">{formatMonth(month)}</span>
           <button
             type="button"
             aria-label="Next month"
@@ -141,27 +144,30 @@ export default function ApplicantsTable() {
               <tr>
                 <th
                   scope="col"
-                  className="w-[30%] px-4 py-3 font-medium text-lg"
+                  className="w-[28%] bg-gray-100 px-4 py-3 font-medium text-lg"
                 >
                   Name
                 </th>
                 <th
                   scope="col"
-                  className="w-[30%] px-4 py-3 font-medium text-lg"
+                  className="w-[28%] bg-gray-100 px-4 py-3 font-medium text-lg"
                 >
                   Email
                 </th>
                 <th
                   scope="col"
-                  className="w-[20%] px-4 py-3 font-medium text-lg"
+                  className="w-[22%] bg-gray-100 px-4 py-3 font-medium text-lg"
                 >
                   Date of Submission
                 </th>
                 <th
                   scope="col"
-                  className="w-[20%] px-4 py-3 font-medium text-lg"
+                  className="w-[16%] bg-gray-100 px-4 py-3 font-medium text-lg"
                 >
                   Status
+                </th>
+                <th scope="col" className="w-[6%] bg-gray-100 px-2 py-3">
+                  <span className="sr-only">Arrow Thing</span>
                 </th>
               </tr>
             </thead>
@@ -173,13 +179,13 @@ export default function ApplicantsTable() {
                     key={a.id}
                     className="group relative border-t border-gray-200 hover:bg-gray-50"
                   >
-                    <td className="px-4 py-3 text-right">
+                    <td className="px-4 py-3">
                       <Link
                         href={`/admin/applicants/${a.id}`}
                         className="flex items-center gap-2 
                         focus-visible:outline-none after:absolute after:inset-0 
                         focus-visible:after:ring-2 focus-visible:after:ring-inset 
-                        focus-visible:after:ring-primary"
+                        focus-visible:after:ring-primary min-w-0"
                       >
                         <span
                           aria-hidden="true"
@@ -192,7 +198,7 @@ export default function ApplicantsTable() {
                         {name}
                       </Link>
                     </td>
-                    <td className="px-4 py-3">{a.email}</td>
+                    <td className="truncate px-4 py-3">{a.email}</td>
                     <td className="px-4 py-3">
                       {formatPantry(a.submittedAt!)}
                     </td>
@@ -205,9 +211,15 @@ export default function ApplicantsTable() {
                         {STATUS_LABELS[a.status] || a.status}
                       </span>
                     </td>
-                    {/* <td className="w-12 px-4 py-3 text-right text-muted-foreground">
-                      <Vector className="inline-block h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100" />
-                    </td> */}
+                    <td className="pointer-events-none w-12 px-2 py-3">
+                      <Image
+                        src={Vector}
+                        alt=""
+                        className="h-4 w-4 opacity-0 
+                        transition-opacity group-hover:opacity-100 
+                        group-focus-within:opacity-100"
+                      />
+                    </td>
                   </tr>
                 );
               })}
