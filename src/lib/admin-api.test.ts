@@ -6,7 +6,7 @@
  * Author: Abby, Alex, Carter, Jeremiah
  * Date Created: 11/06/26
  */
-import { decideApplicant, fetchApplicants } from "./admin-api";
+import { decideApplicant, fetchApplicants, fetchApplicantDetail } from "./admin-api";
 
 const originalFetch = global.fetch;
 
