@@ -55,7 +55,6 @@ export async function decideApplicant(
   }
 }
 
-// TODO: ApplicantDetail type (the fields of model Applicant in prisma/schema.prisma, with dates as strings and positions as { id, name }[])
 export type ApplicantDetail = {
   id: string;
   status: ApplicantStatus;
@@ -124,7 +123,7 @@ export async function fetchApplicantDetail(
 ): Promise<ApplicantDetailResult> {
   try {
     const response = await fetch(`/api/applicants/${encodeURIComponent(id)}`);
-    let data: any;
+    let data: { error?: string; applicant?: ApplicantDetail };
 
     try {
       data = await response.json();
@@ -146,7 +145,7 @@ export async function fetchApplicantDetail(
 
     return {
       ok: true,
-      applicant: data.applicant,
+      applicant: data.applicant as ApplicantDetail,
     };
   } catch {
     return {
