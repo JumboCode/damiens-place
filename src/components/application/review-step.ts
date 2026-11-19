@@ -24,6 +24,7 @@ export type ReviewData = {
   emergencyContactPhone: string;
   emergencyContactRelationship: string; // "" if not given
   proofUploaded: boolean;
+  proofOfResidenceUrl: string; // "" if not uploaded
   // Positions
   positionNames: string[];
   availableDays: string[];

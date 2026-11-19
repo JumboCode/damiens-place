@@ -16,6 +16,8 @@ import {
 } from "@/lib/admin-api";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { useFileSize } from "@/lib/use-file-size";
+import CommonFileViewer from "@/components/common/CommonFileViewer";
 import ApplicantDecisionControls from "@/components/admin/ApplicantDecisionControls";
 
 function Row({
@@ -78,6 +80,8 @@ export default function ApplicantDetailView({
     applyResult(await fetchApplicantDetail(applicantId));
   }
 
+  const proofSize = useFileSize(applicant?.proofOfResidenceUrl ?? "");
+
   useEffect(() => {
     let cancelled = false;
     fetchApplicantDetail(applicantId).then((result) => {
@@ -126,8 +130,6 @@ export default function ApplicantDetailView({
       </Link>
 
       <section className="mx-auto flex w-full max-w-7xl flex-col gap-10 px-8 py-6">
-        {/* TODO(natalie): Proof of residence is private and cannot be opened. */}
-
         <section className="w-full">
           <h2 className="mb-5">Personal Information</h2>
           <div className="grid grid-cols-1 gap-x-8 gap-y-12 md:grid-cols-3">
@@ -143,7 +145,13 @@ export default function ApplicantDetailView({
             />
           </div>
           <div className="mt-10 max-w-sm">
-            <Row label="Proof of Residence" value="Uploaded" />
+            <p className="mb-1 text-base font-medium">
+              Proof of Residence <span className="text-error-msg">*</span>
+            </p>
+            <CommonFileViewer
+              url={applicant.proofOfResidenceUrl}
+              fileSize={proofSize}
+            />
           </div>
         </section>
         <section className="w-full">

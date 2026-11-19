@@ -42,8 +42,9 @@ export async function POST(request: Request) {
           allowedContentTypes: ["image/jpeg", "image/png", "application/pdf"],
           // maximumSizeInBytes: 10 MB
           maximumSizeInBytes: 10 * 1024 * 1024,
-          // Adds random characters to the file name so two people can upload "bill.pdf"
-          addRandomSuffix: true,
+          // The client puts a random folder in the pathname, so two people can upload
+          // "bill.pdf" without clashing and the file name stays exactly as uploaded
+          addRandomSuffix: false,
         };
       },
     });
