@@ -24,19 +24,17 @@ export default function AuthPageLayout({
 }: AuthPageLayoutProps) {
   return (
     <main className="flex min-h-screen items-center justify-center bg-background px-4 py-12">
-      <div className="w-full max-w-sm flex flex-col items-center">
+      <div className="w-full max-w-md flex flex-col items-center">
         <Image
           src={logo}
           alt="Damien's Place Logo"
-          className="mx-auto mb-8 h-auto w-45"
+          className="mx-auto mb-6 h-auto w-40"
           priority
         />
-        <h1 className="text-center text-4xl tracking-tight text-black">
+        <h1 className="text-center text-3xl tracking-tight text-black">
           Welcome, <span className="text-secondary">{user}</span>!
         </h1>
-        <div className="mt-8 w-full text-2xl justify-center font-medium">
-          {children}
-        </div>
+        <div className="mt-6 w-full">{children}</div>
       </div>
     </main>
   );

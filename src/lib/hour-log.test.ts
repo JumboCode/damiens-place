@@ -8,7 +8,11 @@
  * Author: Natalie Phua
  * Date Created: 11/6/2026
  */
-import { validateHourLogFields } from "./hour-log";
+import {
+  describeHourLogChanges,
+  validateHourLogFields,
+  type HourLogEditSnapshot,
+} from "./hour-log";
 
 const VALID = {
   date: "2026-10-14",
@@ -41,7 +45,7 @@ function expectError(body: unknown, field: string) {
 }
 
 // TODO: BE-hour-log changes this to `describe` once validateHourLogFields is written
-describe.skip("validateHourLogFields", () => {
+describe("validateHourLogFields", () => {
   beforeAll(() => {
     jest.useFakeTimers();
     jest.setSystemTime(new Date("2026-11-05T12:00:00Z"));
@@ -87,6 +91,42 @@ describe.skip("validateHourLogFields", () => {
         endTime: "06:00",
       });
       expect(data.minutes).toBe(60);
+    });
+  });
+
+  describe("describeHourLogChanges", () => {
+    const before: HourLogEditSnapshot = {
+      positionId: "position-1",
+      position: { name: "Food distribution" },
+      startsAt: new Date("2026-09-21T20:05:00Z"),
+      endsAt: new Date("2026-09-21T21:05:00Z"),
+      notes: "Packed boxes",
+    };
+
+    it("reports all changed editable fields with their previous and updated values", () => {
+      const after: HourLogEditSnapshot = {
+        positionId: "position-2",
+        position: { name: "Pantry setup" },
+        startsAt: new Date("2026-09-22T20:10:00Z"),
+        endsAt: new Date("2026-09-22T21:20:00Z"),
+        notes: null,
+      };
+
+      expect(describeHourLogChanges(before, after)).toEqual([
+        { field: "Date", previous: "09/21/2026", updated: "09/22/2026" },
+        { field: "Start time", previous: "04:05PM", updated: "04:10PM" },
+        { field: "End time", previous: "05:05PM", updated: "05:20PM" },
+        {
+          field: "Position",
+          previous: "Food distribution",
+          updated: "Pantry setup",
+        },
+        { field: "Notes", previous: "Packed boxes", updated: "None" },
+      ]);
+    });
+
+    it("returns no changes for an identical entry", () => {
+      expect(describeHourLogChanges(before, before)).toEqual([]);
     });
   });
 

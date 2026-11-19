@@ -11,6 +11,10 @@
   --primary-foreground: #ffffff;
   --muted-foreground: #6b7280;
   --text-primary: #1c1e1f;
+  --green: #1aca63;
+  --muted-green: #e3f4ea;
+  --red: #ff0000;
+  --muted-red: #fbe4e4;
 
   /* Profile banner gradient (left to right, middle stop at 55%) */
   --banner-start: #f0d5db;
@@ -51,6 +55,10 @@
   --color-input-focus-frame: var(--input-focus-frame);
   --color-error-msg: var(--error-msg);
   --color-text-primary: var(--text-primary);
+  --color-green: var(--green);
+  --color-muted-green: var(--muted-green);
+  --color-red: var(--red);
+  --color-muted-red: var(--muted-red);
 }
 
 @layer base {

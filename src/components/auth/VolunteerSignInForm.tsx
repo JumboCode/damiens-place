@@ -12,6 +12,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import FormField from "@/components/application/FormField";
 import CommonButton from "@/components/common/CommonButton";
 
 export default function VolunteerSignInForm() {
@@ -27,6 +28,7 @@ export default function VolunteerSignInForm() {
   // This runs when the person clicks "Sign in"
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault(); // stops the browser from reloading the page
+    if (submitting) return;
 
     let hasError = false;
 
@@ -42,7 +44,6 @@ export default function VolunteerSignInForm() {
     // now check the email!
     const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (EMAIL_REGEX.test(email)) {
-      console.log("valid email");
       setEmailError("");
     } else {
       setEmailError("Please enter a valid email.");
@@ -78,45 +79,28 @@ export default function VolunteerSignInForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
-      <label htmlFor="email">Email</label>
-      <input
+    <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
+      <FormField
+        labelClassName="text-xl font-medium"
+        label="Email"
         name="email"
         type="email"
-        id="email"
-        className="flex h-[51px] flex-col items-start justify-center gap-2.5 self-stretch rounded-lg border border-[#cbd0da] bg-[#f8fafc] px-5 py-2.5 text-2xl font-normal leading-normal text-[#1c1e1f]"
+        autoComplete="email"
         value={email}
-        onChange={(event) => setEmail(event.target.value)}
-        aria-describedby="email-error"
-        required
+        onChange={setEmail}
+        error={emailError}
       />
-      {emailError && (
-        <p
-          className="self-stretch font-normal leading-normal text-error-msg"
-          id="email-error"
-        >
-          {emailError}
-        </p>
-      )}
-      <label htmlFor="phone">Phone Number</label>
-      <input
+      <FormField
+        labelClassName="text-xl font-medium"
+        label="Phone Number"
         name="phone"
         type="tel"
-        id="phone"
-        className="flex h-[51px] flex-col items-start justify-center gap-2.5 self-stretch rounded-lg border border-[#cbd0da] bg-[#f8fafc] px-5 py-2.5 text-2xl font-normal leading-normal text-[#1c1e1f]"
+        inputMode="tel"
+        autoComplete="tel"
         value={phone}
-        onChange={(event) => setPhone(event.target.value)}
-        aria-describedby="email-error"
-        required
+        onChange={setPhone}
+        error={phoneError}
       />
-      {phoneError && (
-        <p
-          className="self-stretch font-normal leading-normal text-error-msg"
-          id="phone-error"
-        >
-          {phoneError}
-        </p>
-      )}
 
       {submitError && (
         <p
@@ -131,9 +115,8 @@ export default function VolunteerSignInForm() {
         <CommonButton
           type="submit"
           id="submit-button"
-          disabled={submitting}
           size="lg"
-          title="Login"
+          title={submitting ? "Logging in..." : "Login"}
         />
       </div>
     </form>
