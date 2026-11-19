@@ -238,6 +238,7 @@ export function buildReviewData(
     emergencyContactRelationship:
       personalInfo.emergencyContactRelationship.trim(),
     proofUploaded: state.proofOfResidenceUrl.trim() !== "",
+    proofOfResidenceUrl: state.proofOfResidenceUrl,
     positionNames,
     availableDays,
     availableHours: picked.availableHours.trim(),

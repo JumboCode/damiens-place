@@ -12,17 +12,11 @@
 import { useState, type FormEvent } from "react";
 import { SignIn, useSession, useSignIn } from "@clerk/nextjs";
 import { usePathname, useRouter } from "next/navigation";
+import FormField from "@/components/application/FormField";
 import CommonButton from "@/components/common/CommonButton";
 import { clerkAppearance } from "@/lib/clerk-appearance";
 
 const signInPath = "/admin/sign-in";
-
-const inputClassName =
-  "min-h-12 w-full rounded-md border border-input-regular-frame " +
-  "bg-input-box px-3 text-lg text-foreground " +
-  "hover:border-input-hover-frame " +
-  "focus:border-2 focus:border-input-focus-frame " +
-  "focus:outline-none focus-visible:outline-none";
 
 export default function AdminSignInForm() {
   const { signIn } = useSignIn();
@@ -33,23 +27,25 @@ export default function AdminSignInForm() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const [emailValue, setEmailValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
-
-  const isSubmitDisabled =
-    !signIn ||
-    isSubmitting ||
-    emailValue.trim() === "" ||
-    passwordValue.length === 0;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     if (!signIn || isSubmitting) return;
 
-    const formData = new FormData(event.currentTarget);
-    const emailAddress = String(formData.get("email") ?? "").trim();
-    const password = String(formData.get("password") ?? "");
+    const emailAddress = emailValue.trim();
+    const password = passwordValue;
+
+    // Show errors for empty fields instead of disabling the button
+    const missingEmail = emailAddress === "";
+    const missingPassword = password.length === 0;
+    setEmailError(missingEmail ? "Please enter your email." : "");
+    setPasswordError(missingPassword ? "Please enter your password." : "");
+    if (missingEmail || missingPassword) return;
 
     setIsSubmitting(true);
     setErrorMessage("");
@@ -125,53 +121,46 @@ export default function AdminSignInForm() {
   return (
     <form
       onSubmit={handleSubmit}
+      noValidate
       aria-label="Admin sign in"
       aria-busy={isSubmitting}
-      className="w-full rounded-md bg-background px-4 pb-8"
+      className="w-full rounded-md bg-background"
     >
-      <fieldset disabled={!signIn || isSubmitting} className="space-y-6">
-        <div className="space-y-2">
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            autoComplete="username"
-            required
-            value={emailValue}
-            onChange={(event) => setEmailValue(event.currentTarget.value)}
-            className={inputClassName}
-          />
-        </div>
-
-        <div className="space-y-2">
-          <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            required
-            value={passwordValue}
-            onChange={(event) => setPasswordValue(event.currentTarget.value)}
-            className={inputClassName}
-          />
-        </div>
+      <div className="flex flex-col gap-5">
+        <FormField
+          labelClassName="text-xl font-medium"
+          label="Email"
+          name="email"
+          type="email"
+          autoComplete="username"
+          value={emailValue}
+          onChange={setEmailValue}
+          error={emailError}
+        />
+        <FormField
+          labelClassName="text-xl font-medium"
+          label="Password"
+          name="password"
+          type="password"
+          autoComplete="current-password"
+          value={passwordValue}
+          onChange={setPasswordValue}
+          error={passwordError}
+        />
 
         {errorMessage && (
           <p role="alert" className="font-normal text-error-msg">
             {errorMessage}
           </p>
         )}
-        <div className="flex justify-center">
+        <div className="mt-2 flex justify-center">
           <CommonButton
             type="submit"
-            disabled={isSubmitDisabled}
             size="lg"
             title={isSubmitting ? "Signing in..." : "Sign in"}
           />
         </div>
-      </fieldset>
+      </div>
     </form>
   );
 }

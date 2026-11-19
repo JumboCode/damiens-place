@@ -13,7 +13,7 @@ import { requireVolunteer } from "@/lib/volunteer-auth";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
-// The fields of a volunteer's profile. GET and PATCH both use it, so they always send back the same shape.
+// The profile fields shared by GET and PATCH. GET also appends calculated hour totals.
 const VOLUNTEER_PROFILE_SELECT = {
   id: true,
   status: true,
@@ -63,8 +63,18 @@ export async function GET(_request: Request, { params }: RouteContext) {
     return Response.json({ error: "Volunteer not found" }, { status: 404 });
   }
 
+  const hourLogTotals = await prisma.hourLog.aggregate({
+    where: { volunteerId: id },
+    _sum: { minutes: true },
+  });
+
   return Response.json(
-    { volunteer },
+    {
+      volunteer: {
+        ...volunteer,
+        totalMinutes: hourLogTotals._sum.minutes ?? 0,
+      },
+    },
     { status: 200, headers: { "Cache-Control": "no-store" } },
   );
 }

@@ -37,6 +37,10 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 Before pushing, run `npm run lint` to try to build the website locally. It will throw errors if something is wrong and notify you where that error is.
 
+## Email Notifications
+
+Set `ADMIN_EMAIL` to the inbox that should receive volunteer hour-log edit notifications. Email delivery requires `RESEND_API_KEY` and `EMAIL_FROM`. Without `RESEND_API_KEY`, the app logs email messages locally instead of delivering them.
+
 ## Learn More
 
 Read the Notion for more info on Code Style Standards, Tech Stack explanations, or general guidelines.

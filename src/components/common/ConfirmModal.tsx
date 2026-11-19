@@ -26,6 +26,8 @@ type ConfirmModalProps = {
   busy?: boolean;
   // An error message to show under the content, like "Something went wrong."
   error?: string | null;
+  // Stretches the buttons to fill the pop-up (a single button becomes full width)
+  fullWidthButtons?: boolean;
 };
 
 /**
@@ -43,6 +45,7 @@ type ConfirmModalProps = {
  * @param icon - something to show above the title
  * @param busy - disables both buttons while true
  * @param error - an error message to show, or null for none
+ * @param fullWidthButtons - stretches the buttons across the pop-up
  * @returns the modal
  */
 export default function ConfirmModal({
@@ -55,6 +58,7 @@ export default function ConfirmModal({
   icon,
   busy = false,
   error = null,
+  fullWidthButtons = false,
 }: ConfirmModalProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
   // Unique ids so the dialog can point to its title and content for screen readers
@@ -104,17 +108,19 @@ export default function ConfirmModal({
             {error}
           </p>
         )}
-        <div className="flex flex-wrap justify-center gap-4">
+        <div className="flex w-full flex-wrap justify-center gap-4">
           {onCancel && (
             <CommonButton
               title={cancelTitle}
               altStyle
+              fullWidth={fullWidthButtons}
               disabled={busy}
               onClick={onCancel}
             />
           )}
           <CommonButton
             title={confirmTitle}
+            fullWidth={fullWidthButtons}
             disabled={busy}
             onClick={onConfirm}
           />

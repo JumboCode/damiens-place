@@ -101,3 +101,46 @@ export function applicationRejectedEmail(firstName: string): RenderedEmail {
     paragraphs: [`Hi ${firstName},`, message],
   });
 }
+
+/**
+ * Creates an email notifying admins that a volunteer edited an hour entry.
+ *
+ * @param volunteerName - The volunteer's full name.
+ * @param changes - The changed fields and their previous and updated values.
+ * @param updatedEntry - The complete updated hour-log entry.
+ * @returns The rendered hour-log edit notification email.
+ */
+export function hourLogEditedEmail({
+  volunteerName,
+  changes,
+  updatedEntry,
+}: {
+  volunteerName: string;
+  changes: { field: string; previous: string; updated: string }[];
+  updatedEntry: {
+    date: string;
+    startTime: string;
+    endTime: string;
+    position: string;
+    notes: string;
+  };
+}): RenderedEmail {
+  const changedFields = changes
+    .map(
+      ({ field, previous, updated }) => `${field} (${previous} -> ${updated})`,
+    )
+    .join(", ");
+
+  return renderEmail({
+    subject: `Volunteer hour log updated: ${volunteerName}`,
+    paragraphs: [
+      `${volunteerName} has edited their hour log entry. Changed fields: ${changedFields}.`,
+      "Updated entry:",
+      `Date: ${updatedEntry.date}`,
+      `Start time: ${updatedEntry.startTime}`,
+      `End time: ${updatedEntry.endTime}`,
+      `Position: ${updatedEntry.position}`,
+      `Notes: ${updatedEntry.notes}`,
+    ],
+  });
+}

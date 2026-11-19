@@ -10,6 +10,8 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
+import Check from "@/assets/icons/check.svg";
 import ConfirmModal from "@/components/common/ConfirmModal";
 import CommonButton from "@/components/common/CommonButton";
 import { decideApplicant } from "@/lib/admin-api";
@@ -85,19 +87,37 @@ export default function ApplicantDecisionControls({
   return (
     <>
       {currentStatus === "SUBMITTED" ? (
-        <div className="">
-          <CommonButton title="Approve" onClick={() => setPending("approve")} />
-
-          <CommonButton title="Reject" onClick={() => setPending("reject")} />
+        <div className="flex w-full flex-col gap-3">
+          <CommonButton
+            title="Mark as Onboarded"
+            fullWidth
+            onClick={() => setPending("approve")}
+          />
+          <CommonButton
+            title="Mark as Rejected"
+            altStyle
+            fullWidth
+            onClick={() => setPending("reject")}
+          />
         </div>
       ) : (
-        <span>{currentStatus}</span>
+        <button
+          type="button"
+          disabled
+          className={`min-h-12 w-full cursor-not-allowed rounded-full px-12 text-xl font-semibold ${
+            currentStatus === "APPROVED"
+              ? "bg-muted-green text-green"
+              : "bg-muted-red text-red"
+          }`}
+        >
+          {currentStatus === "APPROVED" ? "Volunteer Onboarded" : "Rejected"}
+        </button>
       )}
 
       {pending && (
         <ConfirmModal
           title="Are you sure?"
-          content={`Are you sure you want to ${pending} this applicant?`}
+          content={`Are you sure you want to ${pending} this applicant? This decision cannot be undone. `}
           confirmTitle={pending === "approve" ? "Approve" : "Reject"}
           onConfirm={handleConfirm}
           onCancel={handleCancel}
@@ -108,17 +128,25 @@ export default function ApplicantDecisionControls({
 
       {result && (
         <ConfirmModal
+          icon={
+            <Image
+              src={Check}
+              alt=""
+              className="mx-auto h-auto w-1/3 object-contain"
+            />
+          }
           title={
             result === "APPROVED"
-              ? "Applicant approved!"
-              : "Applicant rejected!"
+              ? "Volunteer On-boarded"
+              : "Volunteer Rejected"
           }
           content={
             result === "APPROVED"
-              ? "The applicant has been approved successfully."
-              : "The applicant has been rejected."
+              ? "A volunteer profile has been created. Check it at volunteer management page."
+              : "Please contact the applicant through email."
           }
           confirmTitle="Close"
+          fullWidthButtons
           onConfirm={handleResultClose}
         />
       )}

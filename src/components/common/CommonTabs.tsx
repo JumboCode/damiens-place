@@ -1,8 +1,8 @@
 /**
- * AdminTabs.tsx
+ * CommonTabs.tsx
  *
- * Implemented the admin tab bar. Each tab is a link to its own page, and the tab
- * for the current page is highlighted.
+ * Renders shared admin and volunteer tabs. Each tab links to its own page, and
+ * the tab for the current page is highlighted.
  *
  * Carter & Jeremiah
  * Date Created: 11/07/2026
@@ -13,29 +13,38 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ADMIN_TABS, isActiveTab } from "./admin-tabs";
+import { ADMIN_TABS, getActiveTabHref, type CommonTab } from "./common-tabs";
+
+type CommonTabsProps = {
+  tabs?: CommonTab[];
+  ariaLabel?: string;
+};
 
 /**
- * AdminTabs
+ * CommonTabs
  *
- * Reads the current pathname and renders one <Link> per entry in ADMIN_TABS.
- * The tab where isActiveTab() is true gets
- * aria-current="page" and the selected style.
- * Every other tab gets a hover style.
+ * Reads the current pathname and renders links for the supplied tabs.
+ * The most specific tab matching the current pathname gets aria-current="page"
+ * and the selected style.
+ * Other tabs get a hover style.
  *
  * @returns a <nav> that scrolls sideways
  */
-export default function AdminTabs() {
+export default function CommonTabs({
+  tabs = ADMIN_TABS,
+  ariaLabel = "Dashboard sections",
+}: CommonTabsProps) {
   const pathname = usePathname();
+  const activeTabHref = getActiveTabHref(pathname, tabs);
 
   return (
     <div className="border-b border-input-hover-frame">
       <nav
-        aria-label="Admin sections"
+        aria-label={ariaLabel}
         className="-mb-px flex gap-2 overflow-x-auto whitespace-nowrap"
       >
-        {ADMIN_TABS.map((tab) => {
-          const activeTab = isActiveTab(pathname, tab.href);
+        {tabs.map((tab) => {
+          const activeTab = tab.href === activeTabHref;
           return (
             <Link
               key={tab.href}

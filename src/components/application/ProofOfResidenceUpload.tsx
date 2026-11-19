@@ -49,10 +49,15 @@ export default function ProofOfResidenceUpload({
     setFileUploadError("");
     setIsUploading(true);
     try {
-      const blob = await upload(`proof-of-residence/${file.name}`, file, {
-        access: "private",
-        handleUploadUrl: "/api/uploads/proof-of-residence",
-      });
+      // A random folder keeps two "bill.pdf" uploads apart while the file keeps its real name
+      const blob = await upload(
+        `proof-of-residence/${crypto.randomUUID()}/${file.name}`,
+        file,
+        {
+          access: "private",
+          handleUploadUrl: "/api/uploads/proof-of-residence",
+        },
+      );
       setFileName(file.name);
       onUploaded(blob.url);
     } catch {

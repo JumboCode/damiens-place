@@ -8,6 +8,10 @@
  * Date Created: 11/03/2026
  */
 
+"use client";
+
+import CommonFileViewer from "@/components/common/CommonFileViewer";
+import { useFileSize } from "@/lib/use-file-size";
 import ReviewSection from "./ReviewSection";
 import { REVIEW_EDIT_STEPS } from "./review-step";
 import type { ReviewData } from "./review-step";
@@ -65,6 +69,8 @@ export default function ReviewStep({ data, onEdit }: ReviewStepProps) {
     disabilityAnswer = data.hasDisability ? "Yes" : "No";
   }
 
+  const proofSize = useFileSize(data.proofOfResidenceUrl);
+
   return (
     <div className="flex flex-col gap-10">
       <h2>Part 5: Review</h2>
@@ -79,10 +85,22 @@ export default function ReviewStep({ data, onEdit }: ReviewStepProps) {
         <Row label="Email" value={data.email} />
         <Row label="Cell Phone" value={data.cellPhone} />
         <Row label="Home Phone" value={data.homePhone} required={false} />
-        <Row
-          label="Proof of Residence"
-          value={data.proofUploaded ? "Uploaded" : ""}
-        />
+        <div className="flex max-w-sm flex-col gap-1 md:col-span-3 mt-2 mb-2">
+          <dt className="text-base font-medium">
+            Proof of Residence <span className="text-error-msg">*</span>
+          </dt>
+          <dd>
+            {data.proofOfResidenceUrl ? (
+              <CommonFileViewer
+                url={data.proofOfResidenceUrl}
+                fileSize={proofSize}
+                canOpen={false}
+              />
+            ) : (
+              "—"
+            )}
+          </dd>
+        </div>
         <Row label="Street Address" value={data.street} />
         <Row label="City" value={data.city} />
         <Row label="State / Province / Region" value={data.state} />
