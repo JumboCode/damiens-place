@@ -80,7 +80,16 @@ export async function fetchApplicants(): Promise<ApplicantsResult> {
     const body = await response.json();
 
     if (response.ok) {
-      return { ok: true, applicants: body };
+      if (
+        typeof body !== "object" ||
+        body === null ||
+        !("applicants" in body) ||
+        !Array.isArray(body.applicants)
+      ) {
+        return { ok: false, message: "Invalid applicants response." };
+      }
+
+      return { ok: true, applicants: body.applicants };
     }
     return { ok: false, message: body?.error ?? "Something went wrong" };
   } catch {

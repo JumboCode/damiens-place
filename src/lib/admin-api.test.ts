@@ -99,10 +99,18 @@ describe("fetchApplicants", () => {
     },
   ];
 
-  it("returns the applicants on a 200", async () => {
-    mockFetch(200, async () => applicants);
+  it("returns applicants from the API response on a 200", async () => {
+    mockFetch(200, async () => ({ applicants }));
     expect(await fetchApplicants()).toEqual({ ok: true, applicants });
     expect(global.fetch).toHaveBeenCalledWith("/api/applicants");
+  });
+
+  it("returns an error when the successful response has no applicants array", async () => {
+    mockFetch(200, async () => ({ applicants: {} }));
+    expect(await fetchApplicants()).toEqual({
+      ok: false,
+      message: "Invalid applicants response.",
+    });
   });
 
   it("returns server error message on 403", async () => {
