@@ -54,7 +54,7 @@ export default function CommonFileViewer({
   const name = fileName ?? fileNameFromUrl(url);
 
   return (
-    <div className="flex w-full items-center gap-2 mt-2 rounded-lg border border-gray-300 bg-white px-4 py-4">
+    <div className="flex w-full items-center gap-2 mt-2 rounded-lg border border-dashboard-frame bg-white px-4 py-4">
       <Image src={PdfSymbol} alt="" className="h-12 shrink-0" />
       <div className="flex min-w-0 flex-1 flex-col">
         <p className="truncate text-lg font-medium"> {name} </p>

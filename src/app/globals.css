@@ -15,6 +15,11 @@
   --muted-green: #e3f4ea;
   --red: #ff0000;
   --muted-red: #fbe4e4;
+  --yellow: #ffac00;
+  --muted-yellow: #fdf1d8;
+
+  /* Dashboard colors */
+  --dashboard-frame: #e7e1e3;
 
   /* Profile banner gradient (left to right, middle stop at 55%) */
   --banner-start: #f0d5db;
@@ -59,6 +64,9 @@
   --color-muted-green: var(--muted-green);
   --color-red: var(--red);
   --color-muted-red: var(--muted-red);
+  --color-yellow: var(--yellow);
+  --color-muted-yellow: var(--muted-yellow);
+  --color-dashboard-frame: var(--dashboard-frame);
 }
 
 @layer base {

@@ -10,6 +10,7 @@
 "use client";
 
 import Image from "next/image";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ApplicantSummary, fetchApplicants } from "@/lib/admin-api";
@@ -24,9 +25,9 @@ import Vector from "@/assets/icons/Vector.svg";
 
 // Styles for the status pill
 const STATUS_STYLES: Record<ApplicantSummary["status"], string> = {
-  REJECTED: "bg-red-100 text-error-msg text-bold",
-  APPROVED: "bg-green-100 text-emerald-500 text-bold",
-  SUBMITTED: "bg-amber-100 text-amber-500 text-bold",
+  REJECTED: "bg-muted-red text-red text-bold",
+  APPROVED: "bg-muted-green text-green text-bold",
+  SUBMITTED: "bg-muted-yellow text-yellow text-bold",
 };
 
 // Labels for the status pill
@@ -97,34 +98,36 @@ export default function ApplicantsTable() {
   );
 
   return (
-    <section className="p-6">
+    <section className="p-6 mb-4">
       {/* Note for dearest Natalie, can take out flex wrap if you want the 
       title and month selector to be on same line FOR PHONES, flex wrap stacks them */}
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <h1>Onboarding Event Tracker</h1>
         <div className="flex items-center gap-3">
           <button
             type="button"
             aria-label="Previous month"
-            className="rounded border border-gray-200 px-2 py-1 text-xs 
+            className="rounded border border-dashboard-frame px-2 py-1 text-xs flex items-center 
             focus-visible:outline-none focus-visible:ring-2 
             focus-visible:ring-primary hover:enabled:bg-gray-50"
             onClick={() => setMonth((m) => shiftMonth(m, -1))}
           >
-            &larr;
+            <ChevronLeft size={16} strokeWidth={2} aria-hidden="true" />
           </button>
-          <span className="mx-4 whitespace-nowrap">{formatMonth(month)}</span>
+          <span className="mx-1 whitespace-nowrap text-lg font-medium">
+            {formatMonth(month)}
+          </span>
           <button
             type="button"
             aria-label="Next month"
             disabled={atCurrentMonth}
-            className="rounded border border-gray-200 px-2 py-1 text-xs 
+            className="rounded border border-dashboard-frame px-2 py-1 text-xs flex items-center 
             focus-visible:outline-none focus-visible:ring-2 
-            focus-visible:ring-primary hover:enabled:bg-gray-50 disabled:cursor-not-allowed
+            focus-visible:ring-primary hover:enabled:bg-gray-100 disabled:cursor-not-allowed
             disabled:opacity-50"
             onClick={() => setMonth((m) => shiftMonth(m, 1))}
           >
-            &rarr;
+            <ChevronRight size={16} strokeWidth={2} aria-hidden="true" />
           </button>
         </div>
       </div>
@@ -138,8 +141,8 @@ export default function ApplicantsTable() {
           No applicants found
         </p>
       ) : (
-        <div className="max-h-[650px] overflow-auto rounded-lg border border-gray-200">
-          <table className="w-full min-w-[640px] text-left text-sm table-fixed">
+        <div className="max-h-[650px] overflow-auto rounded-lg border border-dashboard-frame">
+          <table className="w-full min-w-[640px] text-left text-md table-fixed">
             <thead className="sticky top-0 bg-gray-100 text-muted-foreground">
               <tr>
                 <th
@@ -177,7 +180,7 @@ export default function ApplicantsTable() {
                 return (
                   <tr
                     key={a.id}
-                    className="group relative border-t border-gray-200 hover:bg-gray-50"
+                    className="group relative border-t border-dashboard-frame hover:bg-gray-100"
                   >
                     <td className="px-4 py-3">
                       <Link
@@ -204,7 +207,7 @@ export default function ApplicantsTable() {
                     </td>
                     <td className="px-4 py-3">
                       <span
-                        className={`rounded px-2 py-0.5 text-xs ${
+                        className={`rounded px-2 py-0.5 ${
                           STATUS_STYLES[a.status]
                         }`}
                       >
