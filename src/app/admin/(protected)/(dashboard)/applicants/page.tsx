@@ -8,14 +8,10 @@
  */
 
 import { requireAdminPage } from "@/lib/admin-auth";
+import ApplicantsTable from "@/components/admin/ApplicantsTable";
 
 export default async function AdminApplicantsPage() {
   await requireAdminPage();
 
-  return (
-    <section className="p-6">
-      <h1>Applicants</h1>
-      <p>Coming soon.</p>
-    </section>
-  );
+  return <ApplicantsTable />;
 }

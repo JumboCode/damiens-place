@@ -49,7 +49,7 @@ export default function ProfileCard({
   return (
     <section
       aria-label="Profile"
-      className="overflow-hidden rounded-xl border border-input-hover-frame bg-white"
+      className="overflow-hidden rounded-xl border border-dashboard-frame bg-white"
     >
       <div
         className="h-28 bg-cover bg-center bg-linear-to-r from-banner-start via-banner-mid via-55% to-banner-end"
@@ -88,7 +88,7 @@ export default function ProfileCard({
           <button
             type="button"
             onClick={onEditProfile}
-            className="mt-3 inline-flex items-center gap-2 rounded-md border border-input-hover-frame bg-white px-3 py-1.5 text-md font-medium hover:bg-gray-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            className="mt-3 inline-flex items-center gap-2 rounded-md border border-dashboard-frame bg-white px-3 py-1.5 text-md font-medium hover:bg-gray-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
             <SquarePen aria-hidden="true" className="size-4 text-gray-400" />
             Edit Profile

@@ -38,7 +38,7 @@ export default function CommonTabs({
   const activeTabHref = getActiveTabHref(pathname, tabs);
 
   return (
-    <div className="border-b border-input-hover-frame">
+    <div className="border-b border-dashboard-frame">
       <nav
         aria-label={ariaLabel}
         className="-mb-px flex gap-2 overflow-x-auto whitespace-nowrap"

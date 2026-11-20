@@ -34,7 +34,7 @@ export default function ProfileInfoCard({
   items,
 }: ProfileInfoCardProps) {
   return (
-    <div className="rounded-lg border border-input-hover-frame p-4 sm:p-5">
+    <div className="rounded-lg border border-dashboard-frame p-4 sm:p-5">
       <h3>{title}</h3>
 
       <dl className="mt-3 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
