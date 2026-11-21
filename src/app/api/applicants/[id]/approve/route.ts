@@ -15,6 +15,8 @@ import { loadApplicantForReview } from "@/lib/admin-review";
 import { normalizeEmail } from "@/lib/volunteer-identifiers";
 import { normalizeCellPhone } from "@/lib/volunteer-identifiers";
 import { prisma } from "@/lib/prisma";
+import { sendEmail } from "@/lib/email";
+import { applicationApprovedEmail } from "@/lib/email-templates";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -27,7 +29,7 @@ type RouteContext = { params: Promise<{ id: string }> };
  * Params:
  *   ID - applicant ID (url)
  *
- * Returns: 200 - { applicant }
+ * Returns: 200 - { applicant, emailSent }
  * Errors:
  *   409 - volunteer with that pair exists
  *   401 - user id missing
@@ -108,7 +110,15 @@ export async function POST(_request: Request, { params }: RouteContext) {
       },
     });
 
-    return NextResponse.json({ applicant: approved }, { status: 200 });
+    const emailResult = await sendEmail({
+      to: applicant.email,
+      ...applicationApprovedEmail(applicant.firstName),
+    });
+
+    return NextResponse.json(
+      { applicant: approved, emailSent: emailResult.ok },
+      { status: 200 },
+    );
   } catch (error) {
     if (
       error instanceof Prisma.PrismaClientKnownRequestError &&

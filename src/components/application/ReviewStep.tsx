@@ -15,6 +15,7 @@ import { useFileSize } from "@/lib/use-file-size";
 import ReviewSection from "./ReviewSection";
 import { REVIEW_EDIT_STEPS } from "./review-step";
 import type { ReviewData } from "./review-step";
+import { normalizeCellPhone } from "@/lib/volunteer-identifiers";
 
 type ReviewStepProps = {
   data: ReviewData;
@@ -83,8 +84,12 @@ export default function ReviewStep({ data, onEdit }: ReviewStepProps) {
         <Row label="Last Name" value={data.lastName} />
         <Row label="Age" value={data.age} />
         <Row label="Email" value={data.email} />
-        <Row label="Cell Phone" value={data.cellPhone} />
-        <Row label="Home Phone" value={data.homePhone} required={false} />
+        <Row label="Cell Phone" value={normalizeCellPhone(data.cellPhone)} />
+        <Row
+          label="Home Phone"
+          value={normalizeCellPhone(data.homePhone)}
+          required={false}
+        />
         <div className="flex max-w-sm flex-col gap-1 md:col-span-3 mt-2 mb-2">
           <dt className="text-base font-medium">
             Proof of Residence <span className="text-error-msg">*</span>
@@ -108,7 +113,7 @@ export default function ReviewStep({ data, onEdit }: ReviewStepProps) {
         <Row label="Emergency Contact Name" value={data.emergencyContactName} />
         <Row
           label="Emergency Contact Phone"
-          value={data.emergencyContactPhone}
+          value={normalizeCellPhone(data.emergencyContactPhone)}
         />
         <Row
           label="Relationship to Volunteer"

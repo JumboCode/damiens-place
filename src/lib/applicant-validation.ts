@@ -122,7 +122,16 @@ export function validateApplicantFields(
 
   // Check each field that was sent, one at a time, and return at the first problem.
   for (const [field, value] of Object.entries(input)) {
-    if (STRING_FIELDS.includes(field)) {
+    if (field === "homePhone" || field === "emergencyContactPhone") {
+      if (typeof value !== "string") {
+        return { error: `${field} must be a string` };
+      }
+      const normalized = normalizeCellPhone(value);
+      if (normalized.length < 10) {
+        return { error: `${field} must have at least 10 digits` };
+      }
+      data[field] = normalized;
+    } else if (STRING_FIELDS.includes(field)) {
       // Blank fields look "filled in" but are useless to an admin, so trim first
       if (typeof value !== "string" || value.trim() === "") {
         return { error: `${field} must be a non-empty string` };
@@ -306,8 +315,7 @@ export function validateVolunteerFields(body: unknown) {
     if (
       field === "firstName" ||
       field === "lastName" ||
-      field === "emergencyContactName" ||
-      field === "emergencyContactPhone"
+      field === "emergencyContactName"
     ) {
       // Blank fields look "filled in" but are useless to an admin, so trim first
       if (typeof value !== "string" || value.trim() === "") {
@@ -331,13 +339,33 @@ export function validateVolunteerFields(body: unknown) {
         return { error: "cellPhone must have at least 10 digits" };
       }
       data[field] = normalized;
+    } else if (field === "emergencyContactPhone") {
+      if (typeof value !== "string") {
+        return { error: "emergencyContactPhone must be a string" };
+      }
+      const normalized = normalizeCellPhone(value);
+      if (normalized.length < 10) {
+        return { error: "emergencyContactPhone must have at least 10 digits" };
+      }
+      data[field] = normalized;
     } else if (field === "photoConsent") {
       if (typeof value !== "boolean") {
         return { error: `${field} must be a boolean` };
       }
       data[field] = value;
+    } else if (field === "homePhone") {
+      if (value == null) {
+        data[field] = null;
+      } else if (typeof value !== "string") {
+        return { error: "homePhone must be a string" };
+      } else {
+        const normalized = normalizeCellPhone(value);
+        if (normalized.length < 10) {
+          return { error: "homePhone must have at least 10 digits" };
+        }
+        data[field] = normalized;
+      }
     } else if (
-      field === "homePhone" ||
       field === "emergencyContactRelationship" ||
       field === "photoUrl"
     ) {
