@@ -21,13 +21,17 @@ import {
   formatPantry,
 } from "@/lib/time-conversion";
 
+import CommonChip from "@/components/common/CommonChip";
 import Vector from "@/assets/icons/Vector.svg";
 
-// Styles for the status pill
-const STATUS_STYLES: Record<ApplicantSummary["status"], string> = {
-  REJECTED: "bg-muted-red text-red text-bold",
-  APPROVED: "bg-muted-green text-green text-bold",
-  SUBMITTED: "bg-muted-yellow text-yellow text-bold",
+// Background and text colors for the status chip
+const STATUS_STYLES: Record<
+  ApplicantSummary["status"],
+  { bgColor: string; textColor: string }
+> = {
+  REJECTED: { bgColor: "bg-muted-red", textColor: "text-red" },
+  APPROVED: { bgColor: "bg-muted-green", textColor: "text-green" },
+  SUBMITTED: { bgColor: "bg-muted-yellow", textColor: "text-yellow" },
 };
 
 // Labels for the status pill
@@ -206,13 +210,10 @@ export default function ApplicantsTable() {
                       {formatPantry(a.submittedAt!)}
                     </td>
                     <td className="px-4 py-3">
-                      <span
-                        className={`rounded px-2 py-0.5 ${
-                          STATUS_STYLES[a.status]
-                        }`}
-                      >
-                        {STATUS_LABELS[a.status] || a.status}
-                      </span>
+                      <CommonChip
+                        label={STATUS_LABELS[a.status] || a.status}
+                        {...STATUS_STYLES[a.status]}
+                      />
                     </td>
                     <td className="pointer-events-none w-12 px-2 py-3">
                       <Image

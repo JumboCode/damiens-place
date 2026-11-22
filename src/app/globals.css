@@ -8,6 +8,7 @@
   /* Primary and base colors */
   --primary: #953756;
   --secondary: #c75173;
+  --muted-primary: #fbe6ea;
   --primary-foreground: #ffffff;
   --muted-foreground: #6b7280;
   --text-primary: #1c1e1f;
@@ -49,6 +50,7 @@
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
   --color-secondary: var(--secondary);
+  --color-muted-primary: var(--muted-primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-muted-foreground: var(--muted-foreground);
   --color-banner-start: var(--banner-start);
